@@ -1,0 +1,601 @@
+<form method="post" accept-charset="utf-8" action="/calculator/phv/1/input/hdi8atj8urkn4vmp93uuc4s9ov?subid=A-00-000" class="form input-form js-help has-help has-preloader js-form-validation-base col-12 js-input-form-init" data-show-arrow="left" id="phv-form">
+                                                                                                                                                                                                                                                                                                                                <input type="hidden" name="sToken" value="36bdf78c54c9a34eba0ad3103f1e39ab">                        <input type="hidden" name="chkFilterNachhaltigkeit" value="0">    <fieldset>
+    <legend class="headline-calculator"><span>Was möchten Sie versichern?</span></legend>
+
+    <div class="clearfix form-section">
+        <!-- form fields -->
+        <div class="box-formfields  form-has-help" data-show-arrow="left">
+            <div class="form-group row pt-3" data-help-show="single" data-help-content="<strong>Tarifauswahl</strong><p>Der Singletarif ist nur möglich, wenn Sie ledig sind und keinen Lebenspartner mitversichern wollen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="single">Tarifauswahl</label>                <div class="col-sm">
+                    <select name="single" id="single" class="form-control form-control-select"><option value="Familie/Lebensgemeinschaft mit Kinder">Familie/Lebensgemeinschaft mit Kind(ern)</option>
+<option value="Familie/Lebensgemeinschaft ohne Kinder">Familie/Lebensgemeinschaft ohne Kinder</option>
+<option value="Single ohne Kinder">Single ohne Kinder</option>
+<option value="Single mit Kinder">Single mit Kind(ern)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="plz" data-help-content="<strong>Warum fragen wir das?</strong><p>Die Postleitzahl Ihrer Wohnung wird für die Risikobeurteilung /Beitragsberechnung benötigt. Die Beitragshöhe ist nicht nur abhängig von Ihren gewünschten Leistungen, sondern wird auch anhand Art und Anzahl der Schäden, die in Ihrem Wohnort durchschnittlich gemeldet werden, bemessen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="plz">PLZ des Antragsstellers<span class="text-info-required">*</span></label>                <div class="col-sm">
+                    <input type="text" name="plz" id="plz" class="form-control form-control-input form-control-short js-special-zip-message" required="required" pattern="^\d{5}$" minlength="5" maxlength="5" value="">                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="beamte" data-help-content="<strong>Warum fragen wir das?</strong><p>Einige Versicherer bieten Beitragsnachlässe für Beamte und Angestellte im öffentlichen Dienst.</p><strong>Hinweis zur Auswahl</strong><p>Wählen Sie auch &quot;öffentlicher Dienst&quot;, wenn Sie Beamter sind oder früher im öffentlichen Dienst beschäftigt waren und sich mittlerweile im Ruhestand befinden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="beamte">Tarifgruppe</label>                <div class="col-sm">
+                    <select name="beamte" id="beamte" class="form-control form-control-select"><option value="Normal">Normal</option>
+<option value="öffentl. Dienst">öffentlicher Dienst</option>
+<option value="ÖD mit Dienst-HP (nur Lehrer)">ÖD mit Dienst-HP (nur Lehrer)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="ihr-geburtsdatum" data-help-content="<strong>Warum fragen wir das?</strong><p>Die Angabe Ihres Geburtsdatums ist relevant für die Höhe des Beitrags. Einige Versicherungs­gesellschaften bieten Beitragsnachlässe für bestimmte Altersgruppen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="gebdatum">Geburtsdatum des Versicherungsnehmers<span class="text-info-required">*</span></label>                <div class="col-sm date datepicker-group js-datepicker-group">
+                    <input type="text" name="gebdatum" id="gebdatum" class="form-control form-control-input datepicker js-datepicker" placeholder="TT.MM.JJJJ" required="required" data-date-format="de" data-date-format-message="Bitte geben Sie ein korrektes Geburtsdatum an!" data-min-age="18y" data-min-age-message="Sie sind leider zu jung, um eine Versicherung abzuschließen." value="" autocomplete="off">                    <img class="input-group-addon ui-datepicker-trigger" src="/img/geldde/ico_datepicker.svg" alt="Kalender anzeigen" title="Kalender anzeigen">
+                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="ausfall" data-help-content="<strong>Ausfalldeckung</strong><p>Wir empfehlen Ihnen, die sogenannte Forderungs­ausfalldeckung in Ihren Versicherungs­schutz aufzunehmen. Ihr Versicherer erstattet dann auch Schäden, die Ihnen durch fremde Personen zugefügt werden, die selbst über keine Privathaftpflicht­versicherung verfügen und finanziell nicht in der Lage sind, Ihnen den entstandenen Schaden zu ersetzen. Voraussetzung für die Begleichung des Schadens ist ein rechtskräftiges Urteil des Verursachers. Die meisten Versicherer legen für die Erstattung eine Mindest­schadenshöhe fest (siehe Leistungs­vergleich).</p>">
+                <label class="col-sm col-form-label text-sm-right" for="ausfall">Ausfalldeckung</label>                <div class="col-sm">
+                    <select name="ausfall" id="ausfall" class="form-control form-control-select toggle-trigger" data-toggle-modus="hide" data-toggle-value="nein"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row collapse-offense collapse show" data-help-show="delikt" data-help-content="<strong>Deliktunfähige Kinder unter 7 Jahre mitversichern?</strong><p>Eltern haften nicht für unter 7-jährige Kinder (bei Verkehr nicht bis unter 10 Jahre), wenn sie Ihrer Aufsichtspflicht nachkommen. Diese Schäden können Sie hier versichern.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="delikt">Deliktunfähige Kinder unter 7 Jahre mitversichern?</label>                <div class="col-sm">
+                    <select name="delikt" id="delikt" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="hund" data-help-content="<strong>Hund mitversichern? (kein Kampfhund!)</strong><p>Je nach Gesellschaft gibt es Hunderassen, die nicht versichert werden können. Dazu gehören z.B. folgende Rassen sowie deren Kreuzungen: Bandog, Bordeaux-Dogge, Bulldog, Bullterrier (auch Staffordshire Bullterrier), Dogo Argentino, Fila Brasileiro, Kangal, Mastiff (auch Bullmastiff), Mastino Espanol, Mastino Napoletano, Owtscharka (alle Unterrassen), Pitbullterrier (auch American Pitbullterrier), Rhodesian Ridgeback, Staffordshire Terrier (auch American Staffordshire Terrier bzw. American Stafford Terrier) und Tosa Ino.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="Hundn">Hund mitversichern? (kein Kampfhund!)</label>                <div class="col-sm">
+                    <select name="Hundn" id="Hundn" class="form-control form-control-select"><option value="0" selected="selected">0</option>
+<option value="1">1 Hund</option>
+<option value="2">2 Hunde</option>
+<option value="3">3 Hunde</option>
+<option value="4">4 Hunde</option>
+<option value="5">5 Hunde</option></select>                </div>
+            </div>
+
+            <div class="collapse-dogs">
+                                <div class="form-group row collapse" data-help-show="Rasse_Tier1" data-help-content="<strong>Rasse Hund 1 eingeben</strong><p>Geben Sie hier die Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier1">Rasse Hund 1 eingeben<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier1" id="Rasse_Tier1" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="mischling_hund1" data-help-content="<strong>Ist Hund 1 ein Mischling?</strong><p>Ist Ihr Hund ein Mischling?</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="mischling_hund1">Ist Hund 1 ein Mischling?</label>                    <div class="col-sm">
+                        <select name="mischling_hund1" id="mischling_hund1" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="Rasse_Tier1a" data-help-content="<strong>Mischlingsrasse Hund 1</strong><p>Geben Sie hier die Mischlings-Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Mischlings-Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier1a">Mischlingsrasse Hund 1<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier1a" id="Rasse_Tier1a" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+                                <div class="form-group row collapse" data-help-show="Rasse_Tier2" data-help-content="<strong>Rasse Hund 2 eingeben</strong><p>Geben Sie hier die Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier2">Rasse Hund 2 eingeben<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier2" id="Rasse_Tier2" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="mischling_hund2" data-help-content="<strong>Ist Hund 2 ein Mischling?</strong><p>Ist Ihr Hund ein Mischling?</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="mischling_hund2">Ist Hund 2 ein Mischling?</label>                    <div class="col-sm">
+                        <select name="mischling_hund2" id="mischling_hund2" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="Rasse_Tier2a" data-help-content="<strong>Mischlingsrasse Hund 2</strong><p>Geben Sie hier die Mischlings-Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Mischlings-Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier2a">Mischlingsrasse Hund 2<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier2a" id="Rasse_Tier2a" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+                                <div class="form-group row collapse" data-help-show="Rasse_Tier3" data-help-content="<strong>Rasse Hund 3 eingeben</strong><p>Geben Sie hier die Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier3">Rasse Hund 3 eingeben<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier3" id="Rasse_Tier3" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="mischling_hund3" data-help-content="<strong>Ist Hund 3 ein Mischling?</strong><p>Ist Ihr Hund ein Mischling?</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="mischling_hund3">Ist Hund 3 ein Mischling?</label>                    <div class="col-sm">
+                        <select name="mischling_hund3" id="mischling_hund3" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="Rasse_Tier3a" data-help-content="<strong>Mischlingsrasse Hund 3</strong><p>Geben Sie hier die Mischlings-Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Mischlings-Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier3a">Mischlingsrasse Hund 3<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier3a" id="Rasse_Tier3a" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+                                <div class="form-group row collapse" data-help-show="Rasse_Tier4" data-help-content="<strong>Rasse Hund 4 eingeben</strong><p>Geben Sie hier die Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier4">Rasse Hund 4 eingeben<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier4" id="Rasse_Tier4" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="mischling_hund4" data-help-content="<strong>Ist Hund 4 ein Mischling?</strong><p>Ist Ihr Hund ein Mischling?</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="mischling_hund4">Ist Hund 4 ein Mischling?</label>                    <div class="col-sm">
+                        <select name="mischling_hund4" id="mischling_hund4" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="Rasse_Tier4a" data-help-content="<strong>Mischlingsrasse Hund 4</strong><p>Geben Sie hier die Mischlings-Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Mischlings-Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier4a">Mischlingsrasse Hund 4<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier4a" id="Rasse_Tier4a" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+                                <div class="form-group row collapse" data-help-show="Rasse_Tier5" data-help-content="<strong>Rasse Hund 5 eingeben</strong><p>Geben Sie hier die Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier5">Rasse Hund 5 eingeben<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier5" id="Rasse_Tier5" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="mischling_hund5" data-help-content="<strong>Ist Hund 5 ein Mischling?</strong><p>Ist Ihr Hund ein Mischling?</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="mischling_hund5">Ist Hund 5 ein Mischling?</label>                    <div class="col-sm">
+                        <select name="mischling_hund5" id="mischling_hund5" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                    </div>
+                </div>
+
+                <div class="form-group row collapse" data-help-show="Rasse_Tier5a" data-help-content="<strong>Mischlingsrasse Hund 5</strong><p>Geben Sie hier die Mischlings-Rasse Ihres Hundes an. Wenn Sie diese nicht genau kennen, geben Sie eine Mischlings-Rasse an, die dem am nächsten kommt. Achten Sie aber vor allem bei kampfhundähnlichen Rassen auf die genaue Angabe.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="Rasse_Tier5a">Mischlingsrasse Hund 5<span class="text-info-required">*</span></label>                    <div class="col-sm">
+                        <input type="text" name="Rasse_Tier5a" id="Rasse_Tier5a" class="form-control form-control-input js-pet-autocomplete js-initial-required ui-autocomplete-input js-autocomplete-init" pattern="[A-Za-z_äâàÄÂÀöÖüÜßÉÊÈéèêç()\s.-]{2,}" value="" autocomplete="off">                    </div>
+                </div>
+                            </div>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend class="headline-calculator"><span>Rabattrelevante Angaben</span></legend>
+
+    <div class="clearfix form-section">
+        <!-- form fields -->
+        <div class="box-formfields form-has-help pt-3" data-show-arrow="left">
+                                        <div class="form-group row" data-help-show="laufzeit" data-help-content="<strong>Laufzeit</strong><p>Laufzeiten von mehr als einem Jahr führen bei vielen Anbietern zu Beitragsnachlässen zwischen 5% und 10%.</p>">
+                    <label class="col-sm col-form-label text-sm-right" for="laufzeit">Laufzeit</label>                    <div class="col-sm">
+                        <select name="laufzeit" id="laufzeit" class="form-control form-control-select"><option value="1">1 Jahr</option>
+<option value="3" selected="selected">3 Jahre</option>
+<option value="5">5 Jahre</option></select>                    </div>
+                </div>
+
+            <div class="form-group row" data-help-show="vorvers5" data-help-content="<strong>Bestand in den letzten 5 Jahren eine Vorversicherung?</strong><p>Bei einigen Versicherungen gibt es bis zu 30% Rabatt, wenn Sie einen Vertrag hatten, der schadenfrei lief.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="vorvers5">Bestand in den letzten 5 Jahren eine Vorversicherung?<span class="text-info-required">*</span></label>                <div class="col-sm">
+                    <select name="vorvers5" id="vorvers5" class="form-control form-control-select" required="required"><option value="">-- Bitte wählen --</option>
+<option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="schaeden5" data-help-content="<strong>Schäden in den letzten 5 Jahren</strong><p>Teilen Sie mit, ob und wieviele Schäden Sie innerhalb der letzten 5 Jahre verursacht haben. Waren Sie in dieser Zeit schadensfrei, erhalten Sie bei einigen Versicherern einen Beitragsnachlass.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="schaeden5">Schäden in den letzten 5 Jahren<span class="text-info-required">*</span></label>                <div class="col-sm">
+                    <select name="schaeden5" id="schaeden5" class="form-control form-control-select" required="required"><option value="">-- Bitte wählen --</option>
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="kombirabatte" data-help-content="<strong>Kombirabatte mit berechnen?</strong><p>Welche Verträge haben Sie schon oder haben vor, sie zu versichern? Je mehr Verträge Sie bei einer Gesellschaft haben, umso günstiger wird der Preis.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="kombirabatte">Kombirabatte mit berechnen?</label>                <div class="col-sm">
+                    <select name="kombirabatte" id="kombirabatte" class="form-control form-control-select toggle-trigger" data-toggle-modus="show" data-toggle-value="ja"><option value="nein" selected="selected">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="collapse toggle-box-kombirabatte discount">
+    <legend class="headline-calculator"><span>Kombirabatte für folgende Sparten-Kombinationen berücksichtigen</span></legend>
+
+    <div class="clearfix form-section">
+        <!-- form fields -->
+        <div class="box-formfields form-has-help" data-show-arrow="left">
+            <p class="text-center pt-2 text-info-discount">Kombirabatte - Je mehr Verträge bei einer Gesellschaft, um so günstigere Preise.
+                Welche Verträge haben Sie schon oder haben vor, sie zu versichern?</p>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrPHV">Privathaftpflicht</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone check-active" for="KrPHV">
+                        <input type="checkbox" name="KrPHV" id="KrPHV" class="form-check-input" value="1" checked="checked">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrTIE">Tierhalterhaftpflicht</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrTIE">
+                        <input type="checkbox" name="KrTIE" id="KrTIE" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrHUG">Haus-Grundbesitzer Haftpflicht</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrHUG">
+                        <input type="checkbox" name="KrHUG" id="KrHUG" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrOEL">Gewässerschaden/Öltank</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrOEL">
+                        <input type="checkbox" name="KrOEL" id="KrOEL" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrWG">Wohngebäude</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrWG">
+                        <input type="checkbox" name="KrWG" id="KrWG" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrWGGLS">Wohngebäude-Glas</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrWGGLS">
+                        <input type="checkbox" name="KrWGGLS" id="KrWGGLS" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrHR">Hausrat</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrHR">
+                        <input type="checkbox" name="KrHR" id="KrHR" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrHRGLS">Hausrat-Glas</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrHRGLS">
+                        <input type="checkbox" name="KrHRGLS" id="KrHRGLS" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrUNF">Unfall</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrUNF">
+                        <input type="checkbox" name="KrUNF" id="KrUNF" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+
+            <div class="row" data-help-show="check-kombirabatte" data-help-content="<strong>Warum fragen wir das?</strong><p>Klicken Sie hier, wenn Sie diese Versicherung schon besitzen oder diese neu beantragen möchten.</p>">
+                <label class="col-sm text-sm-right check-label" for="KrRS">Rechtsschutz</label>                <div class="col-sm">
+                    <label class="form-check form-check-alone" for="KrRS">
+                        <input type="checkbox" name="KrRS" id="KrRS" class="form-check-input" value="1">                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<!-- Zusatzfragen -->
+<div class="more-questions">
+    <label class="form-radio js-gtm-event" for="zusatzfragen_nein" data-event-type="click" data-event-category="versicherung" data-event-action="no additional questions" data-event-label="phv"><input type="radio" name="zusatzfragen" id="zusatzfragen_nein" class="form-check-input form-radio-input" required="required" value="nein">Ich verzichte auf die Beantwortung weiterer Fragen und wähle aus dem Vergleich einen Tarif, der meinen Bedarf erfüllt.</label><label class="form-radio js-gtm-event" for="zusatzfragen_ja" data-event-type="click" data-event-category="versicherung" data-event-action="additional questions requested" data-event-label="phv"><input type="radio" name="zusatzfragen" id="zusatzfragen_ja" class="form-check-input form-radio-input" required="required" value="ja">Ich möchte weitere Angaben zum gewünschten Versicherungsschutz machen. Es werden dann nur Tarife angezeigt, welche die Vorgaben erfüllen.</label></div>
+
+<fieldset class="collapse collapse-questions">
+    <legend class="headline-calculator"><span>Optionale Detailfragen</span></legend>
+    <div class="clearfix form-section">
+        <!-- form fields -->
+        <div class="box-formfields form-has-help" data-show-on="mouseup">
+            <div class="form-group row pt-3" data-help-show="uver_v" data-help-content="<strong>Wählen Sie eine Vorgabe für Ihre Berechnung</strong><p>Die Vorgabe des Arbeitskreis Vermittlerrichlinie (AK-Empfehlung) bietet Ihnen einen empfohlenen Mindestschutz. Heute erfüllen alle wichtigen Tarife diese Vorgaben. Zu Ihrer Sicherheit sollten Sie diese Mindestvorgaben wählen.</p>">
+                <label class="col-sm text-sm-right check-label">Wählen Sie eine Vorgabe für Ihre Berechnung</label>
+                <div class="col-sm">
+                    <div class="mx-auto mt-sm-2 text-center text-sm-left">
+                        <a href="#" class="js-standard js-gtm-event" data-event-type="click" data-event-category="versicherung" data-event-label="phv" data-event-action="choose standard options">Standard</a> |
+                        <a href="#" class="recommendation js-recommendation js-gtm-event" title="Mindeststandards des Arbeitskreises EU-Vermittlerrichtlinie" data-help-show="recommendation" data-help-content="<p>Diese Voreinstellung erfüllt die vom Arbeitskreis EU-Vermittlerrichtlinie entwickelten Mindeststandards.</p>" data-event-type="click" data-event-category="versicherung" data-event-label="phv" data-event-action="choose AK recommentations">AK Empfehlung</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="vs_v" data-help-content="<strong>Mindest-Versicherungssumme Personen/Sachschäden</strong><p>Die Versicherungssumme beschreibt den maximalen Betrag, den eine Versicherung im Schadenfall erstattet.</p><p>Wählen Sie zu Ihrer Sicherheit eine hohe Versicherungssumme.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="vs_v">Mindest-Versicherungssumme Personen/Sachschäden</label>                <div class="col-sm">
+                    <select name="vs_v" id="vs_v" class="form-control form-control-select"><option value="3000000">mind. 3 Mio EUR  (AK Empfehlung)</option>
+<option value="5000000">mind. 5 Mio EUR</option>
+<option value="10000000">mind. 10 Mio EUR</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="vsm_v" data-help-content="<strong>Mindest-Versicherungssumme für Mietsachschäden</strong><p>Schäden an festen gemieteten Sachen (Mietwohnung, Hotel) sind mit diesem Einschluss versichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="vsm_v">Mindest-Versicherungssumme für Mietsachschäden</label>                <div class="col-sm">
+                    <select name="vsm_v" id="vsm_v" class="form-control form-control-select"><option value="300000">mind. 300.000 EUR (AK Empfehlung)</option>
+<option value="500000">mind. 500.000 EUR</option>
+<option value="1000000">mind. 1 Mio EUR</option>
+<option value="3000000">mind. 3 Mio EUR</option>
+<option value="0">unter 500.000 EUR</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="vsv_v" data-help-content="<strong>Mindest-Versicherungssumme für Vermögensschäden</strong><p>Beispiel für einen Vermögensschaden:<br/>Sie fahren mit dem Fahrrad einen Passanten an, welcher daraufhin für 2 Wochen im Krankenhaus liegt. Dadurch hat er Verdienstausfall und Einnahmenverluste.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="vsv_v">Mindest-Versicherungssumme für Vermögensschäden</label>                <div class="col-sm">
+                    <select name="vsv_v" id="vsv_v" class="form-control form-control-select"><option value="50000">mind. 50.000 EUR (AK Empfehlung)</option>
+<option value="100000">mind. 100.000 EUR</option>
+<option value="1000000">mind. 1 Mio EUR</option>
+<option value="10000">unter 50.000 EUR</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="best_v" data-help-content="<strong>Best-Leistungsgarantie</strong><p>Einige Gesellschaften bieten eine Best-Leistungs-Garantie an. Bietet ein anderer Haftpflicht-Tarif zum Zeitpunkt des Schadens einen größeren Leistungsumfang an, wird der Schaden nach diesen besseren Bedingungen reguliert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="best_v">Best-Leistungsgarantie</label>                <div class="col-sm">
+                    <select name="best_v" id="best_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="sgwe_v" data-help-content="<strong>Selbstgenutztes Wohneigentum</strong><p>Dieser Einschluss deckt Schäden, die durch Ihr Wohneigentum verursacht werden (Streupflicht, Herabfallende Äste usw.). Vermietetes Eigentum muss normalerweise in einer extra Haftpflicht versichert werden. Nur wenige Tarife bieten den Einschluss von Mehrfamilienhäusern an.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="sgwe_v">Selbstgenutztes Wohneigentum</label>                <div class="col-sm">
+                    <select name="sgwe_v" id="sgwe_v" class="form-control form-control-select"><option value="0 kein Wohneigentum">kein Wohneigentum</option>
+<option value="1 Wohnung">Wohnung</option>
+<option value="1 EFH">Einfamilienhaus</option>
+<option value="2 ZFH">Zweifamilienhaus</option>
+<option value="4">Mehrfamilienhaus bis 4 Wohnungen</option>
+<option value="100">Mehrfamilienhaus über 4 Wohnungen</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="ew_v" data-help-content="<strong>Eigentumswohnungen in Deutschland, vermietet</strong><p>Durch eine lose Treppenstufe stürzt ein Besucher in Ihrer vermieteten Wohnung.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="ew_v">Eigentumswohnungen in Deutschland, vermietet</label>                <div class="col-sm">
+                    <select name="ew_v" id="ew_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="unbgru_v" data-help-content="<strong>Unbebautes Grundstück</strong><p>Bereits von einem unbe­bauten Grund­stück können Gefahren ausgehen. Der Eigen­tümer ist dafür verantwort­lich, dass dort niemand zu Schaden kommt.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="unbgru_v">Unbebautes Grundstück</label>                <div class="col-sm">
+                    <select name="unbgru_v" id="unbgru_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="einlw_v" data-help-content="<strong>Einliegerwohnung vermietet im selbstbewohnten Haus</strong><p>Schäden, die durch Ihre vermietete Einliegerwohnung entstehen, sind versichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="einlw_v">Einliegerwohnung vermietet im selbstbewohnten Haus</label>                <div class="col-sm">
+                    <select name="einlw_v" id="einlw_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="fewoi_v" data-help-content="<strong>Ferienhaus-/Wohnung im Inland selbstgenutzt</strong><p>Schäden, die durch dieses Risiko entstehen, sind versichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="fewoi_v">Ferienhaus-/Wohnung im Inland selbstgenutzt</label>                <div class="col-sm">
+                    <select name="fewoi_v" id="fewoi_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="fewoa_v" data-help-content="<strong>Wohnung / Ferienwohnung / Ferienhaus im europ. Ausland ohne Vermietung</strong><p>Schäden, die durch genannte Wohneinheiten entstehen, sind versichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="fewoa_v">Wohnung / Ferienwohnung / Ferienhaus im europ. Ausland ohne Vermietung</label>                <div class="col-sm">
+                    <select name="fewoa_v" id="fewoa_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="fach_v" data-help-content="<strong>Fachpraktischer Unterricht (Laborarbeiten)</strong><p>Sie sind auch versichert, wenn Sie Schäden bei Arbeiten in Schul-, Berufsausbildung oder im Studium verursachen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="fach_v">Fachpraktischer Unterricht (Laborarbeiten)</label>                <div class="col-sm">
+                    <select name="fach_v" id="fach_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="tier_v" data-help-content="<strong>Hüten eines fremden Hundes/Pferdes</strong><p>Sollte durch das von Ihnen gehütete Tier ein Schaden entstehen, haftet diese Versicherung, falls Sie ein Verschulden am Schaden trifft.</p><p>In der Regel leistet immer zuerst die Tierhalter­haftpflicht­versicherung des Tieres.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="tier_v">Hüten eines fremden Hundes/Pferdes</label>                <div class="col-sm">
+                    <select name="tier_v" id="tier_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="oel_v" data-help-content="<strong>Einschluss Öltankhaftpflicht</strong><p>Wenn Sie einen Öltank besitzen, können Sie den Schutz hier mit einschließen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="oel_v">Einschluss Öltankhaftpflicht</label>                <div class="col-sm">
+                    <select name="oel_v" id="oel_v" class="form-control form-control-select toggle-trigger" data-toggle-modus="hide" data-toggle-value="kein Tank vorhanden"><option value="kein Tank vorhanden">kein Tank vorhanden</option>
+<option value="3000">bis 3.000 Liter</option>
+<option value="5000">bis 5.000 Liter</option>
+<option value="10000">bis 10.000 Liter</option>
+<option value="20000">bis 20.000 Liter</option>
+<option value="50000">bis 50.000 Liter</option>
+<option value="100000">bis 100.000 Liter</option></select>                </div>
+            </div>
+
+            <div class="form-group row collapse toggle-box-oel_v" data-help-show="oelwo_v" data-help-content="<strong>Wo befindet sich der Öltank?</strong><p>Wählen Sie, ob der Tank ober- oder unterirdisch steht. Unterirdische Tanks haben ein höheres Risiko, da nicht sofort erkennbar ist, wenn Öl ausfliesst.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="oelwo_v">Wo befindet sich der Öltank?</label>                <div class="col-sm">
+                    <select name="oelwo_v" id="oelwo_v" class="form-control form-control-select"><option value="oberirdisch">oberirdisch</option>
+<option value="unterirdisch">unterirdisch</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="allm_v" data-help-content="<strong>Allmählichkeits­schäden</strong><p>Sachschäden, die durch schuldhafte allmähliche Einwirkung der Temperatur, von Gasen, Dämpfen oder Feuchtigkeit und von Niederschlägen (Rauch, Ruß, Staub) und dergleichen entstehen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="allm_v">Allmählichkeitsschäden</label>                <div class="col-sm">
+                    <select name="allm_v" id="allm_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">mind. 3 Mio (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="gewsa_v" data-help-content="<strong>Gewässerschaden-Risiko, z.B. Farben</strong><p>Auch im Haushalt verwendete Farben, Lacke oder Reinigungsmittel können Gewässerschäden verursachen, diese sind hier mitversichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="gewsa_v">Gewässerschaden-Risiko, z.B. Farben</label>                <div class="col-sm">
+                    <select name="gewsa_v" id="gewsa_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="abwa_v" data-help-content="<strong>Schäden durch häusliche Abwässer</strong><p>Durch Chemikalien, die Sie in Ihren Abfluss gießen, entsteht ein Schaden an der Umwelt.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="abwa_v">Schäden durch häusliche Abwässer</label>                <div class="col-sm">
+                    <select name="abwa_v" id="abwa_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">mind. 3 Mio (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="inet_v" data-help-content="<strong>Schäden durch elektronischen Datenaustausch / Internetnutzung</strong><p>Durch Ihren virenbefallenen PC werden z.B. fremde PCs angegriffen bzw. Festplatten gelöscht. Oder Sie verbreiten z.B. unbewusst auf einem USB Stick Viren, die einen anderen PC unbrauchbar machen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="inet_v">Schäden durch elektronischen Datenaustausch/Internetnutzung</label>                <div class="col-sm">
+                    <select name="inet_v" id="inet_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="gef_v" data-help-content="<strong>Gefälligkeitsschäden</strong><p>Wenn Sie jemanden helfen und dabei etwas kaputt machen, ist das normalerweise NICHT versichert. Es gibt nur wenige Tarife, die diesen Einschluss bieten.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="gef_v">Gefälligkeitsschäden</label>                <div class="col-sm">
+                    <select name="gef_v" id="gef_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="geli_v" data-help-content="<strong>Gemietete oder geliehene Sachen</strong><p>Bewegliche fremde geliehene Sachen sind normalerweise nicht versichert, es sei denn, Sie möchten diesen Schutz einschließen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="geli_v">Gemietete oder geliehene Sachen</label>                <div class="col-sm">
+                    <select name="geli_v" id="geli_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="sv_v" data-help-content="<strong>Schlüsselverlust, fremder privater Schlüssel (Mietwohnung)</strong><p>Sie verlieren den Schlüssel Ihrer Mietwohnung und die Tür muss geöffnet werden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="sv_v">Schlüsselverlust, fremder privater Schlüssel (Mietwohnung)</label>                <div class="col-sm">
+                    <select name="sv_v" id="sv_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="sva_v" data-help-content="<strong>Schlüsselverlust für Zentrale Schließanlage (keine Eigenschäden)</strong><p>Sie verlieren den Schlüssel Ihrer Mietwohnung im Mehrfamilienhaus und die die gesamte Schließanlage muss getauscht werden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="sva_v">Schlüsselverlust für Zentrale Schließanlage (keine Eigenschäden)</label>                <div class="col-sm">
+                    <select name="sva_v" id="sva_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="svd_v" data-help-content="<strong>Schlüsselverlust von fremden Dienstschlüsseln</strong><p>Schlüsselverlust bei Ihren Firmenschlüsseln können Sie hier versichern.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="svd_v">Schlüsselverlust von fremden Dienstschlüsseln</label>                <div class="col-sm">
+                    <select name="svd_v" id="svd_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="welt_v" data-help-content="<strong>Weltweite Deckung gewünscht (Standard ist Europa oder EU)</strong><p>Der Aufenthalt in außereuropäischen Ländern ist meist nur zeitlich begrenzt versicherbar und die Bezahlung muss über ein deutsches Institut laufen.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="welt_v">Weltweite Deckung gewünscht (Standard ist Europa oder EU)</label>                <div class="col-sm">
+                    <select name="welt_v" id="welt_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="elt_v" data-help-content="<strong>Alleinstehendes Elternteil im Haushalt lebend</strong><p>Wenn ein Elternteil alleinstehend und im Haushalt des VN gemeldet ist, kann hier der Versicherungsschutz eingeschlossen werden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="elt_v">Alleinstehendes Elternteil im Haushalt lebend</label>                <div class="col-sm">
+                    <select name="elt_v" id="elt_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="ehr_v" data-help-content="<strong>Ehrenamtliche Tätigkeit</strong><p>Sie sind versichert, wenn Sie eine ehrenamtlichen Tätigkeit ausüben.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="ehr_v">Ehrenamtliche Tätigkeit</label>                <div class="col-sm">
+                    <select name="ehr_v" id="ehr_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="tagmu_v" data-help-content="<strong>Tätigkeit als Tagesmutter</strong><p>Sie sind versichert, als Tagesmutter, meist bei der Betreuung von max. 5-6 Kindern.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="tagmu_v">Tätigkeit als Tagesmutter</label>                <div class="col-sm">
+                    <select name="tagmu_v" id="tagmu_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="regr_v" data-help-content="<strong>Regressansprüche von Sozial­versicherungs­trägern von mitversicherten Personen</strong><p>Durch Ihr Verschulden kommt Ihr Partner zu Sturz und muss behandelt werden, die Krankenversicherung des Partners will die Behandlungskosten wieder haben. Ansprüche durch fremde Geschädigte sind mitversichert.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="regr_v">Regressansprüche von Sozialversicherungsträgern von mitversicherten Personen</label>                <div class="col-sm">
+                    <select name="regr_v" id="regr_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja (AK Empfehlung)</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="bau_v" data-help-content="<strong>Bauherrenhaftpflicht am Haus oder Grundstück</strong><p>Für Neu- und Umbauten auf dem versicherten Grundstück.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="bau_v">Bauherrenhaftpflicht am Haus oder Grundstück</label>                <div class="col-sm">
+                    <select name="bau_v" id="bau_v" class="form-control form-control-select"><option value="0">nein</option>
+<option value="50000">bis 50.000 EUR (AK Empfehlung)</option>
+<option value="100000">bis 100.000 EUR</option>
+<option value="200000">bis 200.000 EUR</option>
+<option value="1000000">bis Versicherungssumme</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="surf_v" data-help-content="<strong>Eigene Surfbretter</strong><p>Geliehene Surfbretter sind i.d.R. mitversichert, eigene müssen Sie extra beantragen bzw. einen Tarif wählen, der diese einschließt.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="surf_v">Eigene Surfbretter</label>                <div class="col-sm">
+                    <select name="surf_v" id="surf_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="tiere_v" data-help-content="<strong>Besitzen Sie Hunde, Pferde, Rinder, landwirtschaftliche Tiere?</strong><p>Für einige Tiere ist eine extra Haftpflicht nötig.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="tiere_v">Besitzen Sie Hunde, Pferde, Rinder, landwirtschaftliche Tiere?</label>                <div class="col-sm">
+                    <select name="tiere_v" id="tiere_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja, evtl. extra Vertrag notwendig!">ja, evtl. extra Vertrag notwendig!</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="wafa_v" data-help-content="<strong>Benutzen Sie eigene Wasserfahrzeuge?</strong><p>Je nach Größe und Leistung ist eine eigene Versicherung nötig.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="wafa_v">Benutzen Sie eigene Wasserfahrzeuge?</label>                <div class="col-sm">
+                    <select name="wafa_v" id="wafa_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja, extra Vertrag notwendig!">ja, extra Vertrag notwendig!</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="flug_v" data-help-content="<strong>Besitzen Sie Modellflugzeuge, Ballone oder Drachen?</strong><p>Je nach Leistung und Art ist eine eigene Versicherung nötig.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="flug_v">Besitzen Sie Modellflugzeuge, Ballone oder Drachen?</label>                <div class="col-sm">
+                    <select name="flug_v" id="flug_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja, evtl. extra Vertrag notwendig!">ja, evtl. extra Vertrag notwendig!</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="drohne_v" data-help-content="<strong>Besitzen Sie privat genutzte Drohnen?</strong><p>Drohnen benötigen einen extra Versicherungsschutz. Über die Privathaftpflicht können nur privat genutzte Drohnen versichert werden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="drohne_v">Besitzen Sie privat genutzte Drohnen?</label>                <div class="col-sm">
+                    <select name="drohne_v" id="drohne_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="jagd_v" data-help-content="<strong>Gehen Sie auf die Jagd?</strong><p>Es gibt Jagdhaftpflicht Versicherungen, die dieses Risiko abdecken.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="jagd_v">Gehen Sie auf die Jagd?</label>                <div class="col-sm">
+                    <select name="jagd_v" id="jagd_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja, evtl. extra Vertrag notwendig!">ja, evtl. extra Vertrag notwendig!</option></select>                </div>
+            </div>
+
+            <div class="form-group row" data-help-show="foto_v" data-help-content="<strong>Betreiben Sie eine Photovoltaikanlage?</strong><p>Photovoltaikanlagen müssen extra versichert werden.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="foto_v">Betreiben Sie eine Photovoltaikanlage?</label>                <div class="col-sm">
+                    <select name="foto_v" id="foto_v" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja, evtl. extra Vertrag notwendig!">ja, evtl. extra Vertrag notwendig!</option></select>                </div>
+            </div>
+
+            <div class="form-group row collapse toggle-box-ausfall" data-help-show="rsausfall" data-help-content="<strong>Rechtsschutz zur Ausfalldeckung</strong><p>Wenn ein Dritter den Ihnen zugefügten Schaden nicht begleichen kann, führt das oftmals zu einem Rechtsstreit. Die Kosten für Anwalt und Gericht werden dann von dieser Versicherung übernommen. Wir empfehlen Ihnen jedoch, einen eigenen RS Vertrag abzuschließen, da dieser Einschluss i.d.R. geringere Leistungen bietet als ein selbständiger RS Vertrag. Wenn Sie eine RS Versicherung für den privaten Bereich besitzen, benötigen Sie diesen Einschluss nicht.</p>">
+                <label class="col-sm col-form-label text-sm-right" for="rsausfall">Rechtsschutz zur Ausfalldeckung</label>                <div class="col-sm">
+                    <select name="rsausfall" id="rsausfall" class="form-control form-control-select"><option value="nein">nein</option>
+<option value="ja">ja</option></select>                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<input type="hidden" name="zahlweise" id="zahlweise" class="form-control form-control-select" value="1"><input type="hidden" name="chkFilterNachhaltigkeit" value="0"><input type="hidden" id="dogbreedUri" value="/load-dogbreeds/1/">
+
+
+<div class="form-group mb-0 button-row">
+        <div class="row ml-0 mr-0 legal-questions">
+        <label class="form-check col-sm col-form-label" for="mrmoErstinfo">
+            <input type="hidden" name="chkErstinfo" value="0"><input type="checkbox" name="chkErstinfo" id="mrmoErstinfo" class="form-check-input" required="required" value="1">                        Ich bestätige, die Erstinformation für Versicherungsmakler gemäß § 15 VersVermV heruntergeladen und gelesen zu haben.<span class="text-info-required">*</span><br>
+            <a title="Erstinformation" href="https://www.geld.de/module/geld/data/erstinformation-jdc.pdf" download="https://www.geld.de/module/geld/data/erstinformation-jdc.pdf" target="_blank">Erstinformation herunterladen</a>
+                    </label>
+    </div>
+
+    <div>
+                <div class="row align-items-center">
+            <div class="col-sm-8">
+                <div class="consulting-waiver-wrapper">
+
+<div class="col-sm-8 align-self-end consulting-waiver">
+    <div class="consulting-waiver-inner icon icon-phone">
+        <div class="row ml-4">
+            <div class="col-10">
+                <div class="consulting-waiver-text">Ich wünsche eine Beratung</div>
+                <div>
+    <span class="consulting-waiver-hotline"><span title="Hotline" class=" telephone">0800 - 2420 2828</span>
+</span>
+    <span class="consulting-waiver-business-hours">
+<span class="description">Mo - Fr:  8.00 - 18.00 Uhr</span>
+</span></div>
+
+
+            </div>
+            <div class="col-2 pl-0 pr-0 align-self-center">
+                <label class="m-0 icon icon-question consulting-waiver-info js-gtm-event" for="sxr-layer-consulting-waiver-1" data-event-type="click" data-event-category="versicherung" data-event-label="phv" data-event-action="consulting requested"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="checkbox" id="sxr-layer-consulting-waiver-1" class="d-none">
+<div class="layer-consulting-waiver">
+    <div class="layer-consulting-waiver-container-row">
+        <div class="layer-consulting-waiver-container-col">
+            <div class="layer-consulting-waiver-inner-col">
+                <label class="layer-consulting-waiver-close" for="sxr-layer-consulting-waiver-1">x</label>
+                <div class="layer-consulting-waiver-col">
+                    <div class="layer-consulting-waiver-headline">Sie möchten eine Beratung?</div>
+                    <div class="d-none d-sm-block icon icon-phone layer-consulting-waiver-icon"></div>
+                    <div>
+    <span class="consulting-waiver-hotline"><span title="Hotline" class=" telephone">0800 - 2420 2828</span>
+</span>
+    <span class="consulting-waiver-business-hours">
+<span class="description">Mo - Fr:  8.00 - 18.00 Uhr</span>
+</span></div>
+
+
+                </div>
+                <div class="mt-4 layer-consulting-waiver-col">
+                    <div class="layer-consulting-waiver-headline">Schneller zum Vertrag?</div>
+                    <div class="layer-consulting-waiver-description">
+                        <p>So kommen Sie direkt zu Ihrer Versicherung</p>
+                        <ol class="pl-3">
+                            <li>Klicken Sie auf "Berechnen".</li>
+                            <li>Machen Sie die nötigen Angaben.</li>
+                            <li>Bestätigen Sie vor dem Abschluss, dass Sie keine Beratung benötigen.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                                    </div>
+            </div>
+            <div class="col-sm-4 pt-2"><input type="submit" name="btn_berechnen" class="btn btn-default js-gtm-event" data-event-type="click" data-event-category="versicherung" data-event-action="calculate" data-event-label="phv" value="Berechnen"></div>
+        </div>
+            </div>
+</div>
+
+<div class="mt-2 text-info-required">* Pflichtfeld </div>
+
+</form>
