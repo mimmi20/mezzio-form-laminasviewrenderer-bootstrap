@@ -1,0 +1,9 @@
+<?= $this->htmlElement()->openTag('fieldset', []) . PHP_EOL ?>
+    <?= $this->htmlElement()->openTag('legend', $this->labelAttributes) ?><?= $this->label ?><?= $this->htmlElement()->closeTag('legend') . PHP_EOL ?>
+    <?= $this->htmlElement()->openTag('div', $this->colAttributes) . PHP_EOL ?>
+        <?= $this->formElement($this->element) ?>
+<?php if ($this->renderErrors) : ?>
+        <?= $this->formElementErrors($this->element) . PHP_EOL ?>
+<?php endif ?>
+    <?= $this->htmlElement()->closeTag('div') . PHP_EOL ?>
+<?= $this->htmlElement()->closeTag('fieldset') ?>
