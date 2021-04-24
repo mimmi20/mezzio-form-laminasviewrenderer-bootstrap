@@ -13,9 +13,14 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
 use Laminas\Form\View\Helper\Form as BaseForm;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\InvalidArgumentException;
+use Laminas\View\Exception\RuntimeException;
 
 use function assert;
 use function method_exists;
@@ -28,6 +33,8 @@ use const PHP_EOL;
  */
 final class Form extends BaseForm
 {
+    use FormTrait;
+
     public const LAYOUT_HORIZONTAL = 'horizontal';
     public const LAYOUT_VERTICAL   = 'vertical';
     public const LAYOUT_INLINE     = 'inline';
@@ -42,7 +49,14 @@ final class Form extends BaseForm
     }
 
     /**
-     * Render a form from the provided $form,
+     * Render a form from the provided $form
+     *
+     * @throws ServiceNotFoundException
+     * @throws InvalidServiceException
+     * @throws Exception\DomainException
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      */
     public function render(FormInterface $form): string
     {
@@ -71,6 +85,7 @@ final class Form extends BaseForm
         $form->setAttribute('class', trim($class));
 
         $formContent = '';
+        $indent      = $this->getIndent();
 
         foreach ($form as $element) {
             assert($element instanceof FieldsetInterface || $element instanceof ElementInterface);
@@ -86,9 +101,13 @@ final class Form extends BaseForm
             }
 
             if ($element instanceof FieldsetInterface) {
-                $formContent .= ($this->formCollection)($element) . PHP_EOL;
+                $this->formCollection->setIndent($indent . $this->getWhitespace(4));
+                $this->formCollection->setShouldWrap(true);
+
+                $formContent .= $this->formCollection->render($element) . PHP_EOL;
             } else {
-                $formContent .= ($this->formRow)($element) . PHP_EOL;
+                $this->formRow->setIndent($indent . $this->getWhitespace(4));
+                $formContent .= $this->formRow->render($element) . PHP_EOL;
             }
         }
 

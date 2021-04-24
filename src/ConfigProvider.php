@@ -12,10 +12,6 @@ declare(strict_types = 1);
 
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Laminas\Form\View\Helper\FormEmail;
-use Laminas\Form\View\Helper\FormHidden;
-use Laminas\Form\View\Helper\FormPassword;
-use Laminas\Form\View\Helper\FormText;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 final class ConfigProvider
@@ -29,7 +25,6 @@ final class ConfigProvider
     {
         return [
             'view_helpers' => $this->getViewHelperConfig(),
-            'templates' => $this->getTemplates(),
         ];
     }
 
@@ -49,18 +44,17 @@ final class ConfigProvider
                 'formElement' => FormElement::class,
                 'form_element' => FormElement::class,
                 'formElementErrors' => FormElementErrors::class,
+                'formEmail' => FormEmail::class,
                 'formFile' => FormFile::class,
+                'formHidden' => FormHidden::class,
                 'formLabel' => FormLabel::class,
                 'formMultiCheckbox' => FormMultiCheckbox::class,
+                'formPassword' => FormPassword::class,
                 'formRadio' => FormRadio::class,
                 'formRange' => FormRange::class,
                 'formRow' => FormRow::class,
                 'formSelect' => FormSelect::class,
                 'formSubmit' => FormSubmit::class,
-                // original Laminas Viewhelpers
-                'formEmail' => FormEmail::class,
-                'formHidden' => FormHidden::class,
-                'formPassword' => FormPassword::class,
                 'formText' => FormText::class,
             ],
             'factories' => [
@@ -70,35 +64,18 @@ final class ConfigProvider
                 FormCheckbox::class => FormCheckboxFactory::class,
                 FormElement::class => FormElementFactory::class,
                 FormElementErrors::class => FormElementErrorsFactory::class,
+                FormEmail::class => InvokableFactory::class,
+                FormFile::class => InvokableFactory::class,
+                FormHidden::class => InvokableFactory::class,
+                FormLabel::class => FormLabelFactory::class,
                 FormMultiCheckbox::class => FormMultiCheckboxFactory::class,
+                FormPassword::class => InvokableFactory::class,
                 FormRadio::class => FormRadioFactory::class,
                 FormRange::class => InvokableFactory::class,
                 FormRow::class => FormRowFactory::class,
                 FormSelect::class => FormSelectFactory::class,
                 FormSubmit::class => InvokableFactory::class,
-                FormLabel::class => FormLabelFactory::class,
-                FormFile::class => InvokableFactory::class,
-                // original Laminas Viewhelpers
-                FormEmail::class => InvokableFactory::class,
-                FormHidden::class => InvokableFactory::class,
-                FormPassword::class => InvokableFactory::class,
                 FormText::class => InvokableFactory::class,
-            ],
-        ];
-    }
-
-    /**
-     * Returns the templates configuration
-     *
-     * @return array<string, array<string, array<int, string>>>
-     */
-    public function getTemplates(): array
-    {
-        return [
-            'paths' => [
-                'horizontal' => [__DIR__ . '/../templates/horizontal'],
-                'vertical' => [__DIR__ . '/../templates/vertical'],
-                'elements' => [__DIR__ . '/../templates/elements'],
             ],
         ];
     }

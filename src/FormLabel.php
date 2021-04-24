@@ -14,6 +14,7 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
@@ -60,6 +61,7 @@ final class FormLabel extends AbstractHelper
      * @return FormLabel|string
      *
      * @throws Exception\DomainException
+     * @throws InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null, ?string $labelContent = null, ?string $position = null)
     {

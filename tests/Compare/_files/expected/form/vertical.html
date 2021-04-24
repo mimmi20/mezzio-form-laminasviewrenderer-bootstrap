@@ -1,44 +1,42 @@
-<form class="row g-3">
+<form action="" method="POST" name="form" class="g-3&#x20;row" role="form" id="form">
     <div class="col-md-6">
-        <label for="inputEmail4" class="form-label">Email</label>
-        <input type="email" class="form-control" id="inputEmail4">
+        <label class="form-label" for="inputEmail4">Email</label>
+        <input type="email" name="inputEmail4" id="inputEmail4" required="required" value="">
     </div>
     <div class="col-md-6">
-        <label for="inputPassword4" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPassword4">
+        <label class="form-label" for="inputPassword4">Password</label>
+        <input type="password" name="inputPassword4" id="inputPassword4" value="">
     </div>
     <div class="col-12">
-        <label for="inputAddress" class="form-label">Address</label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        <label class="form-label" for="inputAddress">Address</label>
+        <input type="text" name="inputAddress" id="inputAddress" placeholder="1234&#x20;Main&#x20;St" value="">
     </div>
     <div class="col-12">
-        <label for="inputAddress2" class="form-label">Address 2</label>
-        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+        <label class="form-label" for="inputAddress2">Address 2</label>
+        <input type="text" name="inputAddress2" id="inputAddress2" placeholder="Apartment,&#x20;studio,&#x20;or&#x20;floor" value="">
     </div>
     <div class="col-md-6">
-        <label for="inputCity" class="form-label">City</label>
-        <input type="text" class="form-control" id="inputCity">
+        <label class="form-label" for="inputCity">City</label>
+        <input type="text" name="inputCity" id="inputCity" value="">
     </div>
     <div class="col-md-4">
-        <label for="inputState" class="form-label">State</label>
-        <select id="inputState" class="form-select">
-            <option selected>Choose...</option>
-            <option>...</option>
+        <label class="form-label" for="inputState">State</label>
+        <select type="select" name="inputState" id="inputState" required class="form-select">
+            <option value="0" selected>Choose...</option>
+            <option value="1">...</option>
         </select>
     </div>
     <div class="col-md-2">
-        <label for="inputZip" class="form-label">Zip</label>
-        <input type="text" class="form-control" id="inputZip">
+        <label class="form-label" for="inputZip">Zip</label>
+        <input type="text" name="inputZip" id="inputZip" value="">
     </div>
     <div class="col-12">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-                Check me out
-            </label>
+            <input type="checkbox" name="gridCheck" id="gridCheck" required="required" value="1" class="form-check-input">
+            <label for="gridCheck" class="form-check-label">Check me out</label>
         </div>
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" name="button" class="btn&#x20;btn-primary" value="">Sign in</button>
     </div>
 </form>

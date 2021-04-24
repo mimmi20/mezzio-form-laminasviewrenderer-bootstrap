@@ -18,16 +18,20 @@ use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormInput;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
+use Traversable;
 
 use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
+use function iterator_to_array;
 use function mb_strtolower;
 use function sprintf;
 
 final class FormButton extends FormInput
 {
+    use FormTrait;
+
     /**
      * Attributes valid for the button tag
      *
@@ -59,6 +63,7 @@ final class FormButton extends FormInput
         'reset' => true,
         'submit' => true,
     ];
+
     private EscapeHtml $escapeHtml;
     private ?Translate $translate;
 
@@ -74,6 +79,9 @@ final class FormButton extends FormInput
      * Proxies to {@link render()}.
      *
      * @return FormButton|string
+     *
+     * @throws Exception\DomainException
+     * @throws Exception\InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null, ?string $buttonContent = null)
     {
@@ -89,6 +97,7 @@ final class FormButton extends FormInput
      * using content from $buttonContent or the element's "label" attribute
      *
      * @throws Exception\DomainException
+     * @throws Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element, ?string $buttonContent = null): string
     {
@@ -118,7 +127,9 @@ final class FormButton extends FormInput
             $buttonContent = ($this->escapeHtml)($buttonContent);
         }
 
-        return $openTag . $buttonContent . $this->closeTag();
+        $indent = $this->getIndent();
+
+        return $indent . $openTag . $buttonContent . $this->closeTag();
     }
 
     /**
@@ -158,7 +169,12 @@ final class FormButton extends FormInput
             ));
         }
 
-        $attributes          = $element->getAttributes();
+        $attributes = $element->getAttributes();
+
+        if ($attributes instanceof Traversable) {
+            $attributes = iterator_to_array($attributes);
+        }
+
         $attributes['name']  = $name;
         $attributes['type']  = $this->getType($element);
         $attributes['value'] = $element->getValue();

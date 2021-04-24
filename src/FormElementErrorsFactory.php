@@ -15,8 +15,9 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\PluginManagerInterface;
+use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
@@ -39,7 +40,7 @@ final class FormElementErrorsFactory
             sprintf(
                 '$plugin should be an Instance of %s, but was %s',
                 HelperPluginManager::class,
-                get_class($plugin)
+                is_object($plugin) ? get_class($plugin) : gettype($plugin)
             )
         );
 
@@ -60,7 +61,8 @@ final class FormElementErrorsFactory
         }
 
         return new FormElementErrors(
-            $lvhPluginManager->get(PartialRendererInterface::class),
+            $lvhPluginManager->get(HtmlElement::class),
+            $plugin->get(EscapeHtml::class),
             $translator
         );
     }

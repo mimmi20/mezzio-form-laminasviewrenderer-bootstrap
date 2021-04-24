@@ -14,7 +14,15 @@ parameters:
     reportUnusedCatchesOfUncheckedExceptions: true
     uncheckedExceptions: []
   checkMissingIterableValueType: false
+  treatPhpDocTypesAsCertain: false
   excludes_analyse:
     - */tests/*/data/*
-#  ignoreErrors:
-#    - '~MockObject~'
+  ignoreErrors:
+    - '~is not subtype of Throwable~'
+    - '~PHPDoc tag @throws with type .* is not compatible with parent~'
+    - '~Strict comparison using === between null and string will always evaluate to false~'
+    - '~Call to an undefined method Laminas\\Form\\View\\Helper\\AbstractHelper::render\(\)~'
+    - '~Parameter #1 \$attributesOrElement of method Mezzio\\BootstrapForm\\LaminasView\\View\\Helper\\FormLabel::openTag\(\) expects array<string, bool\|string>\|Laminas\\Form\\ElementInterface\|null, array given~'
+    - '~Parameter #2 \$attribs of method Mezzio\\LaminasViewHelper\\Helper\\HtmlElement::toHtml\(\) expects array<string, .*>, array<int\|string, string> given~'
+    - '~Call to an undefined method Laminas\\View\\Helper\\HelperInterface::render\(\)~'
+    - '~Call to an undefined method Laminas\\InputFilter\\InputFilterInterface\|Laminas\\InputFilter\\InputInterface::isRequired\(\)~'

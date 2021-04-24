@@ -13,38 +13,23 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\View\Helper\FormInput;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\View\Helper\FormRange as BaseFormRange;
 
-final class FormRange extends FormInput
+final class FormRange extends BaseFormRange
 {
-    /**
-     * Attributes valid for the input tag type="range"
-     *
-     * @var array<string, bool>
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
-     */
-    protected $validTagAttributes = [
-        'name' => true,
-        'autocomplete' => true,
-        'autofocus' => true,
-        'disabled' => true,
-        'form' => true,
-        'list' => true,
-        'max' => true,
-        'min' => true,
-        'step' => true,
-        'required' => true,
-        'type' => true,
-        'value' => true,
-    ];
+    use FormTrait;
 
     /**
-     * Determine input type to use
+     * Render a form <input> element from the provided $element
      *
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     * @throws DomainException
      */
-    protected function getType(ElementInterface $element): string
+    public function render(ElementInterface $element): string
     {
-        return 'range';
+        $markup = parent::render($element);
+        $indent = $this->getIndent();
+
+        return $indent . $markup;
     }
 }

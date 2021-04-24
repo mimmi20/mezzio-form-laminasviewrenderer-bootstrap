@@ -21,14 +21,19 @@ use Laminas\Form\View\Helper\FormHidden;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Helper\EscapeHtml;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Traversable;
 
 use function array_key_exists;
 use function array_merge;
+use function assert;
 use function explode;
 use function implode;
 use function is_array;
 use function is_scalar;
+use function is_string;
+use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
@@ -37,6 +42,8 @@ use const PHP_EOL;
 
 final class FormSelect extends AbstractHelper
 {
+    use FormTrait;
+
     /**
      * Attributes valid for the current tag
      *
@@ -56,6 +63,7 @@ final class FormSelect extends AbstractHelper
     private PartialRendererInterface $renderer;
     private ?Translate $translate;
     private EscapeHtml $escaper;
+    private HtmlElement $htmlElement;
 
     /**
      * Attributes valid for select
@@ -96,15 +104,17 @@ final class FormSelect extends AbstractHelper
     ];
 
     public function __construct(
+        HtmlElement $htmlElement,
         PartialRendererInterface $renderer,
         EscapeHtml $escaper,
         FormHidden $formHidden,
         ?Translate $translator = null
     ) {
-        $this->renderer   = $renderer;
-        $this->formHidden = $formHidden;
-        $this->escaper    = $escaper;
-        $this->translate  = $translator;
+        $this->renderer    = $renderer;
+        $this->htmlElement = $htmlElement;
+        $this->formHidden  = $formHidden;
+        $this->escaper     = $escaper;
+        $this->translate   = $translator;
     }
 
     /**
@@ -113,6 +123,9 @@ final class FormSelect extends AbstractHelper
      * Proxies to {@link render()}.
      *
      * @return FormSelect|string
+     *
+     * @throws Exception\InvalidArgumentException
+     * @throws Exception\DomainException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -154,7 +167,12 @@ final class FormSelect extends AbstractHelper
         }
 
         $attributes = $element->getAttributes();
-        $value      = $this->validateMultiValue($element->getValue(), $attributes);
+
+        if ($attributes instanceof Traversable) {
+            $attributes = iterator_to_array($attributes);
+        }
+
+        $value = $this->validateMultiValue($element->getValue(), $attributes);
 
         $attributes['name'] = $name;
         if (array_key_exists('multiple', $attributes) && $attributes['multiple']) {
@@ -171,14 +189,14 @@ final class FormSelect extends AbstractHelper
 
         $attributes['class'] = trim(implode(' ', $classes));
 
-        $rendered = $this->renderer->render(
-            'elements::select',
-            [
-                'attributes' => $attributes,
-                'options' => $options,
-                'value' => $value,
-            ]
-        );
+        $indent        = $this->getIndent();
+        $optionContent = [];
+
+        foreach ($options as $key => $option) {
+            $optionContent[] = $this->renderOption($key, $option, $value, 1);
+        }
+
+        $rendered = $indent . $this->htmlElement->toHtml('select', $attributes, PHP_EOL . implode(PHP_EOL, $optionContent) . PHP_EOL . $indent);
 
         // Render hidden element
         $useHiddenElement = method_exists($element, 'useHiddenElement')
@@ -209,15 +227,15 @@ final class FormSelect extends AbstractHelper
      * @param array<int|string, array<string, string>|string> $options
      * @param array<int|string, string>                       $selectedOptions Option values that should be marked as selected
      */
-    public function renderOptions(array $options, array $selectedOptions = []): string
+    public function renderOptions(array $options, array $selectedOptions = [], int $level = 0): string
     {
         $optionStrings = [];
 
         foreach ($options as $key => $optionSpec) {
-            $optionStrings[] = $this->renderOption($key, $optionSpec, $selectedOptions);
+            $optionStrings[] = $this->renderOption($key, $optionSpec, $selectedOptions, $level);
         }
 
-        return implode('', $optionStrings);
+        return implode(PHP_EOL, $optionStrings);
     }
 
     /**
@@ -225,10 +243,8 @@ final class FormSelect extends AbstractHelper
      * @param array<string, string>|string $optionSpec
      * @param array<int|string, string>    $selectedOptions
      */
-    public function renderOption($key, $optionSpec, array $selectedOptions = []): string
+    public function renderOption($key, $optionSpec, array $selectedOptions = [], int $level = 0): string
     {
-        $template = '<option %s>%s</option>';
-
         $value    = '';
         $label    = '';
         $selected = false;
@@ -242,7 +258,7 @@ final class FormSelect extends AbstractHelper
         }
 
         if (isset($optionSpec['options']) && is_array($optionSpec['options'])) {
-            return $this->renderOptgroup($optionSpec, $selectedOptions);
+            return $this->renderOptgroup($optionSpec, $selectedOptions, $level);
         }
 
         if (isset($optionSpec['value'])) {
@@ -265,14 +281,20 @@ final class FormSelect extends AbstractHelper
             $selected = true;
         }
 
-        if (null !== $this->translate) {
+        assert(is_string($label));
+
+        if ('' !== $label && null !== $this->translate) {
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
+        }
+
+        if ('' !== $label && isset($optionSpec['disable_html_escape'])) {
+            $label = ($this->escaper)($label);
         }
 
         $attributes = [
             'value' => $value,
-            'selected' => $selected,
-            'disabled' => $disabled,
+            'selected' => $selected ? true : null,
+            'disabled' => $disabled ? true : null,
         ];
 
         if (isset($optionSpec['attributes']) && is_array($optionSpec['attributes'])) {
@@ -281,11 +303,10 @@ final class FormSelect extends AbstractHelper
 
         $this->validTagAttributes = $this->validOptionAttributes;
 
-        return sprintf(
-            $template,
-            $this->createAttributesString($attributes),
-            ($this->escaper)($label)
-        );
+        $content = $this->htmlElement->toHtml('option', $attributes, $label);
+        $indent  = $this->getIndent();
+
+        return $indent . $this->getWhitespace($level * 4) . $content;
     }
 
     /**
@@ -295,13 +316,11 @@ final class FormSelect extends AbstractHelper
      * an optgroup is simply an option that has an additional "options" key
      * with an array following the specification for renderOptions().
      *
-     * @param array<string, string>     $optgroup
+     * @param array<string, int|string> $optgroup
      * @param array<int|string, string> $selectedOptions
      */
-    public function renderOptgroup(array $optgroup, array $selectedOptions = []): string
+    public function renderOptgroup(array $optgroup, array $selectedOptions = [], int $level = 0): string
     {
-        $template = '<optgroup%s>%s</optgroup>';
-
         $options = [];
         if (isset($optgroup['options']) && is_array($optgroup['options'])) {
             $options = $optgroup['options'];
@@ -309,15 +328,11 @@ final class FormSelect extends AbstractHelper
         }
 
         $this->validTagAttributes = $this->validOptgroupAttributes;
-        $attributes               = $this->createAttributesString($optgroup);
-        if (!empty($attributes)) {
-            $attributes = ' ' . $attributes;
-        }
 
-        return sprintf(
-            $template,
-            $attributes,
-            $this->renderOptions($options, $selectedOptions)
+        return $this->htmlElement->toHtml(
+            'optgroup',
+            $optgroup,
+            $this->renderOptions($options, $selectedOptions, $level + 1)
         );
     }
 
@@ -357,11 +372,15 @@ final class FormSelect extends AbstractHelper
         return $value;
     }
 
-    private function renderHiddenElement(ElementInterface $element): string
+    /**
+     * @throws Exception\DomainException
+     * @throws Exception\InvalidArgumentException
+     */
+    private function renderHiddenElement(SelectElement $element): string
     {
         $hiddenElement = new Hidden($element->getName());
         $hiddenElement->setValue($element->getUnselectedValue());
 
-        return ($this->formHidden)($hiddenElement);
+        return $this->formHidden->render($hiddenElement);
     }
 }

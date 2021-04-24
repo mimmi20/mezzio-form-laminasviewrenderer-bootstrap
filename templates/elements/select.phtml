@@ -1,5 +1,0 @@
-<?= $this->htmlElement()->openTag('select', $this->attributes) . PHP_EOL ?>
-    <?php foreach ($this->options as $key => $option) : ?>
-    <?= $this->formSelect()->renderOption($key, $option, $this->value) . PHP_EOL; ?>
-    <?php endforeach ?>
-<?= $this->htmlElement()->closeTag('select') ?>

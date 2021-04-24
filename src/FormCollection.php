@@ -14,17 +14,26 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Collection as CollectionElement;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormCollection as BaseFormCollection;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\InvalidArgumentException;
+use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
+use Traversable;
 
 use function assert;
+use function iterator_to_array;
 use function sprintf;
 
 final class FormCollection extends BaseFormCollection
 {
+    use FormTrait;
+
     private FormRow $formRow;
     private EscapeHtml $escapeHtml;
     private ?Translate $translate;
@@ -38,9 +47,25 @@ final class FormCollection extends BaseFormCollection
 
     /**
      * Render a collection by iterating through all fieldsets and elements
+     *
+     * @throws ServiceNotFoundException
+     * @throws InvalidServiceException
+     * @throws Exception\DomainException
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element): string
     {
+        if (!$element instanceof FieldsetInterface) {
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Laminas\Form\FieldsetInterface',
+                    __METHOD__
+                )
+            );
+        }
+
         $markup         = '';
         $templateMarkup = '';
 
@@ -50,6 +75,7 @@ final class FormCollection extends BaseFormCollection
 
         $layout   = $element->getOption('layout');
         $floating = $element->getOption('floating');
+        $indent   = $this->getIndent();
 
         foreach ($element->getIterator() as $elementOrFieldset) {
             assert($elementOrFieldset instanceof FieldsetInterface || $elementOrFieldset instanceof ElementInterface);
@@ -65,15 +91,25 @@ final class FormCollection extends BaseFormCollection
             }
 
             if ($elementOrFieldset instanceof FieldsetInterface) {
-                $markup .= ($this)($elementOrFieldset, $this->shouldWrap());
+                $this->setIndent($indent . $this->getWhitespace(4));
+
+                $markup .= $this->render($elementOrFieldset);
+
+                $this->setIndent($indent);
             } else {
-                $markup .= ($this->formRow)($elementOrFieldset);
+                $this->formRow->setIndent($indent . $this->getWhitespace(4));
+                $markup .= $this->formRow->render($elementOrFieldset);
             }
         }
 
         // Every collection is wrapped by a fieldset if needed
         if ($this->shouldWrap) {
             $attributes = $element->getAttributes();
+
+            if ($attributes instanceof Traversable) {
+                $attributes = iterator_to_array($attributes);
+            }
+
             unset($attributes['name']);
             $attributesString = $attributes ? ' ' . $this->createAttributesString($attributes) : '';
 

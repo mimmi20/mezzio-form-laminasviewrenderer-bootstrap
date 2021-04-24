@@ -35,6 +35,7 @@ final class FormMultiCheckbox extends AbstractFormMultiCheckbox
     protected static function getName(ElementInterface $element): string
     {
         $name = $element->getName();
+
         if (null === $name || '' === $name) {
             throw new Exception\DomainException(sprintf(
                 '%s requires that the element has an assigned name; none discovered',

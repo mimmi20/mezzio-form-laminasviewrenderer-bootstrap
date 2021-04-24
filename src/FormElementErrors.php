@@ -14,42 +14,42 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Laminas\View\Helper\EscapeHtml;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Traversable;
 
 use function array_merge;
 use function array_walk_recursive;
 use function get_class;
-use function gettype;
 use function is_array;
-use function is_object;
 use function iterator_to_array;
 use function sprintf;
 
+use const PHP_EOL;
+
 final class FormElementErrors extends AbstractHelper
 {
-    /**
-     * Templates for the open/close/separators for message tags
-     */
-    private string $messageCloseString     = '</li></ul>';
-    private string $messageOpenFormat      = '<ul%s><li>';
-    private string $messageSeparatorString = '</li><li>';
+    use FormTrait;
 
     /** @var array<int|string, string> Default attributes for the open format tag */
     private array $attributes = [];
 
-    /** @var bool whether or not to translate error messages during render */
-    private bool $translateErrorMessages = true;
-
     private ?Translate $translate;
-    private PartialRendererInterface $renderer;
+    private EscapeHtml $escapeHtml;
+    private HtmlElement $htmlElement;
 
-    public function __construct(PartialRendererInterface $renderer, ?Translate $translate = null)
-    {
-        $this->renderer  = $renderer;
-        $this->translate = $translate;
+    public function __construct(
+        HtmlElement $htmlElement,
+        EscapeHtml $escapeHtml,
+        ?Translate $translate = null
+    ) {
+        $this->htmlElement = $htmlElement;
+        $this->escapeHtml  = $escapeHtml;
+        $this->translate   = $translate;
     }
 
     /**
@@ -60,6 +60,8 @@ final class FormElementErrors extends AbstractHelper
      * @param array<int|string, string> $attributes
      *
      * @return FormElementErrors|string
+     *
+     * @throws DomainException
      */
     public function __invoke(?ElementInterface $element = null, array $attributes = [])
     {
@@ -73,7 +75,7 @@ final class FormElementErrors extends AbstractHelper
     /**
      * Render validation errors for the provided $element
      *
-     * If {@link $translateErrorMessages} is true, and a translator is
+     * If a translator is
      * composed, messages retrieved from the element will be translated; if
      * either is not the case, they will not.
      *
@@ -90,7 +92,7 @@ final class FormElementErrors extends AbstractHelper
             throw new Exception\DomainException(sprintf(
                 '%s expects that $element->getMessages() will return an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($messages) ? get_class($messages) : gettype($messages)
+                get_class($messages)
             ));
         }
 
@@ -112,14 +114,28 @@ final class FormElementErrors extends AbstractHelper
             'class' => 'invalid-feedback',
         ];
 
-        return $this->renderer->render(
-            'elements::errors',
-            [
-                'errorAttributes' => $errorAttributes,
-                'attributes' => $attributes,
-                'messages' => $messages,
-            ]
-        );
+        $indent = $this->getIndent();
+        $markup = '';
+
+        foreach ($messages as $message) {
+            if ('' === $message) {
+                continue;
+            }
+
+            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+                $message = ($this->escapeHtml)($message);
+            }
+
+            $markup .= $indent . $this->getWhitespace(8) . $this->htmlElement->toHtml('li', [], $message) . PHP_EOL;
+        }
+
+        if ('' === $markup) {
+            return '';
+        }
+
+        $ul = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('ul', $attributes, $markup . $indent . $this->getWhitespace(4));
+
+        return $indent . $this->htmlElement->toHtml('div', $errorAttributes, $ul);
     }
 
     /**
@@ -145,109 +161,26 @@ final class FormElementErrors extends AbstractHelper
     }
 
     /**
-     * Set the string used to close message representation
-     */
-    public function setMessageCloseString(string $messageCloseString): self
-    {
-        $this->messageCloseString = $messageCloseString;
-
-        return $this;
-    }
-
-    /**
-     * Get the string used to close message representation
-     */
-    public function getMessageCloseString(): string
-    {
-        return $this->messageCloseString;
-    }
-
-    /**
-     * Set the formatted string used to open message representation
-     */
-    public function setMessageOpenFormat(string $messageOpenFormat): self
-    {
-        $this->messageOpenFormat = $messageOpenFormat;
-
-        return $this;
-    }
-
-    /**
-     * Get the formatted string used to open message representation
-     */
-    public function getMessageOpenFormat(): string
-    {
-        return $this->messageOpenFormat;
-    }
-
-    /**
-     * Set the string used to separate messages
-     */
-    public function setMessageSeparatorString(string $messageSeparatorString): self
-    {
-        $this->messageSeparatorString = $messageSeparatorString;
-
-        return $this;
-    }
-
-    /**
-     * Get the string used to separate messages
-     */
-    public function getMessageSeparatorString(): string
-    {
-        return $this->messageSeparatorString;
-    }
-
-    /**
-     * Set the flag detailing whether or not to translate error messages.
-     */
-    public function setTranslateMessages(bool $flag): self
-    {
-        $this->translateErrorMessages = $flag;
-
-        return $this;
-    }
-
-    /**
      * @param array<int|string, string> $messages
      *
      * @return array<int, string>
      */
     private function flattenMessages(array $messages): array
     {
-        return $this->translateErrorMessages && null !== $this->translate
-            ? $this->flattenMessagesWithTranslator($messages)
-            : $this->flattenMessagesWithoutTranslator($messages);
-    }
-
-    /**
-     * @param array<int|string, string> $messages
-     *
-     * @return array<int, string>
-     */
-    private function flattenMessagesWithoutTranslator(array $messages): array
-    {
         $messagesToPrint = [];
-        array_walk_recursive($messages, static function ($item) use (&$messagesToPrint): void {
-            $messagesToPrint[] = $item;
-        });
 
-        return $messagesToPrint;
-    }
+        if (null === $this->translate) {
+            $messageCallback = static function ($item) use (&$messagesToPrint): void {
+                $messagesToPrint[] = $item;
+            };
+        } else {
+            $translator      = $this->translate;
+            $textDomain      = $this->getTranslatorTextDomain();
+            $messageCallback = static function ($item) use (&$messagesToPrint, $translator, $textDomain): void {
+                $messagesToPrint[] = ($translator)($item, $textDomain);
+            };
+        }
 
-    /**
-     * @param array<int|string, string> $messages
-     *
-     * @return array<int, string>
-     */
-    private function flattenMessagesWithTranslator(array $messages): array
-    {
-        $translator      = $this->translate;
-        $textDomain      = $this->getTranslatorTextDomain();
-        $messagesToPrint = [];
-        $messageCallback = static function ($item) use (&$messagesToPrint, $translator, $textDomain): void {
-            $messagesToPrint[] = ($translator)($item, $textDomain);
-        };
         array_walk_recursive($messages, $messageCallback);
 
         return $messagesToPrint;

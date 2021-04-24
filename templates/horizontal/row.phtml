@@ -1,9 +1,0 @@
-<?= $this->htmlElement()->openTag('div', $this->rowAttributes) . PHP_EOL ?>
-    <?= $this->formLabel()->openTag($this->labelAttributes) ?><?= $this->label ?><?= $this->formLabel()->closeTag() . PHP_EOL ?>
-    <?= $this->htmlElement()->openTag('div', $this->colAttributes) . PHP_EOL ?>
-        <?= $this->formElement($this->element) ?>
-<?php if ($this->renderErrors) : ?>
-        <?= $this->formElementErrors($this->element) . PHP_EOL ?>
-<?php endif ?>
-    <?= $this->htmlElement()->closeTag('div') . PHP_EOL ?>
-<?= $this->htmlElement()->closeTag('div') ?>

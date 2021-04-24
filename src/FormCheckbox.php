@@ -17,28 +17,44 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormInput;
+use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Traversable;
 
 use function array_key_exists;
 use function array_merge;
 use function explode;
 use function implode;
+use function iterator_to_array;
+use function method_exists;
 use function sprintf;
 use function trim;
 
+use const PHP_EOL;
+
 final class FormCheckbox extends FormInput
 {
-    private PartialRendererInterface $renderer;
+    use FormTrait;
+    use LabelPositionTrait;
+    use UseHiddenElementTrait;
+
     private ?Translate $translate;
     private EscapeHtml $escaper;
+    private HtmlElement $htmlElement;
+    private FormLabel $formLabel;
 
-    public function __construct(PartialRendererInterface $renderer, EscapeHtml $escaper, ?Translate $translator = null)
-    {
-        $this->renderer  = $renderer;
-        $this->escaper   = $escaper;
-        $this->translate = $translator;
+    public function __construct(
+        FormLabel $formLabel,
+        HtmlElement $htmlElement,
+        EscapeHtml $escaper,
+        ?Translate $translator = null
+    ) {
+        $this->escaper     = $escaper;
+        $this->htmlElement = $htmlElement;
+        $this->translate   = $translator;
+        $this->formLabel   = $formLabel;
     }
 
     /**
@@ -106,7 +122,12 @@ final class FormCheckbox extends FormInput
 
         $labelAttributes['class'] = trim(implode(' ', $labelClasses));
 
-        $attributes          = $element->getAttributes();
+        $attributes = $element->getAttributes();
+
+        if ($attributes instanceof Traversable) {
+            $attributes = iterator_to_array($attributes);
+        }
+
         $attributes['name']  = $name;
         $attributes['type']  = $this->getInputType();
         $attributes['value'] = $element->getCheckedValue();
@@ -122,40 +143,60 @@ final class FormCheckbox extends FormInput
 
         $attributes['class'] = trim(implode(' ', $inputClasses));
 
+        $indent = $this->getIndent();
+
+        if (
+            array_key_exists('id', $attributes)
+            && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
+        ) {
+            $labelOpen  = '';
+            $labelClose = '';
+            $label      = $this->formLabel->openTag($labelAttributes) . $label . $this->formLabel->closeTag();
+        } else {
+            $labelOpen  = $this->formLabel->openTag($labelAttributes) . PHP_EOL;
+            $labelClose = $this->formLabel->closeTag() . PHP_EOL;
+        }
+
+        if (
+            '' !== $label && !array_key_exists('id', $attributes)
+            || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+        ) {
+            $label = '<span>' . $label . '</span>';
+        }
+
         $rendered = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
             $closingBracket
         );
 
+        $rendered = $indent . $this->getWhitespace(4) . $rendered;
+
         $hidden = '';
 
-        if ($element->useHiddenElement()) {
-            $hiddenAttributes = [
-                'disabled' => $attributes['disabled'] ?? null,
-                'name' => $attributes['name'],
-                'value' => $element->getUncheckedValue(),
-            ];
+        // Render hidden element
+        $useHiddenElement = method_exists($element, 'useHiddenElement') && $element->useHiddenElement()
+            ? $element->useHiddenElement()
+            : $this->useHiddenElement;
 
-            $hidden = sprintf(
-                '<input type="hidden" %s%s',
-                $this->createAttributesString($hiddenAttributes),
-                $closingBracket
-            );
+        if ($useHiddenElement) {
+            $hidden = $this->renderHiddenElement($element, $attributes);
+            $hidden = $indent . $this->getWhitespace(4) . $hidden . PHP_EOL;
         }
 
-        return $this->renderer->render(
-            'elements::checkbox',
-            [
-                'attributes' => $attributes,
-                'useHidden' => $element->useHiddenElement(),
-                'hidden' => $hidden,
-                'labelAttributes' => $labelAttributes,
-                'label' => $label,
-                'element' => $rendered,
-                'groupClasses' => $groupClasses,
-            ]
-        );
+        $labelPosition = $this->getLabelPosition();
+
+        switch ($labelPosition) {
+            case BaseFormRow::LABEL_PREPEND:
+                $rendered = $labelOpen . $label . PHP_EOL . $indent . $this->getWhitespace(4) . $rendered . $labelClose;
+                break;
+            case BaseFormRow::LABEL_APPEND:
+            default:
+                $rendered = $labelOpen . $rendered . PHP_EOL . $indent . $this->getWhitespace(4) . $label . $labelClose;
+                break;
+        }
+
+        return $indent . $this->htmlElement->toHtml('div', ['class' => $groupClasses], PHP_EOL . $hidden . $rendered . PHP_EOL . $indent);
     }
 
     /**
@@ -164,5 +205,30 @@ final class FormCheckbox extends FormInput
     protected function getInputType(): string
     {
         return 'checkbox';
+    }
+
+    /**
+     * Render a hidden element for empty/unchecked value
+     *
+     * @param array<string, bool> $attributes
+     */
+    private function renderHiddenElement(CheckboxElement $element, array $attributes): string
+    {
+        $closingBracket = $this->getInlineClosingBracket();
+
+        $uncheckedValue = $element->getUncheckedValue()
+            ?: $this->uncheckedValue;
+
+        $hiddenAttributes = [
+            'name' => $element->getName(),
+            'value' => $uncheckedValue,
+            'disabled' => $attributes['disabled'] ?? null,
+        ];
+
+        return sprintf(
+            '<input type="hidden" %s%s',
+            $this->createAttributesString($hiddenAttributes),
+            $closingBracket
+        );
     }
 }

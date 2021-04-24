@@ -18,6 +18,7 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
@@ -41,7 +42,7 @@ final class FormSelectFactory
             sprintf(
                 '$plugin should be an Instance of %s, but was %s',
                 HelperPluginManager::class,
-                get_class($plugin)
+                is_object($plugin) ? get_class($plugin) : gettype($plugin)
             )
         );
 
@@ -62,6 +63,7 @@ final class FormSelectFactory
         }
 
         return new FormSelect(
+            $lvhPluginManager->get(HtmlElement::class),
             $lvhPluginManager->get(PartialRendererInterface::class),
             $plugin->get(EscapeHtml::class),
             $plugin->get(FormHidden::class),

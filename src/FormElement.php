@@ -15,10 +15,17 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\Element;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
+
+use function assert;
+use function method_exists;
 
 final class FormElement extends AbstractHelper
 {
+    use FormTrait;
+
     public const DEFAULT_HELPER = 'formInput';
 
     /**
@@ -87,6 +94,9 @@ final class FormElement extends AbstractHelper
      * Proxies to {@link render()}.
      *
      * @return self|string
+     *
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -102,6 +112,9 @@ final class FormElement extends AbstractHelper
      *
      * Introspects the element type and attributes to determine which
      * helper to utilize when rendering.
+     *
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
      */
     public function render(ElementInterface $element): string
     {
@@ -158,16 +171,27 @@ final class FormElement extends AbstractHelper
 
     /**
      * Render element by helper name
+     *
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
      */
     private function renderHelper(string $name, ElementInterface $element): string
     {
         $helper = $this->helperPluginManager->get($name);
+        assert($helper instanceof AbstractHelper);
 
-        return $helper($element);
+        if (method_exists($helper, 'setIndent')) {
+            $helper->setIndent($this->getIndent());
+        }
+
+        return $helper->render($element);
     }
 
     /**
      * Render element by instance map
+     *
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
      */
     private function renderInstance(ElementInterface $element): ?string
     {
@@ -182,6 +206,9 @@ final class FormElement extends AbstractHelper
 
     /**
      * Render element by type map
+     *
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
      */
     private function renderType(ElementInterface $element): ?string
     {

@@ -1,7 +1,0 @@
-<div class="<?= implode(' ', $this->groupClasses) ?>">
-    <?php if ($this->useHidden) : ?>
-    <?= $this->hidden . PHP_EOL ?>
-    <?php endif ?>
-    <?= $this->element . PHP_EOL ?>
-    <?= $this->formLabel()->openTag($this->labelAttributes) ?><?= $this->label ?><?= $this->formLabel()->closeTag() . PHP_EOL ?>
-</div>

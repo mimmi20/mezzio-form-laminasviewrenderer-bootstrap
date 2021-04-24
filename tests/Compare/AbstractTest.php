@@ -12,10 +12,7 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
-use Laminas\Form\View\Helper\FormEmail;
-use Laminas\Form\View\Helper\FormHidden;
-use Laminas\Form\View\Helper\FormPassword;
-use Laminas\Form\View\Helper\FormText;
+use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Helper\HelperInterface;
@@ -31,12 +28,15 @@ use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementFactory;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormEmail;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHidden;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckboxFactory;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormPassword;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadioFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRange;
@@ -45,20 +45,22 @@ use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelect;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectFactory;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSubmit;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormText;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\LaminasView\LaminasViewRendererFactory;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Mezzio\LaminasViewHelper\Helper\PluginManagerFactory as LvhPluginManagerFactory;
-use Mezzio\LaminasViewHelper\View\Helper\HtmlElement;
-use Mezzio\LaminasViewHelper\View\Helper\HtmlElementFactory;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function file_get_contents;
 use function sprintf;
+use function str_replace;
+
+use const PHP_EOL;
 
 /**
  * Base class for navigation view helper tests
@@ -84,6 +86,8 @@ abstract class AbstractTest extends TestCase
 
     /**
      * Prepares the environment before running a test
+     *
+     * @throws ContainerModificationsNotAllowedException
      */
     protected function setUp(): void
     {
@@ -110,20 +114,17 @@ abstract class AbstractTest extends TestCase
                         'formElement' => FormElement::class,
                         'form_element' => FormElement::class,
                         'formElementErrors' => FormElementErrors::class,
+                        'formEmail' => FormEmail::class,
                         'formFile' => FormFile::class,
+                        'formHidden' => FormHidden::class,
                         'formLabel' => FormLabel::class,
                         'formMultiCheckbox' => FormMultiCheckbox::class,
+                        'formPassword' => FormPassword::class,
                         'formRadio' => FormRadio::class,
                         'formRange' => FormRange::class,
                         'formRow' => FormRow::class,
                         'formSelect' => FormSelect::class,
                         'formSubmit' => FormSubmit::class,
-                        // from mimmi20/mezzio-laminasviewrenderer-helpers
-                        'htmlElement' => HtmlElement::class,
-                        // original Laminas Viewhelpers
-                        'formEmail' => FormEmail::class,
-                        'formHidden' => FormHidden::class,
-                        'formPassword' => FormPassword::class,
                         'formText' => FormText::class,
                     ],
                     'factories' => [
@@ -133,28 +134,18 @@ abstract class AbstractTest extends TestCase
                         FormCheckbox::class => FormCheckboxFactory::class,
                         FormElement::class => FormElementFactory::class,
                         FormElementErrors::class => FormElementErrorsFactory::class,
+                        FormEmail::class => InvokableFactory::class,
+                        FormFile::class => InvokableFactory::class,
+                        FormHidden::class => InvokableFactory::class,
+                        FormLabel::class => FormLabelFactory::class,
                         FormMultiCheckbox::class => FormMultiCheckboxFactory::class,
+                        FormPassword::class => InvokableFactory::class,
                         FormRadio::class => FormRadioFactory::class,
                         FormRange::class => InvokableFactory::class,
                         FormRow::class => FormRowFactory::class,
                         FormSelect::class => FormSelectFactory::class,
                         FormSubmit::class => InvokableFactory::class,
-                        FormLabel::class => FormLabelFactory::class,
-                        FormFile::class => InvokableFactory::class,
-                        // from mimmi20/mezzio-laminasviewrenderer-helpers
-                        HtmlElement::class => HtmlElementFactory::class,
-                        // original Laminas Viewhelpers
-                        FormEmail::class => InvokableFactory::class,
-                        FormHidden::class => InvokableFactory::class,
-                        FormPassword::class => InvokableFactory::class,
                         FormText::class => InvokableFactory::class,
-                    ],
-                ],
-                'templates' => [
-                    'paths' => [
-                        'horizontal' => [__DIR__ . '/../../templates/horizontal'],
-                        'vertical' => [__DIR__ . '/../../templates/vertical'],
-                        'elements' => [__DIR__ . '/../../templates/elements'],
                     ],
                 ],
             ]
@@ -177,6 +168,6 @@ abstract class AbstractTest extends TestCase
 
         static::assertIsString($content, sprintf('could not load file %s', $this->files . '/expected/' . $file));
 
-        return $content;
+        return str_replace(["\r\n", "\n", "\r", '##lb##'], ['##lb##', '##lb##', '##lb##', PHP_EOL], $content);
     }
 }

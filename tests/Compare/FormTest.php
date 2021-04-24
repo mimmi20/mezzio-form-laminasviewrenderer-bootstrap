@@ -15,11 +15,17 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 use Laminas\Form\Factory;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use PHPUnit\Framework\Exception;
+use Psr\Container\ContainerExceptionInterface;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function trim;
 
 final class FormTest extends AbstractTest
 {
+    /**
+     * @throws ContainerExceptionInterface
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,6 +35,10 @@ final class FormTest extends AbstractTest
         $this->helper = $plugin->get(Form::class);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
     public function testVerticalForm(): void
     {
         $form = (new Factory())->createForm(require '_files/config/vertical.config.php');
@@ -38,6 +48,10 @@ final class FormTest extends AbstractTest
         self::assertSame($expected, trim($this->helper->render($form)));
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
     public function testHorizontalForm(): void
     {
         $form = (new Factory())->createForm(require '_files/config/horizontal.config.php');
@@ -47,53 +61,53 @@ final class FormTest extends AbstractTest
         self::assertSame($expected, trim($this->helper->render($form)));
     }
 
-    public function testHrForm(): void
-    {
-        self::markTestSkipped();
-        $form = (new Factory())->createForm(require '_files/config/default.hr.config.php');
-
-        $expected = $this->getExpected('form/hr.html');
-
-        self::assertSame($expected, trim($this->helper->render($form)));
-    }
-
-    public function testPhvForm(): void
-    {
-        self::markTestSkipped();
-        $form = (new Factory())->createForm(require '_files/config/default.phv.config.php');
-
-        $expected = $this->getExpected('form/phv.html');
-
-        self::assertSame($expected, trim($this->helper->render($form)));
-    }
-
-    public function testRsForm(): void
-    {
-        self::markTestSkipped();
-        $form = (new Factory())->createForm(require '_files/config/default.rs.config.php');
-
-        $expected = $this->getExpected('form/rs.html');
-
-        self::assertSame($expected, trim($this->helper->render($form)));
-    }
-
-    public function testTierForm(): void
-    {
-        self::markTestSkipped();
-        $form = (new Factory())->createForm(require '_files/config/default.tier.config.php');
-
-        $expected = $this->getExpected('form/tier.html');
-
-        self::assertSame($expected, trim($this->helper->render($form)));
-    }
-
-    public function testUnfallForm(): void
-    {
-        self::markTestSkipped();
-        $form = (new Factory())->createForm(require '_files/config/default.unfall.config.php');
-
-        $expected = $this->getExpected('form/unfall.html');
-
-        self::assertSame($expected, trim($this->helper->render($form)));
-    }
+//    public function testHrForm(): void
+//    {
+//        self::markTestSkipped();
+//        $form = (new Factory())->createForm(require '_files/config/default.hr.config.php');
+//
+//        $expected = $this->getExpected('form/hr.html');
+//
+//        self::assertSame($expected, trim($this->helper->render($form)));
+//    }
+//
+//    public function testPhvForm(): void
+//    {
+//        self::markTestSkipped();
+//        $form = (new Factory())->createForm(require '_files/config/default.phv.config.php');
+//
+//        $expected = $this->getExpected('form/phv.html');
+//
+//        self::assertSame($expected, trim($this->helper->render($form)));
+//    }
+//
+//    public function testRsForm(): void
+//    {
+//        self::markTestSkipped();
+//        $form = (new Factory())->createForm(require '_files/config/default.rs.config.php');
+//
+//        $expected = $this->getExpected('form/rs.html');
+//
+//        self::assertSame($expected, trim($this->helper->render($form)));
+//    }
+//
+//    public function testTierForm(): void
+//    {
+//        self::markTestSkipped();
+//        $form = (new Factory())->createForm(require '_files/config/default.tier.config.php');
+//
+//        $expected = $this->getExpected('form/tier.html');
+//
+//        self::assertSame($expected, trim($this->helper->render($form)));
+//    }
+//
+//    public function testUnfallForm(): void
+//    {
+//        self::markTestSkipped();
+//        $form = (new Factory())->createForm(require '_files/config/default.unfall.config.php');
+//
+//        $expected = $this->getExpected('form/unfall.html');
+//
+//        self::assertSame($expected, trim($this->helper->render($form)));
+//    }
 }

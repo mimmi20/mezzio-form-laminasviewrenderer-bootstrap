@@ -13,48 +13,23 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
-use Laminas\Form\View\Helper\FormInput;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\View\Helper\FormSubmit as BaseFormSubmit;
 
-final class FormSubmit extends FormInput
+final class FormSubmit extends BaseFormSubmit
 {
-    /**
-     * Attributes valid for the input tag type="submit"
-     *
-     * @var array<string, bool>
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
-     */
-    protected $validTagAttributes = [
-        'name' => true,
-        'autofocus' => true,
-        'disabled' => true,
-        'form' => true,
-        'formaction' => true,
-        'formenctype' => true,
-        'formmethod' => true,
-        'formnovalidate' => true,
-        'formtarget' => true,
-        'type' => true,
-        'value' => true,
-    ];
+    use FormTrait;
 
     /**
-     * Translatable attributes
+     * Render a form <input> element from the provided $element
      *
-     * @var array<string, bool>
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     * @throws DomainException
      */
-    protected $translatableAttributes = ['value' => true];
-
-    /**
-     * Determine input type to use
-     *
-     * @throws Exception\DomainException
-     *
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-     */
-    protected function getType(ElementInterface $element): string
+    public function render(ElementInterface $element): string
     {
-        return 'submit';
+        $markup = parent::render($element);
+        $indent = $this->getIndent();
+
+        return $indent . $markup;
     }
 }
