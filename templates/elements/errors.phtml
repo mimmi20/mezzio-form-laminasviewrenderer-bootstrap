@@ -1,7 +1,0 @@
-<?= $this->htmlElement()->openTag('div', $this->errorAttributes) . PHP_EOL ?>
-    <?= $this->htmlElement()->openTag('ul', $this->attributes) . PHP_EOL ?>
-        <?php foreach ($this->messages as $message) : ?>
-        <?= $this->htmlElement()->openTag('li', []) ?><?= $this->escapeHtml($message) ?><?= $this->htmlElement()->closeTag('li') . PHP_EOL ?>
-        <?php endforeach ?>
-    <?= $this->htmlElement()->closeTag('ul') . PHP_EOL ?>
-<?= $this->htmlElement()->closeTag('div') ?>
