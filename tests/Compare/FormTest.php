@@ -19,6 +19,7 @@ use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
+use function assert;
 use function trim;
 
 final class FormTest extends AbstractTest
@@ -33,6 +34,7 @@ final class FormTest extends AbstractTest
         $plugin = $this->serviceManager->get(HelperPluginManager::class);
 
         $this->helper = $plugin->get(Form::class);
+        assert($this->helper instanceof Form);
     }
 
     /**
@@ -61,6 +63,36 @@ final class FormTest extends AbstractTest
         self::assertSame($expected, trim($this->helper->render($form)));
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testHorizontalFormWithCollection(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/horizontal.collection.config.php');
+
+        $expected = $this->getExpected('form/horizontal.collection.html');
+
+        self::assertSame($expected, trim($this->helper->render($form)));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testHorizontalFormWithElementGroup(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/horizontal.element-group.config.php');
+
+        $expected = $this->getExpected('form/horizontal.element-group.html');
+
+        self::assertSame($expected, trim($this->helper->render($form)));
+    }
+
+//    /**
+//     * @throws InvalidArgumentException
+//     * @throws Exception
+//     */
 //    public function testHrForm(): void
 //    {
 //        self::markTestSkipped();

@@ -69,8 +69,13 @@ final class Form extends BaseForm
             $form->setAttribute('role', 'form');
         }
 
-        $formLayout = $form->getOption('layout');
-        $class      = $form->getAttribute('class') ?? '';
+        $formLayout   = $form->getOption('layout');
+        $class        = $form->getAttribute('class') ?? '';
+        $requiredMark = $form->getOption('form-required-mark');
+
+        if (null === $formLayout && $form->getOption('floating-labels')) {
+            $formLayout = self::LAYOUT_VERTICAL;
+        }
 
         if (self::LAYOUT_VERTICAL === $formLayout) {
             $class .= ' row';
@@ -96,6 +101,11 @@ final class Form extends BaseForm
                 $element->setOption('layout', $formLayout);
             }
 
+            if ($requiredMark && $form->getOption('field-required-mark')) {
+                $element->setOption('show-required-mark', true);
+                $element->setOption('field-required-mark', $form->getOption('field-required-mark'));
+            }
+
             if ((self::LAYOUT_VERTICAL === $formLayout || self::LAYOUT_INLINE === $formLayout) && $form->getOption('floating-labels')) {
                 $element->setOption('floating', true);
             }
@@ -109,6 +119,10 @@ final class Form extends BaseForm
                 $this->formRow->setIndent($indent . $this->getWhitespace(4));
                 $formContent .= $this->formRow->render($element) . PHP_EOL;
             }
+        }
+
+        if ($requiredMark) {
+            $formContent .= $indent . $this->getWhitespace(4) . $requiredMark . PHP_EOL;
         }
 
         return $this->openTag($form) . PHP_EOL . $formContent . $this->closeTag() . PHP_EOL;

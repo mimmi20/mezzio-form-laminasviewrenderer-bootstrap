@@ -18,6 +18,7 @@ use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\MonthSelect;
 use Laminas\Form\Element\MultiCheckbox;
 use Laminas\Form\Element\Radio;
+use Laminas\Form\Element\Submit;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\FormInterface;
@@ -34,6 +35,7 @@ use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 
 use function array_key_exists;
 use function array_merge;
+use function array_unique;
 use function assert;
 use function explode;
 use function get_class;
@@ -102,6 +104,7 @@ final class FormRow extends BaseFormRow
         if (
             null !== $form
             && !$element->getAttribute('required')
+            && $form->getInputFilter()->has($element->getName())
             && $form->getInputFilter()->get($element->getName())->isRequired()
         ) {
             $element->setAttribute('required', true);
@@ -147,7 +150,7 @@ final class FormRow extends BaseFormRow
         $type = $element->getAttribute('type');
 
         if ('hidden' === $type) {
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $this->formElement->setIndent($indent);
             $markup = $this->formElement->render($element);
 
             if ($this->renderErrors) {
@@ -159,6 +162,10 @@ final class FormRow extends BaseFormRow
 
         if ('' !== $label && (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape'))) {
             $label = ($this->escapeHtml)($label);
+        }
+
+        if ($element->getOption('show-required-mark')) {
+            $label .= $element->getOption('field-required-mark');
         }
 
         if (Form::LAYOUT_HORIZONTAL === $element->getOption('layout')) {
@@ -193,14 +200,23 @@ final class FormRow extends BaseFormRow
         $labelClasses = ['col-form-label'];
         $colClasses   = [];
 
-        $rowAttributes   = $element->getOption('row_attributes') ?? [];
-        $colAttributes   = $element->getOption('col_attributes') ?? [];
-        $labelAttributes = $element->getOption('label_col_attributes') ?? [];
+        $rowAttributes      = $element->getOption('row_attributes') ?? [];
+        $colAttributes      = $element->getOption('col_attributes') ?? [];
+        $labelAttributes    = $element->getOption('label_attributes') ?? [];
+        $labelColAttributes = $element->getOption('label_col_attributes') ?? [];
+
+        if (array_key_exists('class', $labelColAttributes)) {
+            $labelClasses = array_merge($labelClasses, explode(' ', $labelColAttributes['class']));
+
+            unset($labelColAttributes['class']);
+        }
+
+        $labelAttributes = array_merge($labelColAttributes, $labelAttributes);
 
         if (null !== $form) {
-            $formRowAttributes   = $form->getOption('row_attributes') ?? [];
-            $formColAttributes   = $form->getOption('col_attributes') ?? [];
-            $formLabelAttributes = $form->getOption('label_col_attributes') ?? [];
+            $formRowAttributes      = $form->getOption('row_attributes') ?? [];
+            $formColAttributes      = $form->getOption('col_attributes') ?? [];
+            $formLabelColAttributes = $form->getOption('label_col_attributes') ?? [];
 
             if (array_key_exists('class', $formRowAttributes)) {
                 $rowClasses = array_merge($rowClasses, explode(' ', $formRowAttributes['class']));
@@ -214,15 +230,15 @@ final class FormRow extends BaseFormRow
                 unset($formColAttributes['class']);
             }
 
-            if (array_key_exists('class', $formLabelAttributes)) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $formLabelAttributes['class']));
+            if (array_key_exists('class', $formLabelColAttributes)) {
+                $labelClasses = array_merge($labelClasses, explode(' ', $formLabelColAttributes['class']));
 
-                unset($formLabelAttributes['class']);
+                unset($formLabelColAttributes['class']);
             }
 
             $rowAttributes   = array_merge($formRowAttributes, $rowAttributes);
             $colAttributes   = array_merge($formColAttributes, $colAttributes);
-            $labelAttributes = array_merge($formLabelAttributes, $labelAttributes);
+            $labelAttributes = array_merge($formLabelColAttributes, $labelAttributes);
         }
 
         assert(is_array($rowAttributes));
@@ -241,9 +257,9 @@ final class FormRow extends BaseFormRow
             $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
         }
 
-        $rowAttributes['class']   = trim(implode(' ', $rowClasses));
-        $colAttributes['class']   = trim(implode(' ', $colClasses));
-        $labelAttributes['class'] = trim(implode(' ', $labelClasses));
+        $rowAttributes['class']   = trim(implode(' ', array_unique($rowClasses)));
+        $colAttributes['class']   = trim(implode(' ', array_unique($colClasses)));
+        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         $indent = $this->getIndent();
 
@@ -269,7 +285,7 @@ final class FormRow extends BaseFormRow
             return $indent . $this->htmlElement->toHtml('fieldset', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Checkbox) {
+        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
             // Button element is a special case, because label is always rendered inside it
             $this->formElement->setIndent($indent . $this->getWhitespace(8));
             $elementString = $this->formElement->render($element);
@@ -325,11 +341,11 @@ final class FormRow extends BaseFormRow
         }
 
         if (array_key_exists('class', $labelAttributes)) {
-            $labelClasses[] = $labelAttributes['class'];
+            $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
         }
 
-        $colAttributes['class']   = trim(implode(' ', $colClasses));
-        $labelAttributes['class'] = trim(implode(' ', $labelClasses));
+        $colAttributes['class']   = trim(implode(' ', array_unique($colClasses)));
+        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         if ($element->hasAttribute('id')) {
             $labelAttributes['for'] = $element->getAttribute('id');
@@ -357,7 +373,7 @@ final class FormRow extends BaseFormRow
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Checkbox) {
+        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
             // Button element is a special case, because label is always rendered inside it
             $this->formElement->setIndent($indent . $this->getWhitespace(4));
             $elementString = $this->formElement->render($element);
@@ -386,11 +402,21 @@ final class FormRow extends BaseFormRow
         $this->formElement->setIndent($indent . $this->getWhitespace(4));
         $elementString = $this->formElement->render($element);
 
-        if ($this->renderErrors) {
-            $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+        switch ($labelPosition) {
+            case BaseFormRow::LABEL_PREPEND:
+                $rendered = $legend . $elementString;
+                break;
+            case BaseFormRow::LABEL_APPEND:
+            default:
+                $rendered = $elementString . $legend;
+                break;
         }
 
-        return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
+        if ($this->renderErrors) {
+            $rendered .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+        }
+
+        return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $rendered . PHP_EOL . $indent);
     }
 
     /**

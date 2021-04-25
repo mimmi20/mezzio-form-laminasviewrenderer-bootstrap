@@ -24,11 +24,20 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
+use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Traversable;
 
+use function array_key_exists;
+use function array_merge;
 use function assert;
+use function explode;
+use function implode;
+use function is_array;
 use function iterator_to_array;
 use function sprintf;
+use function trim;
+
+use const PHP_EOL;
 
 final class FormCollection extends BaseFormCollection
 {
@@ -36,13 +45,15 @@ final class FormCollection extends BaseFormCollection
 
     private FormRow $formRow;
     private EscapeHtml $escapeHtml;
+    private HtmlElement $htmlElement;
     private ?Translate $translate;
 
-    public function __construct(FormRow $formRow, EscapeHtml $escapeHtml, ?Translate $translator = null)
+    public function __construct(FormRow $formRow, EscapeHtml $escapeHtml, HtmlElement $htmlElement, ?Translate $translator = null)
     {
-        $this->formRow    = $formRow;
-        $this->escapeHtml = $escapeHtml;
-        $this->translate  = $translator;
+        $this->formRow     = $formRow;
+        $this->escapeHtml  = $escapeHtml;
+        $this->htmlElement = $htmlElement;
+        $this->translate   = $translator;
     }
 
     /**
@@ -68,14 +79,14 @@ final class FormCollection extends BaseFormCollection
 
         $markup         = '';
         $templateMarkup = '';
+        $indent         = $this->getIndent();
 
         if ($element instanceof CollectionElement && $element->shouldCreateTemplate()) {
-            $templateMarkup = $this->renderTemplate($element);
+            $templateMarkup = PHP_EOL . $indent . $this->getWhitespace(4) . $this->renderTemplate($element);
         }
 
         $layout   = $element->getOption('layout');
         $floating = $element->getOption('floating');
-        $indent   = $this->getIndent();
 
         foreach ($element->getIterator() as $elementOrFieldset) {
             assert($elementOrFieldset instanceof FieldsetInterface || $elementOrFieldset instanceof ElementInterface);
@@ -90,68 +101,75 @@ final class FormCollection extends BaseFormCollection
                 $elementOrFieldset->setOption('floating', true);
             }
 
+            if ($element->getOption('show-required-mark') && $element->getOption('field-required-mark')) {
+                $elementOrFieldset->setOption('show-required-mark', true);
+                $elementOrFieldset->setOption('field-required-mark', $element->getOption('field-required-mark'));
+            }
+
             if ($elementOrFieldset instanceof FieldsetInterface) {
                 $this->setIndent($indent . $this->getWhitespace(4));
 
-                $markup .= $this->render($elementOrFieldset);
+                $markup .= $this->render($elementOrFieldset) . PHP_EOL;
 
                 $this->setIndent($indent);
             } else {
                 $this->formRow->setIndent($indent . $this->getWhitespace(4));
-                $markup .= $this->formRow->render($elementOrFieldset);
+                $markup .= $this->formRow->render($elementOrFieldset) . PHP_EOL;
             }
+        }
+
+        if (!$this->shouldWrap) {
+            return $markup . $templateMarkup;
         }
 
         // Every collection is wrapped by a fieldset if needed
-        if ($this->shouldWrap) {
-            $attributes = $element->getAttributes();
+        $attributes = $element->getAttributes();
 
-            if ($attributes instanceof Traversable) {
-                $attributes = iterator_to_array($attributes);
-            }
+        if ($attributes instanceof Traversable) {
+            $attributes = iterator_to_array($attributes);
+        }
 
-            unset($attributes['name']);
-            $attributesString = $attributes ? ' ' . $this->createAttributesString($attributes) : '';
+        unset($attributes['name']);
 
-            $label  = $element->getLabel();
-            $legend = '';
+        $indent = $this->getIndent();
+        $label  = $element->getLabel();
+        $legend = '';
 
-            if (!empty($label)) {
-                if (null !== $this->translate) {
-                    $label = ($this->translate)(
-                        $label,
-                        $this->getTranslatorTextDomain()
-                    );
-                }
-
-                if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
-                    $label = ($this->escapeHtml)($label);
-                }
-
-                if (
-                    '' !== $label && !$element->hasAttribute('id')
-                    || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
-                ) {
-                    $label = '<span>' . $label . '</span>';
-                }
-
-                $legend = sprintf(
-                    $this->labelWrapper,
-                    $label
+        if (!empty($label)) {
+            if (null !== $this->translate) {
+                $label = ($this->translate)(
+                    $label,
+                    $this->getTranslatorTextDomain()
                 );
             }
 
-            $markup = sprintf(
-                $this->wrapper,
-                $markup,
-                $legend,
-                $templateMarkup,
-                $attributesString
-            );
-        } else {
-            $markup .= $templateMarkup;
+            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+                $label = ($this->escapeHtml)($label);
+            }
+
+            if (
+                '' !== $label && !$element->hasAttribute('id')
+                || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+            ) {
+                $label = '<span>' . $label . '</span>';
+            }
+
+            $labelClasses    = [];
+            $labelAttributes = $element->getOption('label_attributes') ?? [];
+
+            assert(is_array($labelAttributes));
+
+            if (array_key_exists('class', $labelAttributes)) {
+                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+            }
+
+            $labelAttributes['class'] = trim(implode(' ', $labelClasses));
+
+            $legend = PHP_EOL . $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('legend', $labelAttributes, $label);
         }
 
-        return $markup;
+        $markup = PHP_EOL . $markup;
+
+        return $indent . $this->htmlElement->toHtml('fieldset', $attributes, $legend . $markup . $templateMarkup . $indent);
     }
 }
