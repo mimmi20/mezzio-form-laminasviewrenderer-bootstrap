@@ -17,7 +17,7 @@
     "laminas/laminas-escaper": "^2.7.0",
     "laminas/laminas-form": "^2.16.3",
     "mezzio/mezzio-laminasviewrenderer": "^2.3.0",
-    "mimmi20/mezzio-laminasviewrenderer-helpers": "^1.0.3"
+    "mimmi20/mezzio-laminasviewrenderer-helpers": "^1.0.4"
   },
   "require-dev": {
     "ext-intl": "*",
