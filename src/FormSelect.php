@@ -188,6 +188,7 @@ final class FormSelect extends AbstractHelper
         }
 
         $attributes['class'] = trim(implode(' ', $classes));
+        unset($attributes['type']);
 
         $indent        = $this->getIndent();
         $optionContent = [];

@@ -169,7 +169,7 @@ final class FormRow extends BaseFormRow
         }
 
         if (Form::LAYOUT_HORIZONTAL === $element->getOption('layout')) {
-            return $this->renderHorizontalRow($element, $label, $form);
+            return $this->renderHorizontalRow($element, $label);
         }
 
         if ('' !== $label) {
@@ -183,6 +183,10 @@ final class FormRow extends BaseFormRow
             $markup .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
         }
 
+        if ($element->getOption('help_content')) {
+            $markup .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+        }
+
         return $markup;
     }
 
@@ -193,17 +197,19 @@ final class FormRow extends BaseFormRow
      */
     private function renderHorizontalRow(
         ElementInterface $element,
-        string $label,
-        ?FormInterface $form
+        string $label
     ): string {
-        $rowClasses   = ['row'];
-        $labelClasses = ['col-form-label'];
-        $colClasses   = [];
+        $labelClasses       = [];
+        $rowAttributes      = $this->mergeAttributes($element, 'row_attributes', ['row']); //$element->getOption('row_attributes') ?? [];
+        $colAttributes      = $this->mergeAttributes($element, 'col_attributes', []); //$element->getOption('col_attributes') ?? [];
+        $labelAttributes    = $this->mergeAttributes($element, 'label_attributes', ['col-form-label']); //$element->getOption('label_attributes') ?? [];
+        $labelColAttributes = $this->mergeAttributes($element, 'label_col_attributes', []); //$element->getOption('label_col_attributes') ?? [];
 
-        $rowAttributes      = $element->getOption('row_attributes') ?? [];
-        $colAttributes      = $element->getOption('col_attributes') ?? [];
-        $labelAttributes    = $element->getOption('label_attributes') ?? [];
-        $labelColAttributes = $element->getOption('label_col_attributes') ?? [];
+        if (array_key_exists('class', $labelAttributes)) {
+            $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+
+            unset($labelAttributes['class']);
+        }
 
         if (array_key_exists('class', $labelColAttributes)) {
             $labelClasses = array_merge($labelClasses, explode(' ', $labelColAttributes['class']));
@@ -211,55 +217,12 @@ final class FormRow extends BaseFormRow
             unset($labelColAttributes['class']);
         }
 
-        $labelAttributes = array_merge($labelColAttributes, $labelAttributes);
-
-        if (null !== $form) {
-            $formRowAttributes      = $form->getOption('row_attributes') ?? [];
-            $formColAttributes      = $form->getOption('col_attributes') ?? [];
-            $formLabelColAttributes = $form->getOption('label_col_attributes') ?? [];
-
-            if (array_key_exists('class', $formRowAttributes)) {
-                $rowClasses = array_merge($rowClasses, explode(' ', $formRowAttributes['class']));
-
-                unset($formRowAttributes['class']);
-            }
-
-            if (array_key_exists('class', $formColAttributes)) {
-                $colClasses = array_merge($colClasses, explode(' ', $formColAttributes['class']));
-
-                unset($formColAttributes['class']);
-            }
-
-            if (array_key_exists('class', $formLabelColAttributes)) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $formLabelColAttributes['class']));
-
-                unset($formLabelColAttributes['class']);
-            }
-
-            $rowAttributes   = array_merge($formRowAttributes, $rowAttributes);
-            $colAttributes   = array_merge($formColAttributes, $colAttributes);
-            $labelAttributes = array_merge($formLabelColAttributes, $labelAttributes);
-        }
+        $labelAttributes          = array_merge($labelColAttributes, $labelAttributes);
+        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         assert(is_array($rowAttributes));
         assert(is_array($colAttributes));
         assert(is_array($labelAttributes));
-
-        if (array_key_exists('class', $rowAttributes)) {
-            $rowClasses = array_merge($rowClasses, explode(' ', $rowAttributes['class']));
-        }
-
-        if (array_key_exists('class', $colAttributes)) {
-            $colClasses = array_merge($colClasses, explode(' ', $colAttributes['class']));
-        }
-
-        if (array_key_exists('class', $labelAttributes)) {
-            $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
-        }
-
-        $rowAttributes['class']   = trim(implode(' ', array_unique($rowClasses)));
-        $colAttributes['class']   = trim(implode(' ', array_unique($colClasses)));
-        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         $indent = $this->getIndent();
 
@@ -280,6 +243,10 @@ final class FormRow extends BaseFormRow
                 $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
             }
 
+            if ($element->getOption('help_content')) {
+                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+            }
+
             $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
 
             return $indent . $this->htmlElement->toHtml('fieldset', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
@@ -292,6 +259,10 @@ final class FormRow extends BaseFormRow
 
             if ($this->renderErrors) {
                 $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+            }
+
+            if ($element->getOption('help_content')) {
+                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
             }
 
             $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
@@ -312,6 +283,10 @@ final class FormRow extends BaseFormRow
             $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
         }
 
+        if ($element->getOption('help_content')) {
+            $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+        }
+
         $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
 
         return $indent . $this->htmlElement->toHtml('div', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
@@ -327,25 +302,11 @@ final class FormRow extends BaseFormRow
         string $label,
         ?string $labelPosition = null
     ): string {
-        $labelClasses = ['form-label'];
-        $colClasses   = [];
-
-        $colAttributes   = $element->getOption('col_attributes') ?? [];
-        $labelAttributes = $element->getOption('label_attributes') ?? [];
+        $colAttributes   = $this->mergeAttributes($element, 'col_attributes', []);
+        $labelAttributes = $this->mergeAttributes($element, 'label_attributes', ['form-label']);
 
         assert(is_array($colAttributes));
         assert(is_array($labelAttributes));
-
-        if (array_key_exists('class', $colAttributes)) {
-            $colClasses[] = $colAttributes['class'];
-        }
-
-        if (array_key_exists('class', $labelAttributes)) {
-            $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
-        }
-
-        $colAttributes['class']   = trim(implode(' ', array_unique($colClasses)));
-        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         if ($element->hasAttribute('id')) {
             $labelAttributes['for'] = $element->getAttribute('id');
@@ -370,6 +331,10 @@ final class FormRow extends BaseFormRow
                 $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
             }
 
+            if ($element->getOption('help_content')) {
+                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+            }
+
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
@@ -380,6 +345,10 @@ final class FormRow extends BaseFormRow
 
             if ($this->renderErrors) {
                 $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+            }
+
+            if ($element->getOption('help_content')) {
+                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
             }
 
             return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent);
@@ -416,6 +385,10 @@ final class FormRow extends BaseFormRow
             $rendered .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
         }
 
+        if ($element->getOption('help_content')) {
+            $rendered .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+        }
+
         return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $rendered . PHP_EOL . $indent);
     }
 
@@ -427,7 +400,7 @@ final class FormRow extends BaseFormRow
         $this->formElementErrors->setIndent($indent);
         $elementErrors = $this->formElementErrors->render($element);
 
-        if ($elementErrors) {
+        if ($elementErrors && $element->hasAttribute('id')) {
             $ariaDesc = $element->hasAttribute('aria-describedby') ? $element->getAttribute('aria-describedby') . ' ' : '';
 
             $ariaDesc .= $element->getAttribute('id') . 'Feedback';
@@ -436,5 +409,68 @@ final class FormRow extends BaseFormRow
         }
 
         return $elementErrors;
+    }
+
+    private function renderFormHelp(ElementInterface $element, string $indent): string
+    {
+        $helpContent = $element->getOption('help_content');
+        $attributes  = $element->getOption('help_attributes') ?? [];
+
+        if ($element->hasAttribute('id')) {
+            $attributes['id'] = $element->getAttribute('id') . 'Help';
+
+            $ariaDesc = $element->hasAttribute('aria-describedby') ? $element->getAttribute('aria-describedby') . ' ' : '';
+
+            $ariaDesc .= $element->getAttribute('id') . 'Help';
+
+            $element->setAttribute('aria-describedby', $ariaDesc);
+        }
+
+        return PHP_EOL . $indent . $this->htmlElement->toHtml('div', $attributes, $helpContent);
+    }
+
+    /**
+     * @param array<int, string> $classes
+     *
+     * @return array<string, string>
+     */
+    private function mergeAttributes(ElementInterface $element, string $optionName, array $classes = []): array
+    {
+        $attributes = $element->getOption($optionName) ?? [];
+        assert(is_array($attributes));
+
+        if (array_key_exists('class', $attributes)) {
+            $classes = array_merge($classes, explode(' ', $attributes['class']));
+
+            unset($attributes['class']);
+        }
+
+        $form = $element->getOption('form');
+        assert(
+            $form instanceof FormInterface || null === $form,
+            sprintf(
+                '$form should be an Instance of %s or null, but was %s',
+                FormInterface::class,
+                is_object($form) ? get_class($form) : gettype($form)
+            )
+        );
+
+        if (null !== $form) {
+            $formAttributes = $form->getOption($optionName) ?? [];
+
+            if (array_key_exists('class', $formAttributes)) {
+                $classes = array_merge($classes, explode(' ', $formAttributes['class']));
+
+                unset($formAttributes['class']);
+            }
+
+            $attributes = array_merge($formAttributes, $attributes);
+        }
+
+        if ($classes) {
+            $attributes['class'] = implode(' ', array_unique($classes));
+        }
+
+        return $attributes;
     }
 }
