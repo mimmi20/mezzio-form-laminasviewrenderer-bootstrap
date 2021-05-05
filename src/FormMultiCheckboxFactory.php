@@ -15,7 +15,9 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\PluginManagerInterface;
+use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
 use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
@@ -61,9 +63,11 @@ final class FormMultiCheckboxFactory
         }
 
         return new FormMultiCheckbox(
+            $plugin->get(EscapeHtml::class),
+            $plugin->get(EscapeHtmlAttr::class),
+            $plugin->get(Doctype::class),
             $plugin->get(FormLabel::class),
             $lvhPluginManager->get(HtmlElement::class),
-            $plugin->get(EscapeHtml::class),
             $translator
         );
     }

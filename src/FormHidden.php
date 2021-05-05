@@ -14,12 +14,13 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
-use Laminas\Form\View\Helper\FormInput;
+use Traversable;
+
+use function iterator_to_array;
+use function sprintf;
 
 final class FormHidden extends FormInput
 {
-    use FormTrait;
-
     /**
      * Attributes valid for the input tag type="hidden"
      *
@@ -42,7 +43,34 @@ final class FormHidden extends FormInput
      */
     public function render(ElementInterface $element): string
     {
-        $markup = parent::render($element);
+        $name = $element->getName();
+
+        if (null === $name || '' === $name) {
+            throw new DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
+        }
+
+        $attributes = $element->getAttributes();
+
+        if ($attributes instanceof Traversable) {
+            $attributes = iterator_to_array($attributes);
+        }
+
+        $attributes['name']  = $name;
+        $type                = $this->getType($element);
+        $attributes['type']  = $type;
+        $attributes['value'] = $element->getValue();
+
+        $markup = sprintf(
+            '<input %s%s',
+            $this->createAttributesString($attributes),
+            $this->getInlineClosingBracket()
+        );
+
         $indent = $this->getIndent();
 
         return $indent . $markup;

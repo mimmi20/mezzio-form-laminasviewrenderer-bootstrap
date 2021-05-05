@@ -2,7 +2,7 @@
     <fieldset>
         <legend class="headline-calculator"><span>Was möchten Sie versichern?</span></legend>
         <div class="row">
-            <label class="col-form-label&#x20;col-sm&#x20;text-sm-right" for="versbeginn">Versicherungsbeginn<span class="text-info-required">*</span></label>
+            <label class="col-form-label&#x20;col-sm&#x20;text-sm-right" for="versbeginn">Versicherungsbeginn</label>
             <div>
                 <select name="versbeginn" id="versbeginn" class="form-select&#x20;form-control&#x20;form-control-select&#x20;toggle-trigger" data-toggle-modus="show" data-toggle-value="datum">
                     <option value="sofort">schnellstmöglich</option>
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="row">
-            <label class="col-form-label" for="versbeginn_datum">Beginn am<span class="text-info-required">*</span></label>
+            <label class="col-form-label" for="versbeginn_datum">Beginn am</label>
             <div>
                 <input type="text" name="versbeginn_datum" id="versbeginn_datum" class="form-control&#x20;form-control-input&#x20;datepicker&#x20;js-datepicker" value="">
             </div>
@@ -20,7 +20,7 @@
     <input type="hidden" name="sToken" value="">
     <div class="row">
         <div>
-            <input type="submit" name="btn_berechnen" class="btn&#x20;btn-default&#x20;js-gtm-event" data-event-type="click" data-event-category="versicherung" data-event-action="calculate" data-event-label="hr" value="Berechnen">
+            <button type="submit" name="btn_berechnen" class="btn&#x20;btn-default&#x20;js-gtm-event" data-event-type="click" data-event-category="versicherung" data-event-action="calculate" data-event-label="hr">Berechnen</button>
         </div>
     </div>
     <div class="mt-2 text-info-required">* Pflichtfeld</div>

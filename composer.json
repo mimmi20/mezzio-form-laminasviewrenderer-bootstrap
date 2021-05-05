@@ -13,15 +13,16 @@
   ],
   "require": {
     "php": "^7.4.0 || ^8.0.0",
+    "ext-intl": "*",
     "ext-mbstring": "*",
     "laminas/laminas-escaper": "^2.7.0",
     "laminas/laminas-form": "^2.16.3",
+    "laminas/laminas-json": "^3.2.0",
     "mezzio/mezzio-laminasviewrenderer": "^2.3.0",
     "mimmi20/mezzio-laminasviewrenderer-helpers": "^1.0.4"
   },
   "require-dev": {
-    "ext-intl": "*",
-    "infection/infection": "^0.21.5",
+    "infection/infection": "^0.22.1",
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-servicemanager": "^3.6.4",
     "mimmi20/coding-standard": "^2.1.3",

@@ -15,9 +15,10 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\LabelAwareInterface;
-use Laminas\Form\View\Helper\FormInput;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Traversable;
 
 use function get_class;
@@ -30,8 +31,6 @@ use function sprintf;
 
 final class FormButton extends FormInput
 {
-    use FormTrait;
-
     /**
      * Attributes valid for the button tag
      *
@@ -64,13 +63,17 @@ final class FormButton extends FormInput
         'submit' => true,
     ];
 
-    private EscapeHtml $escapeHtml;
     private ?Translate $translate;
 
-    public function __construct(EscapeHtml $escapeHtml, ?Translate $translator = null)
-    {
-        $this->escapeHtml = $escapeHtml;
-        $this->translate  = $translator;
+    public function __construct(
+        EscapeHtml $escapeHtml,
+        EscapeHtmlAttr $escapeHtmlAttr,
+        Doctype $doctype,
+        ?Translate $translator = null
+    ) {
+        parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
+
+        $this->translate = $translator;
     }
 
     /**
@@ -175,9 +178,14 @@ final class FormButton extends FormInput
             $attributes = iterator_to_array($attributes);
         }
 
-        $attributes['name']  = $name;
-        $attributes['type']  = $this->getType($element);
-        $attributes['value'] = $element->getValue();
+        $attributes['name'] = $name;
+        $attributes['type'] = $this->getType($element);
+
+        $value = $element->getValue();
+
+        if ($value) {
+            $attributes['value'] = $value;
+        }
 
         return sprintf(
             '<button %s>',

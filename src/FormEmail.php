@@ -13,13 +13,9 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception\DomainException;
-use Laminas\Form\View\Helper\FormInput;
 
 final class FormEmail extends FormInput
 {
-    use FormTrait;
-
     /**
      * Attributes valid for the input tag type="email"
      *
@@ -44,19 +40,6 @@ final class FormEmail extends FormInput
         'type' => true,
         'value' => true,
     ];
-
-    /**
-     * Render a form <input> element from the provided $element
-     *
-     * @throws DomainException
-     */
-    public function render(ElementInterface $element): string
-    {
-        $markup = parent::render($element);
-        $indent = $this->getIndent();
-
-        return $indent . $markup;
-    }
 
     /**
      * Determine input type to use

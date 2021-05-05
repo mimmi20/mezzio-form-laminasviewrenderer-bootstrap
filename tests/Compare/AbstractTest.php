@@ -17,35 +17,7 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormButtonFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckboxFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormEmail;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHidden;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckboxFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormPassword;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadioFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRange;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelect;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSubmit;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormText;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
 use Mezzio\LaminasView\LaminasViewRenderer;
@@ -105,49 +77,7 @@ abstract class AbstractTest extends TestCase
         $sm->setFactory(
             'config',
             static fn (): array => [
-                'view_helpers' => [
-                    'aliases' => [
-                        'form' => Form::class,
-                        'formButton' => FormButton::class,
-                        'formCheckbox' => FormCheckbox::class,
-                        'formCollection' => FormCollection::class,
-                        'formElement' => FormElement::class,
-                        'form_element' => FormElement::class,
-                        'formElementErrors' => FormElementErrors::class,
-                        'formEmail' => FormEmail::class,
-                        'formFile' => FormFile::class,
-                        'formHidden' => FormHidden::class,
-                        'formLabel' => FormLabel::class,
-                        'formMultiCheckbox' => FormMultiCheckbox::class,
-                        'formPassword' => FormPassword::class,
-                        'formRadio' => FormRadio::class,
-                        'formRange' => FormRange::class,
-                        'formRow' => FormRow::class,
-                        'formSelect' => FormSelect::class,
-                        'formSubmit' => FormSubmit::class,
-                        'formText' => FormText::class,
-                    ],
-                    'factories' => [
-                        Form::class => FormFactory::class,
-                        FormButton::class => FormButtonFactory::class,
-                        FormCollection::class => FormCollectionFactory::class,
-                        FormCheckbox::class => FormCheckboxFactory::class,
-                        FormElement::class => FormElementFactory::class,
-                        FormElementErrors::class => FormElementErrorsFactory::class,
-                        FormEmail::class => InvokableFactory::class,
-                        FormFile::class => InvokableFactory::class,
-                        FormHidden::class => InvokableFactory::class,
-                        FormLabel::class => FormLabelFactory::class,
-                        FormMultiCheckbox::class => FormMultiCheckboxFactory::class,
-                        FormPassword::class => InvokableFactory::class,
-                        FormRadio::class => FormRadioFactory::class,
-                        FormRange::class => InvokableFactory::class,
-                        FormRow::class => FormRowFactory::class,
-                        FormSelect::class => FormSelectFactory::class,
-                        FormSubmit::class => InvokableFactory::class,
-                        FormText::class => InvokableFactory::class,
-                    ],
-                ],
+                'view_helpers' => (new ConfigProvider())->getViewHelperConfig(),
             ]
         );
         $sm->setFactory(LaminasViewRenderer::class, LaminasViewRendererFactory::class);

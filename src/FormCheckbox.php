@@ -16,15 +16,17 @@ use Laminas\Form\Element\Checkbox as CheckboxElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\LabelAwareInterface;
-use Laminas\Form\View\Helper\FormInput;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Traversable;
 
 use function array_key_exists;
 use function array_merge;
+use function array_unique;
 use function explode;
 use function implode;
 use function iterator_to_array;
@@ -36,22 +38,23 @@ use const PHP_EOL;
 
 final class FormCheckbox extends FormInput
 {
-    use FormTrait;
     use LabelPositionTrait;
     use UseHiddenElementTrait;
 
     private ?Translate $translate;
-    private EscapeHtml $escaper;
     private HtmlElement $htmlElement;
     private FormLabel $formLabel;
 
     public function __construct(
+        EscapeHtml $escapeHtml,
+        EscapeHtmlAttr $escapeHtmlAttr,
+        Doctype $doctype,
         FormLabel $formLabel,
         HtmlElement $htmlElement,
-        EscapeHtml $escaper,
         ?Translate $translator = null
     ) {
-        $this->escaper     = $escaper;
+        parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
+
         $this->htmlElement = $htmlElement;
         $this->translate   = $translator;
         $this->formLabel   = $formLabel;
@@ -87,7 +90,7 @@ final class FormCheckbox extends FormInput
         }
 
         if (!empty($label) && (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape'))) {
-            $label = ($this->escaper)($label);
+            $label = ($this->escapeHtml)($label);
         }
 
         $id = $this->getId($element);
@@ -120,7 +123,7 @@ final class FormCheckbox extends FormInput
             $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
         }
 
-        $labelAttributes['class'] = trim(implode(' ', $labelClasses));
+        $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         $attributes = $element->getAttributes();
 
@@ -141,7 +144,7 @@ final class FormCheckbox extends FormInput
             $inputClasses = array_merge($inputClasses, explode(' ', $attributes['class']));
         }
 
-        $attributes['class'] = trim(implode(' ', $inputClasses));
+        $attributes['class'] = trim(implode(' ', array_unique($inputClasses)));
 
         $indent = $this->getIndent();
 

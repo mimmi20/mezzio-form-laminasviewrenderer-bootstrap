@@ -135,10 +135,8 @@ final class FormElement extends AbstractHelper
 
     /**
      * Set default helper name
-     *
-     * @return $this
      */
-    public function setDefaultHelper(string $name)
+    public function setDefaultHelper(string $name): self
     {
         $this->defaultHelper = $name;
 
@@ -147,10 +145,8 @@ final class FormElement extends AbstractHelper
 
     /**
      * Add form element type to plugin map
-     *
-     * @return $this
      */
-    public function addType(string $type, string $plugin)
+    public function addType(string $type, string $plugin): self
     {
         $this->typeMap[$type] = $plugin;
 
@@ -159,10 +155,8 @@ final class FormElement extends AbstractHelper
 
     /**
      * Add instance class to plugin map
-     *
-     * @return $this
      */
-    public function addClass(string $class, string $plugin)
+    public function addClass(string $class, string $plugin): self
     {
         $this->classMap[$class] = $plugin;
 

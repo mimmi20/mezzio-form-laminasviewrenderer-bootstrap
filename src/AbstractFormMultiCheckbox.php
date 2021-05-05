@@ -16,16 +16,19 @@ use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\LabelAwareInterface;
-use Laminas\Form\View\Helper\FormInput;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\LaminasViewHelper\Helper\HtmlElement;
 use Traversable;
 
 use function array_key_exists;
 use function array_merge;
+use function array_unique;
 use function assert;
+use function explode;
 use function implode;
 use function in_array;
 use function is_array;
@@ -40,7 +43,6 @@ use const PHP_EOL;
 
 abstract class AbstractFormMultiCheckbox extends FormInput
 {
-    use FormTrait;
     use LabelPositionTrait;
     use UseHiddenElementTrait;
 
@@ -49,7 +51,6 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
     private FormLabel $formLabel;
     private ?Translate $translate;
-    private EscapeHtml $escaper;
     private HtmlElement $htmlElement;
 
     /**
@@ -64,11 +65,13 @@ abstract class AbstractFormMultiCheckbox extends FormInput
      */
     private string $separator = '';
 
-    public function __construct(FormLabel $formLabel, HtmlElement $htmlElement, EscapeHtml $escaper, ?Translate $translator = null)
+    public function __construct(EscapeHtml $escapeHtml, EscapeHtmlAttr $escapeHtmlAttr, Doctype $doctype, FormLabel $formLabel, HtmlElement $htmlElement, ?Translate $translator = null)
     {
+        parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
+
         $this->formLabel   = $formLabel;
         $this->htmlElement = $htmlElement;
-        $this->escaper     = $escaper;
+        $this->escapeHtml  = $escapeHtml;
         $this->translate   = $translator;
     }
 
@@ -283,21 +286,26 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $inputAttributes['checked']  = $selected;
             $inputAttributes['disabled'] = $disabled;
 
-            if (!array_key_exists('class', $inputAttributes)) {
-                $inputAttributes['class'] = '';
+            $inputClasses = ['form-check-input'];
+
+            if (array_key_exists('class', $inputAttributes)) {
+                assert(is_string($inputAttributes['class']));
+                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
             }
 
-            $inputAttributes['class'] = trim('form-check-input ' . $inputAttributes['class']);
+            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
 
             if (!is_array($labelAttributes)) {
                 $labelAttributes = [];
             }
 
-            if (!array_key_exists('class', $labelAttributes)) {
-                $labelAttributes['class'] = '';
+            $labelClasses = ['form-check-label'];
+
+            if (array_key_exists('class', $labelAttributes)) {
+                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
             }
 
-            $labelAttributes['class'] = trim('form-check-label ' . $labelAttributes['class']);
+            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
             if (array_key_exists('id', $inputAttributes)) {
                 $labelAttributes['for'] = $inputAttributes['id'];
@@ -321,7 +329,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             }
 
             if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
-                $label = ($this->escaper)($label);
+                $label = ($this->escapeHtml)($label);
             }
 
             if (

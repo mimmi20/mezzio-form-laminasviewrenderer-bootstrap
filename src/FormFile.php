@@ -14,7 +14,6 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
-use Laminas\Form\View\Helper\FormInput;
 use Traversable;
 
 use function array_key_exists;
@@ -25,8 +24,6 @@ use function sprintf;
 
 final class FormFile extends FormInput
 {
-    use FormTrait;
-
     /**
      * Attributes valid for the input tag type="file"
      *

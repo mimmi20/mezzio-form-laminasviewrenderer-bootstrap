@@ -25,3 +25,4 @@ parameters:
     - '~Parameter #1 \$attributesOrElement of method Mezzio\\BootstrapForm\\LaminasView\\View\\Helper\\FormLabel::openTag\(\) expects array<string, bool\|string>\|Laminas\\Form\\ElementInterface\|null, array given~'
     - '~Call to an undefined method Laminas\\View\\Helper\\HelperInterface::render\(\)~'
     - '~Call to an undefined method Laminas\\InputFilter\\InputFilterInterface\|Laminas\\InputFilter\\InputInterface::isRequired\(\)~'
+    - '~Strict comparison using === between null and int\|string will always evaluate to false~'

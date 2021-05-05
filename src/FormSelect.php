@@ -27,6 +27,7 @@ use Traversable;
 
 use function array_key_exists;
 use function array_merge;
+use function array_unique;
 use function assert;
 use function explode;
 use function implode;
@@ -179,16 +180,13 @@ final class FormSelect extends AbstractHelper
             $attributes['name'] .= '[]';
         }
 
-        $this->validTagAttributes = $this->validSelectAttributes;
-
         $classes = ['form-select'];
 
         if (array_key_exists('class', $attributes)) {
             $classes = array_merge($classes, explode(' ', $attributes['class']));
         }
 
-        $attributes['class'] = trim(implode(' ', $classes));
-        unset($attributes['type']);
+        $attributes['class'] = trim(implode(' ', array_unique($classes)));
 
         $indent        = $this->getIndent();
         $optionContent = [];
@@ -197,7 +195,13 @@ final class FormSelect extends AbstractHelper
             $optionContent[] = $this->renderOption($key, $option, $value, 1);
         }
 
-        $rendered = $indent . $this->htmlElement->toHtml('select', $attributes, PHP_EOL . implode(PHP_EOL, $optionContent) . PHP_EOL . $indent);
+        $this->validTagAttributes = $this->validSelectAttributes;
+
+        $rendered = $indent . sprintf(
+            '<select %s>%s</select>',
+            $this->createAttributesString($attributes),
+            PHP_EOL . implode(PHP_EOL, $optionContent) . PHP_EOL . $indent
+        );
 
         // Render hidden element
         $useHiddenElement = method_exists($element, 'useHiddenElement')
@@ -288,7 +292,7 @@ final class FormSelect extends AbstractHelper
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
         }
 
-        if ('' !== $label && isset($optionSpec['disable_html_escape'])) {
+        if ('' !== $label && !isset($optionSpec['disable_html_escape'])) {
             $label = ($this->escaper)($label);
         }
 
@@ -304,7 +308,11 @@ final class FormSelect extends AbstractHelper
 
         $this->validTagAttributes = $this->validOptionAttributes;
 
-        $content = $this->htmlElement->toHtml('option', $attributes, $label);
+        $content = sprintf(
+            '<option %s>%s</option>',
+            $this->createAttributesString($attributes),
+            $label
+        );
         $indent  = $this->getIndent();
 
         return $indent . $this->getWhitespace($level * 4) . $content;
@@ -329,10 +337,14 @@ final class FormSelect extends AbstractHelper
         }
 
         $this->validTagAttributes = $this->validOptgroupAttributes;
+        $attributes               = $this->createAttributesString($optgroup);
+        if (!empty($attributes)) {
+            $attributes = ' ' . $attributes;
+        }
 
-        return $this->htmlElement->toHtml(
-            'optgroup',
-            $optgroup,
+        return sprintf(
+            '<optgroup%s>%s</optgroup>',
+            $attributes,
             $this->renderOptions($options, $selectedOptions, $level + 1)
         );
     }

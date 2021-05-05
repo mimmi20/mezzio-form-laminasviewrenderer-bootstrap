@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Calculator;
 
+use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Collection;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
-use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 
@@ -88,11 +88,11 @@ return [
         ],
         [
             'spec' => [
-                'type' => Submit::class,
+                'type' => Button::class,
                 'name' => 'btn_berechnen',
                 'options' => ['label' => 'Berechnen'],
                 'attributes' => [
-                    'value' => 'Berechnen',
+                    'type' => 'submit',
                     'class' => 'btn btn-default js-gtm-event',
                     'data-event-type' => 'click',
                     'data-event-category' => 'versicherung',

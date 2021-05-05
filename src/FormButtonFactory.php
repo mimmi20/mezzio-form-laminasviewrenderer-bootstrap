@@ -14,7 +14,9 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
@@ -49,6 +51,8 @@ final class FormButtonFactory
 
         return new FormButton(
             $plugin->get(EscapeHtml::class),
+            $plugin->get(EscapeHtmlAttr::class),
+            $plugin->get(Doctype::class),
             $translator
         );
     }

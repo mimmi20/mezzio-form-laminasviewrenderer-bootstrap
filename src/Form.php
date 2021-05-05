@@ -92,7 +92,7 @@ final class Form extends BaseForm
         $formContent = '';
         $indent      = $this->getIndent();
 
-        foreach ($form as $element) {
+        foreach ($form->getIterator() as $element) {
             assert($element instanceof FieldsetInterface || $element instanceof ElementInterface);
 
             $element->setOption('form', $form);

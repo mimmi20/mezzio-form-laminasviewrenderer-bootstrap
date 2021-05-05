@@ -164,7 +164,7 @@ final class FormRow extends BaseFormRow
             $label = ($this->escapeHtml)($label);
         }
 
-        if ($element->getOption('show-required-mark')) {
+        if ($element->getAttribute('required') && $element->getOption('show-required-mark')) {
             $label .= $element->getOption('field-required-mark');
         }
 
@@ -176,16 +176,20 @@ final class FormRow extends BaseFormRow
             return $this->renderVerticalRow($element, $label, $labelPosition);
         }
 
-        $this->formElement->setIndent($indent . $this->getWhitespace(4));
-        $markup = $this->formElement->render($element);
+        $errorContent = '';
+        $helpContent  = '';
 
         if ($this->renderErrors) {
-            $markup .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
         }
 
         if ($element->getOption('help_content')) {
-            $markup .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
         }
+
+        $this->formElement->setIndent($indent . $this->getWhitespace(4));
+        $markup  = $this->formElement->render($element);
+        $markup .= $errorContent . $helpContent;
 
         return $markup;
     }
@@ -200,10 +204,10 @@ final class FormRow extends BaseFormRow
         string $label
     ): string {
         $labelClasses       = [];
-        $rowAttributes      = $this->mergeAttributes($element, 'row_attributes', ['row']); //$element->getOption('row_attributes') ?? [];
-        $colAttributes      = $this->mergeAttributes($element, 'col_attributes', []); //$element->getOption('col_attributes') ?? [];
-        $labelAttributes    = $this->mergeAttributes($element, 'label_attributes', ['col-form-label']); //$element->getOption('label_attributes') ?? [];
-        $labelColAttributes = $this->mergeAttributes($element, 'label_col_attributes', []); //$element->getOption('label_col_attributes') ?? [];
+        $rowAttributes      = $this->mergeAttributes($element, 'row_attributes', ['row']);
+        $colAttributes      = $this->mergeAttributes($element, 'col_attributes', []);
+        $labelAttributes    = $this->mergeAttributes($element, 'label_attributes', ['col-form-label']);
+        $labelColAttributes = $this->mergeAttributes($element, 'label_col_attributes', []);
 
         if (array_key_exists('class', $labelAttributes)) {
             $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
@@ -236,16 +240,20 @@ final class FormRow extends BaseFormRow
         ) {
             $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('legend', $labelAttributes, $label) . PHP_EOL;
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
-            $elementString = $this->formElement->render($element);
+            $errorContent = '';
+            $helpContent  = '';
 
             if ($this->renderErrors) {
-                $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
             }
 
             if ($element->getOption('help_content')) {
-                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
             }
+
+            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $elementString  = $this->formElement->render($element);
+            $elementString .= $errorContent . $helpContent;
 
             $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
 
@@ -254,16 +262,20 @@ final class FormRow extends BaseFormRow
 
         if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
             // Button element is a special case, because label is always rendered inside it
-            $this->formElement->setIndent($indent . $this->getWhitespace(8));
-            $elementString = $this->formElement->render($element);
+            $errorContent = '';
+            $helpContent  = '';
 
             if ($this->renderErrors) {
-                $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
             }
 
             if ($element->getOption('help_content')) {
-                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
             }
+
+            $this->formElement->setIndent($indent . $this->getWhitespace(8));
+            $elementString  = $this->formElement->render($element);
+            $elementString .= $errorContent . $helpContent;
 
             $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
 
@@ -276,16 +288,20 @@ final class FormRow extends BaseFormRow
 
         $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
 
-        $this->formElement->setIndent($indent . $this->getWhitespace(8));
-        $elementString = $this->formElement->render($element);
+        $errorContent = '';
+        $helpContent  = '';
 
         if ($this->renderErrors) {
-            $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
         }
 
         if ($element->getOption('help_content')) {
-            $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
         }
+
+        $this->formElement->setIndent($indent . $this->getWhitespace(8));
+        $elementString  = $this->formElement->render($element);
+        $elementString .= $errorContent . $helpContent;
 
         $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4));
 
@@ -324,32 +340,40 @@ final class FormRow extends BaseFormRow
         ) {
             $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
-            $elementString = $indent . $this->getWhitespace(4) . $this->formElement->render($element);
+            $errorContent = '';
+            $helpContent  = '';
 
             if ($this->renderErrors) {
-                $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
             }
 
             if ($element->getOption('help_content')) {
-                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
             }
+
+            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $elementString  = $indent . $this->getWhitespace(4) . $this->formElement->render($element);
+            $elementString .= $errorContent . $helpContent;
 
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
         if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
             // Button element is a special case, because label is always rendered inside it
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
-            $elementString = $this->formElement->render($element);
+            $errorContent = '';
+            $helpContent  = '';
 
             if ($this->renderErrors) {
-                $elementString .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
             }
 
             if ($element->getOption('help_content')) {
-                $elementString .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
             }
+
+            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $elementString  = $this->formElement->render($element);
+            $elementString .= $errorContent . $helpContent;
 
             return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent);
         }
@@ -368,6 +392,17 @@ final class FormRow extends BaseFormRow
 
         $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
 
+        $errorContent = '';
+        $helpContent  = '';
+
+        if ($this->renderErrors) {
+            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+        }
+
+        if ($element->getOption('help_content')) {
+            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+        }
+
         $this->formElement->setIndent($indent . $this->getWhitespace(4));
         $elementString = $this->formElement->render($element);
 
@@ -381,13 +416,7 @@ final class FormRow extends BaseFormRow
                 break;
         }
 
-        if ($this->renderErrors) {
-            $rendered .= $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
-        }
-
-        if ($element->getOption('help_content')) {
-            $rendered .= $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
-        }
+        $rendered .= $errorContent . $helpContent;
 
         return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $rendered . PHP_EOL . $indent);
     }
@@ -414,7 +443,7 @@ final class FormRow extends BaseFormRow
     private function renderFormHelp(ElementInterface $element, string $indent): string
     {
         $helpContent = $element->getOption('help_content');
-        $attributes  = $element->getOption('help_attributes') ?? [];
+        $attributes  = $this->mergeAttributes($element, 'help_attributes', []);
 
         if ($element->hasAttribute('id')) {
             $attributes['id'] = $element->getAttribute('id') . 'Help';

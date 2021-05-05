@@ -47,7 +47,7 @@ trait FormTrait
      *
      * @param int|string $indent
      */
-    private function getWhitespace($indent): string
+    protected function getWhitespace($indent): string
     {
         if (is_int($indent)) {
             $indent = str_repeat(' ', $indent);
