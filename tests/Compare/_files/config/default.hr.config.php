@@ -169,7 +169,7 @@ return [
 
                                 'data-date-format' => 'de',
                                 'data-date-format-message' => 'Bitte geben Sie ein korrektes Geburtsdatum an!',
-                                'data-min-age' => '18',
+                                'data-min-age' => '18y',
                                 'data-min-age-message' => 'Sie sind leider zu jung, um eine Versicherung abzuschließen.',
                                 'autocomplete' => 'off',
                             ],

@@ -24,6 +24,11 @@ return [
     'type' => Form::class,
     'options' => [
         'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
+        'field-required-mark' => '<span class="text-info-required">*</span>',
+        'col_attributes' => ['class' => 'col-sm'],
+        'label_attributes' => ['class' => 'col-sm text-sm-right'],
+        'help_attributes' => ['class' => 'help-content'],
     ],
     'attributes' => [
         'method' => 'post',
@@ -128,7 +133,7 @@ return [
                 'name' => 'vermiet',
                 'options' => [
                     'label' => 'Vermietete Wohneinheiten',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '1' => '1 vermietete WE',
@@ -139,10 +144,7 @@ return [
                         '6' => '6 vermietete WEs',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vermiet',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vermiet'],
             ],
         ],
         [
@@ -150,9 +152,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB1',
                 'options' => [
-                    'label' => 'WE 1 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 1 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB1',
@@ -168,9 +170,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB2',
                 'options' => [
-                    'label' => 'WE 2 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 2 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB2',
@@ -186,9 +188,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB3',
                 'options' => [
-                    'label' => 'WE 3 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 3 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB3',
@@ -204,9 +206,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB4',
                 'options' => [
-                    'label' => 'WE 4 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 4 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB4',
@@ -222,9 +224,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB5',
                 'options' => [
-                    'label' => 'WE 5 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 5 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB5',
@@ -240,9 +242,9 @@ return [
                 'type' => Text::class,
                 'name' => 'OB6',
                 'options' => [
-                    'label' => 'WE 6 Jahresbruttomiete EUR<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'WE 6 Jahresbruttomiete EUR',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'OB6',
@@ -259,16 +261,13 @@ return [
                 'name' => 'cyber',
                 'options' => [
                     'label' => 'Erweiterter Internet-Schutz',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'cyber',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'cyber'],
             ],
         ],
         [
@@ -277,7 +276,7 @@ return [
                 'name' => 'plz',
                 'options' => [
                     'label' => 'PLZ des Antragsstellers',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'plz',
@@ -291,7 +290,7 @@ return [
                 'name' => 'famstand',
                 'options' => [
                     'label' => 'Familiäre Verhältnisse',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'Familie' => 'Familie',
                         'Paar' => 'Paar',
@@ -299,10 +298,7 @@ return [
                         'Alleinerziehend' => 'Alleinerziehend',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'famstand',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'famstand'],
             ],
         ],
         [
@@ -310,9 +306,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum',
                 'options' => [
-                    'label' => 'Geburtsdatum des Versicherungsnehmers<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum des Versicherungsnehmers',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum',
@@ -331,9 +327,9 @@ return [
                 'type' => Text::class,
                 'name' => 'geburtsdatumPartner',
                 'options' => [
-                    'label' => 'Geburtsdatum des Ehe- oder Lebenspartners<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum des Ehe- oder Lebenspartners',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'geburtsdatumPartner',
@@ -353,7 +349,7 @@ return [
                 'name' => 'anag',
                 'options' => [
                     'label' => 'Aktuelle Tätigkeit',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'Arbeitnehmer' => 'Arbeitnehmer',
                         'ohne berufliche Tätigkeit' => 'ohne berufliche Tätigkeit',
@@ -365,7 +361,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'anag',
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'show',
                     'data-toggle-value' => 'Selbständig',
                 ],
@@ -377,7 +373,7 @@ return [
                 'name' => 'umsatzselbst',
                 'options' => [
                     'label' => 'Jahresumsatz',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '10000' => '1 - 10.000 EUR',
                         '15000' => '10.001 - 15.000 EUR',
@@ -386,10 +382,7 @@ return [
                         '9999999' => 'ab 50.001 EUR',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'umsatzselbst',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'umsatzselbst'],
             ],
         ],
         'laufzeit' => [
@@ -398,16 +391,13 @@ return [
                 'name' => 'laufzeit',
                 'options' => [
                     'label' => 'Laufzeit',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '1' => '1 Jahr',
                         '3' => '3 Jahre',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'laufzeit',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'laufzeit'],
             ],
         ],
         [
@@ -415,8 +405,8 @@ return [
                 'type' => Select::class,
                 'name' => 'vorvers5',
                 'options' => [
-                    'label' => 'Wie lange bestehen oder bestanden für den Antragsteller und/oder den mitversicherten Lebenspartner Vorversicherungen?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
+                    'label' => 'Wie lange bestehen oder bestanden für den Antragsteller und/oder den mitversicherten Lebenspartner Vorversicherungen?',
+
                     'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '' => '-- Bitte wählen --',
@@ -430,7 +420,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'vorvers5',
-                    'class' => 'form-control form-control-select',
+
                     'required' => 'required',
                     'title' => 'Bitte geben Sie die Information zur Vorversicherung an!',
                 ],
@@ -441,9 +431,9 @@ return [
                 'type' => Select::class,
                 'name' => 'wannschaden',
                 'options' => [
-                    'label' => 'Wann wurde der letzte Schaden gemeldet?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Wann wurde der letzte Schaden gemeldet?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '' => '-- Bitte wählen --',
                         'vor mehr als 5 Jahren oder schadenfrei' => 'vor mehr als 5 Jahren oder schadenfrei',
@@ -455,7 +445,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'wannschaden',
-                    'class' => 'form-control form-control-select',
+
                     'required' => 'required',
                     'title' => 'Bitte geben Sie an, wann der letzte Schaden gemeldet wurde!',
                 ],
@@ -467,7 +457,7 @@ return [
                 'name' => 'kombirabatte',
                 'options' => [
                     'label' => 'Kombirabatte mit berechnen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -475,7 +465,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'kombirabatte',
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'show',
                     'data-toggle-value' => 'ja',
                 ],
@@ -703,7 +693,7 @@ return [
                 'name' => 'vs_v',
                 'options' => [
                     'label' => 'Deckungssumme?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'o100000' => [
                             'value' => '100000',
@@ -724,10 +714,7 @@ return [
                         ],
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vs_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vs_v'],
             ],
         ],
         'kaution_v' => [
@@ -736,7 +723,7 @@ return [
                 'name' => 'kaution_v',
                 'options' => [
                     'label' => 'Strafkautionen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'o50000' => [
                             'value' => '50000',
@@ -752,10 +739,7 @@ return [
                         ],
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'kaution_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'kaution_v'],
             ],
         ],
         [
@@ -764,16 +748,13 @@ return [
                 'name' => 'folge_v',
                 'options' => [
                     'label' => 'Schadensregulierung nach Folgeereignistheorie',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'folge_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'folge_v'],
             ],
         ],
         [
@@ -782,7 +763,7 @@ return [
                 'name' => 'ehestreit_v',
                 'options' => [
                     'label' => 'Rechtsschutz in Ehesachen (nur wenn verheiratet)',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'beratung' => 'mindestens Beratungsleistung',
@@ -790,10 +771,7 @@ return [
                         'gerichtlich' => 'Übernahme gerichtliche Kosten',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'ehestreit_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'ehestreit_v'],
             ],
         ],
         [
@@ -802,7 +780,7 @@ return [
                 'name' => 'unterhalt_v',
                 'options' => [
                     'label' => 'Rechtsschutz für Unterhalt',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'beratung' => 'mindestens Beratungsleistung',
@@ -810,10 +788,7 @@ return [
                         'gerichtlich' => 'Übernahme gerichtliche Kosten',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'unterhalt_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'unterhalt_v'],
             ],
         ],
         [
@@ -822,16 +797,13 @@ return [
                 'name' => 'spezialstraf_v',
                 'options' => [
                     'label' => 'Einschluss Spezial-Straf-Rechtschutz',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'spezialstraf_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'spezialstraf_v'],
             ],
         ],
         [

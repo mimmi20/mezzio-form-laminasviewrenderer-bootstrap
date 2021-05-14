@@ -24,6 +24,11 @@ return [
     'type' => Form::class,
     'options' => [
         'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
+        'field-required-mark' => '<span class="text-info-required">*</span>',
+        'col_attributes' => ['class' => 'col-sm'],
+        'label_attributes' => ['class' => 'col-sm text-sm-right'],
+        'help_attributes' => ['class' => 'help-content'],
     ],
     'attributes' => [
         'method' => 'post',
@@ -40,7 +45,7 @@ return [
                 'name' => 'anz',
                 'options' => [
                     'label' => 'Wieviele Personen möchten Sie versichern?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '1' => '1 Person',
                         '2' => '2 Personen',
@@ -52,10 +57,7 @@ return [
                         '8' => '8 Personen',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'anz',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'anz'],
             ],
         ],
         [
@@ -63,9 +65,9 @@ return [
                 'type' => Text::class,
                 'name' => 'plz',
                 'options' => [
-                    'label' => 'PLZ des Antragsstellers<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'PLZ des Antragsstellers',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'plz',
@@ -83,7 +85,7 @@ return [
                 'name' => 'versbeginn',
                 'options' => [
                     'label' => 'Versicherungsbeginn',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'sofort' => 'schnellstmöglich',
                         'datum' => 'Datum angeben',
@@ -91,7 +93,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'versbeginn',
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'show',
                     'data-toggle-value' => 'datum',
                 ],
@@ -102,9 +104,9 @@ return [
                 'type' => Text::class,
                 'name' => 'versbeginn_datum',
                 'options' => [
-                    'label' => 'Beginn am<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beginn am',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'versbeginn_datum',
@@ -119,16 +121,13 @@ return [
                 'name' => 'beamte',
                 'options' => [
                     'label' => 'Tarif',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'Normal' => 'Normal',
                         'öffentl. Dienst' => 'öffentlicher Dienst',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'beamte',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'beamte'],
             ],
         ],
         'laufzeit' => [
@@ -137,17 +136,14 @@ return [
                 'name' => 'laufzeit',
                 'options' => [
                     'label' => 'Laufzeit',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '1' => '1 Jahr',
                         '3' => '3 Jahre',
                         '5' => '5 Jahre',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'laufzeit',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'laufzeit'],
             ],
         ],
         [
@@ -156,7 +152,7 @@ return [
                 'name' => 'kombirabatte',
                 'options' => [
                     'label' => 'Kombirabatte mit berechnen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -164,7 +160,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'kombirabatte',
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'show',
                     'data-toggle-value' => 'ja',
                 ],
@@ -346,7 +342,7 @@ return [
                 'name' => 'name1',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name1',
@@ -361,7 +357,7 @@ return [
                 'name' => 'name2',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name2',
@@ -376,7 +372,7 @@ return [
                 'name' => 'name3',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name3',
@@ -391,7 +387,7 @@ return [
                 'name' => 'name4',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name4',
@@ -406,7 +402,7 @@ return [
                 'name' => 'name5',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name5',
@@ -421,7 +417,7 @@ return [
                 'name' => 'name6',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name6',
@@ -436,7 +432,7 @@ return [
                 'name' => 'name7',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name7',
@@ -451,7 +447,7 @@ return [
                 'name' => 'name8',
                 'options' => [
                     'label' => 'Vorname',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'name8',
@@ -465,9 +461,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum1',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum1',
@@ -485,9 +481,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum2',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum2',
@@ -505,9 +501,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum3',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum3',
@@ -525,9 +521,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum4',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum4',
@@ -545,9 +541,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum5',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum5',
@@ -565,9 +561,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum6',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum6',
@@ -585,9 +581,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum7',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum7',
@@ -605,9 +601,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum8',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum8',
@@ -626,7 +622,7 @@ return [
                 'name' => 'geschlecht1',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -635,7 +631,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht1',
                     'data-pers' => 1,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -645,7 +640,7 @@ return [
                 'name' => 'geschlecht2',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -654,7 +649,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht2',
                     'data-pers' => 2,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -664,7 +658,7 @@ return [
                 'name' => 'geschlecht3',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -673,7 +667,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht3',
                     'data-pers' => 3,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -683,7 +676,7 @@ return [
                 'name' => 'geschlecht4',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -692,7 +685,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht4',
                     'data-pers' => 4,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -702,7 +694,7 @@ return [
                 'name' => 'geschlecht5',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -711,7 +703,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht5',
                     'data-pers' => 5,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -721,7 +712,7 @@ return [
                 'name' => 'geschlecht6',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -730,7 +721,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht6',
                     'data-pers' => 6,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -740,7 +730,7 @@ return [
                 'name' => 'geschlecht7',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -749,7 +739,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht7',
                     'data-pers' => 7,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -759,7 +748,7 @@ return [
                 'name' => 'geschlecht8',
                 'options' => [
                     'label' => 'Geschlecht',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'M' => 'männlich',
                         'W' => 'weiblich',
@@ -768,7 +757,6 @@ return [
                 'attributes' => [
                     'id' => 'geschlecht8',
                     'data-pers' => 8,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -777,9 +765,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master1',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master1',
@@ -793,9 +781,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master2',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master2',
@@ -809,9 +797,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master3',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master3',
@@ -825,9 +813,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master4',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master4',
@@ -841,9 +829,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master5',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master5',
@@ -857,9 +845,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master6',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master6',
@@ -873,9 +861,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master7',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master7',
@@ -889,9 +877,9 @@ return [
                 'type' => Text::class,
                 'name' => 'beruf_master8',
                 'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Beruf',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'beruf_master8',
@@ -904,10 +892,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master1_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master1_id',
                     'data-pers' => 1,
@@ -921,10 +906,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master2_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master2_id',
                     'data-pers' => 2,
@@ -938,10 +920,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master3_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master3_id',
                     'data-pers' => 3,
@@ -955,10 +934,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master4_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master4_id',
                     'data-pers' => 4,
@@ -972,10 +948,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master5_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master5_id',
                     'data-pers' => 5,
@@ -989,10 +962,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master6_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master6_id',
                     'data-pers' => 6,
@@ -1006,10 +976,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master7_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master7_id',
                     'data-pers' => 7,
@@ -1023,10 +990,7 @@ return [
             'spec' => [
                 'type' => Text::class,
                 'name' => 'beruf_master8_id',
-                'options' => [
-                    'label' => 'Beruf<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                ],
+                'options' => ['label' => 'Beruf'],
                 'attributes' => [
                     'id' => 'beruf_master8_id',
                     'data-pers' => 8,
@@ -1041,9 +1005,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund1',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund1',
@@ -1059,9 +1023,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund2',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund2',
@@ -1077,9 +1041,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund3',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund3',
@@ -1095,9 +1059,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund4',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund4',
@@ -1113,9 +1077,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund5',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund5',
@@ -1131,9 +1095,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund6',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund6',
@@ -1149,9 +1113,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund7',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund7',
@@ -1167,9 +1131,9 @@ return [
                 'type' => Text::class,
                 'name' => 'grund8',
                 'options' => [
-                    'label' => 'Grundinvalidität<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Grundinvalidität',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'grund8',
@@ -1186,7 +1150,7 @@ return [
                 'name' => 'prog1',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1200,7 +1164,6 @@ return [
                 'attributes' => [
                     'id' => 'prog1',
                     'data-pers' => 1,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1210,7 +1173,7 @@ return [
                 'name' => 'prog2',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1224,7 +1187,6 @@ return [
                 'attributes' => [
                     'id' => 'prog2',
                     'data-pers' => 2,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1234,7 +1196,7 @@ return [
                 'name' => 'prog3',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1248,7 +1210,6 @@ return [
                 'attributes' => [
                     'id' => 'prog3',
                     'data-pers' => 3,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1258,7 +1219,7 @@ return [
                 'name' => 'prog4',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1272,7 +1233,6 @@ return [
                 'attributes' => [
                     'id' => 'prog4',
                     'data-pers' => 4,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1282,7 +1242,7 @@ return [
                 'name' => 'prog5',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1296,7 +1256,6 @@ return [
                 'attributes' => [
                     'id' => 'prog5',
                     'data-pers' => 5,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1306,7 +1265,7 @@ return [
                 'name' => 'prog6',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1320,7 +1279,6 @@ return [
                 'attributes' => [
                     'id' => 'prog6',
                     'data-pers' => 6,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1330,7 +1288,7 @@ return [
                 'name' => 'prog7',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1344,7 +1302,6 @@ return [
                 'attributes' => [
                     'id' => 'prog7',
                     'data-pers' => 7,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1354,7 +1311,7 @@ return [
                 'name' => 'prog8',
                 'options' => [
                     'label' => 'Progression',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '100' => '100 %',
                         '225' => '225 %',
@@ -1368,7 +1325,6 @@ return [
                 'attributes' => [
                     'id' => 'prog8',
                     'data-pers' => 8,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -1378,7 +1334,7 @@ return [
                 'name' => 'voll1',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll1',
@@ -1393,7 +1349,7 @@ return [
                 'name' => 'voll2',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll2',
@@ -1408,7 +1364,7 @@ return [
                 'name' => 'voll3',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll3',
@@ -1423,7 +1379,7 @@ return [
                 'name' => 'voll4',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll4',
@@ -1438,7 +1394,7 @@ return [
                 'name' => 'voll5',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll5',
@@ -1453,7 +1409,7 @@ return [
                 'name' => 'voll6',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll6',
@@ -1468,7 +1424,7 @@ return [
                 'name' => 'voll7',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll7',
@@ -1483,7 +1439,7 @@ return [
                 'name' => 'voll8',
                 'options' => [
                     'label' => 'Vollinvalidität',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'voll8',
@@ -1498,7 +1454,7 @@ return [
                 'name' => 'tod1',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod1',
@@ -1513,7 +1469,7 @@ return [
                 'name' => 'tod2',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod2',
@@ -1528,7 +1484,7 @@ return [
                 'name' => 'tod3',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod3',
@@ -1543,7 +1499,7 @@ return [
                 'name' => 'tod4',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod4',
@@ -1558,7 +1514,7 @@ return [
                 'name' => 'tod5',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod5',
@@ -1573,7 +1529,7 @@ return [
                 'name' => 'tod6',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod6',
@@ -1588,7 +1544,7 @@ return [
                 'name' => 'tod7',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod7',
@@ -1603,7 +1559,7 @@ return [
                 'name' => 'tod8',
                 'options' => [
                     'label' => 'Todesfall',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'tod8',
@@ -1618,7 +1574,7 @@ return [
                 'name' => 'ueber1',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber1',
@@ -1633,7 +1589,7 @@ return [
                 'name' => 'ueber2',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber2',
@@ -1648,7 +1604,7 @@ return [
                 'name' => 'ueber3',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber3',
@@ -1663,7 +1619,7 @@ return [
                 'name' => 'ueber4',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber4',
@@ -1678,7 +1634,7 @@ return [
                 'name' => 'ueber5',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber5',
@@ -1693,7 +1649,7 @@ return [
                 'name' => 'ueber6',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber6',
@@ -1708,7 +1664,7 @@ return [
                 'name' => 'ueber7',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber7',
@@ -1723,7 +1679,7 @@ return [
                 'name' => 'ueber8',
                 'options' => [
                     'label' => 'Übergangsleistung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'ueber8',
@@ -1738,7 +1694,7 @@ return [
                 'name' => 'kh1',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh1',
@@ -1753,7 +1709,7 @@ return [
                 'name' => 'kh2',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh2',
@@ -1768,7 +1724,7 @@ return [
                 'name' => 'kh3',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh3',
@@ -1783,7 +1739,7 @@ return [
                 'name' => 'kh4',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh4',
@@ -1798,7 +1754,7 @@ return [
                 'name' => 'kh5',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh5',
@@ -1813,7 +1769,7 @@ return [
                 'name' => 'kh6',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh6',
@@ -1828,7 +1784,7 @@ return [
                 'name' => 'kh7',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh7',
@@ -1843,7 +1799,7 @@ return [
                 'name' => 'kh8',
                 'options' => [
                     'label' => 'Krankenhaustage- und Genesungsgeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'kh8',
@@ -1858,7 +1814,7 @@ return [
                 'name' => 'utg1',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1870,7 +1826,7 @@ return [
                 'attributes' => [
                     'id' => 'utg1',
                     'data-pers' => 1,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -1882,7 +1838,7 @@ return [
                 'name' => 'utg2',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1894,7 +1850,7 @@ return [
                 'attributes' => [
                     'id' => 'utg2',
                     'data-pers' => 2,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -1906,7 +1862,7 @@ return [
                 'name' => 'utg3',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1918,7 +1874,7 @@ return [
                 'attributes' => [
                     'id' => 'utg3',
                     'data-pers' => 3,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -1930,7 +1886,7 @@ return [
                 'name' => 'utg4',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1942,7 +1898,7 @@ return [
                 'attributes' => [
                     'id' => 'utg4',
                     'data-pers' => 4,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -1954,7 +1910,7 @@ return [
                 'name' => 'utg5',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1966,7 +1922,7 @@ return [
                 'attributes' => [
                     'id' => 'utg5',
                     'data-pers' => 5,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -1978,7 +1934,7 @@ return [
                 'name' => 'utg6',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -1990,7 +1946,7 @@ return [
                 'attributes' => [
                     'id' => 'utg6',
                     'data-pers' => 6,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -2002,7 +1958,7 @@ return [
                 'name' => 'utg7',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -2014,7 +1970,7 @@ return [
                 'attributes' => [
                     'id' => 'utg7',
                     'data-pers' => 7,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -2026,7 +1982,7 @@ return [
                 'name' => 'utg8',
                 'options' => [
                     'label' => 'Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '8' => 'ab 8. Tag',
@@ -2038,7 +1994,7 @@ return [
                 'attributes' => [
                     'id' => 'utg8',
                     'data-pers' => 8,
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'hide',
                     'data-toggle-value' => 'nein',
                 ],
@@ -2050,7 +2006,7 @@ return [
                 'name' => 'utgeur1',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur1',
@@ -2065,7 +2021,7 @@ return [
                 'name' => 'utgeur2',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur2',
@@ -2080,7 +2036,7 @@ return [
                 'name' => 'utgeur3',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur3',
@@ -2095,7 +2051,7 @@ return [
                 'name' => 'utgeur4',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur4',
@@ -2110,7 +2066,7 @@ return [
                 'name' => 'utgeur5',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur5',
@@ -2125,7 +2081,7 @@ return [
                 'name' => 'utgeur6',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur6',
@@ -2140,7 +2096,7 @@ return [
                 'name' => 'utgeur7',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur7',
@@ -2155,7 +2111,7 @@ return [
                 'name' => 'utgeur8',
                 'options' => [
                     'label' => 'Höhe Unfall-Krankentagegeld',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'utgeur8',
@@ -2170,7 +2126,7 @@ return [
                 'name' => 'rente1',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente1',
@@ -2185,7 +2141,7 @@ return [
                 'name' => 'rente2',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente2',
@@ -2200,7 +2156,7 @@ return [
                 'name' => 'rente3',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente3',
@@ -2215,7 +2171,7 @@ return [
                 'name' => 'rente4',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente4',
@@ -2230,7 +2186,7 @@ return [
                 'name' => 'rente5',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente5',
@@ -2245,7 +2201,7 @@ return [
                 'name' => 'rente6',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente6',
@@ -2260,7 +2216,7 @@ return [
                 'name' => 'rente7',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente7',
@@ -2275,7 +2231,7 @@ return [
                 'name' => 'rente8',
                 'options' => [
                     'label' => 'Unfall-Rente',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'rente8',
@@ -2290,7 +2246,7 @@ return [
                 'name' => 'assistance1',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2299,7 +2255,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance1',
                     'data-pers' => 1,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2309,7 +2264,7 @@ return [
                 'name' => 'assistance2',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2318,7 +2273,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance2',
                     'data-pers' => 2,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2328,7 +2282,7 @@ return [
                 'name' => 'assistance3',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2337,7 +2291,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance3',
                     'data-pers' => 3,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2347,7 +2300,7 @@ return [
                 'name' => 'assistance4',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2356,7 +2309,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance4',
                     'data-pers' => 4,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2366,7 +2318,7 @@ return [
                 'name' => 'assistance5',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2375,7 +2327,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance5',
                     'data-pers' => 5,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2385,7 +2336,7 @@ return [
                 'name' => 'assistance6',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2394,7 +2345,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance6',
                     'data-pers' => 6,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2404,7 +2354,7 @@ return [
                 'name' => 'assistance7',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2413,7 +2363,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance7',
                     'data-pers' => 7,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2423,7 +2372,7 @@ return [
                 'name' => 'assistance8',
                 'options' => [
                     'label' => 'Assistance Leistungen',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2432,7 +2381,6 @@ return [
                 'attributes' => [
                     'id' => 'assistance8',
                     'data-pers' => 8,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2442,7 +2390,7 @@ return [
                 'name' => 'knochen1',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2451,7 +2399,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen1',
                     'data-pers' => 1,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2461,7 +2408,7 @@ return [
                 'name' => 'knochen2',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2470,7 +2417,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen2',
                     'data-pers' => 2,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2480,7 +2426,7 @@ return [
                 'name' => 'knochen3',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2489,7 +2435,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen3',
                     'data-pers' => 3,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2499,7 +2444,7 @@ return [
                 'name' => 'knochen4',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2508,7 +2453,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen4',
                     'data-pers' => 4,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2518,7 +2462,7 @@ return [
                 'name' => 'knochen5',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2527,7 +2471,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen5',
                     'data-pers' => 5,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2537,7 +2480,7 @@ return [
                 'name' => 'knochen6',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2546,7 +2489,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen6',
                     'data-pers' => 6,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2556,7 +2498,7 @@ return [
                 'name' => 'knochen7',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2565,7 +2507,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen7',
                     'data-pers' => 7,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2575,7 +2516,7 @@ return [
                 'name' => 'knochen8',
                 'options' => [
                     'label' => 'Knochenbruch',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -2584,7 +2525,6 @@ return [
                 'attributes' => [
                     'id' => 'knochen8',
                     'data-pers' => 8,
-                    'class' => 'form-control form-control-select',
                 ],
             ],
         ],
@@ -2640,16 +2580,13 @@ return [
                 'name' => 'eigen_v',
                 'options' => [
                     'label' => 'Bleibende Schäden durch Eigenbewegungen mitversichern?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'eigen_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'eigen_v'],
             ],
         ],
         [
@@ -2658,16 +2595,13 @@ return [
                 'name' => 'kraft_v',
                 'options' => [
                     'label' => 'Bleibende Schäden durch erhöhte Kraftanstrengung mitversichern?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'kraft_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'kraft_v'],
             ],
         ],
         [
@@ -2676,7 +2610,7 @@ return [
                 'name' => 'alk_v',
                 'options' => [
                     'label' => 'Mitversichern von Bewusstseinsstörungen durch Trunkenheit?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
@@ -2684,7 +2618,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'alk_v',
-                    'class' => 'form-control form-control-select',
+
                     'min' => '0',
                 ],
             ],
@@ -2695,16 +2629,13 @@ return [
                 'name' => 'gift_v',
                 'options' => [
                     'label' => 'Mitversichern von Vergiftungen durch Gase und Dämpfe?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'gift_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'gift_v'],
             ],
         ],
         [
@@ -2713,16 +2644,13 @@ return [
                 'name' => 'kgif_v',
                 'options' => [
                     'label' => 'Mitversichern von Vergiftungen bei Kindern bis zu 14 Jahre?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'kgif_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'kgif_v'],
             ],
         ],
         [
@@ -2731,16 +2659,13 @@ return [
                 'name' => 'room_v',
                 'options' => [
                     'label' => 'Kosten für Übernachtung Erziehungsberechtigter im Krankenhaus bei Kinderunfall (Rooming-In)?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'room_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'room_v'],
             ],
         ],
         [
@@ -2749,16 +2674,13 @@ return [
                 'name' => 'nahr_v',
                 'options' => [
                     'label' => 'Mitversichern von Nahrungsmittelvergiftungen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'nahr_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'nahr_v'],
             ],
         ],
         [
@@ -2767,16 +2689,13 @@ return [
                 'name' => 'stral_v',
                 'options' => [
                     'label' => 'Mitversichern von Schäden durch Röntgen-, Laser- und künstlich erzeugte ultraviolette Strahlen (außer bei beruflichen Umgang)?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'stral_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'stral_v'],
             ],
         ],
         [
@@ -2785,16 +2704,13 @@ return [
                 'name' => 'tauch_v',
                 'options' => [
                     'label' => 'Mitversichern von tauchtypischen Gesundheitsschäden?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'tauch_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'tauch_v'],
             ],
         ],
         [
@@ -2803,16 +2719,13 @@ return [
                 'name' => 'sofo_v',
                 'options' => [
                     'label' => 'Sofortleistung bei schweren Unfällen (Vorschusszahlung)?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'sofo_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'sofo_v'],
             ],
         ],
         [
@@ -2821,16 +2734,13 @@ return [
                 'name' => 'zahn_v',
                 'options' => [
                     'label' => 'Kostenerstattung von Zahnersatz infolge Unfall?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'zahn_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'zahn_v'],
             ],
         ],
         [
@@ -2839,16 +2749,13 @@ return [
                 'name' => 'insekt_v',
                 'options' => [
                     'label' => 'Mitversichern von Insektenstichen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'insekt_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'insekt_v'],
             ],
         ],
         [
@@ -2857,7 +2764,7 @@ return [
                 'name' => 'mitw_v',
                 'options' => [
                     'label' => 'Keine Anrechnung der Mitwirkung von Krankheiten/Gebrechen bei Unfällen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         '40' => 'keine Anrechnung ab 40%',
@@ -2865,10 +2772,7 @@ return [
                         '100' => 'generell keine Anrechnung',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mitw_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mitw_v'],
             ],
         ],
         [
@@ -2877,16 +2781,13 @@ return [
                 'name' => 'frist_v',
                 'options' => [
                     'label' => 'Wünschen Sie eine erweiterte Meldefrist bei Invalidität?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'frist_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'frist_v'],
             ],
         ],
         [
@@ -2895,16 +2796,13 @@ return [
                 'name' => 'kap_v',
                 'options' => [
                     'label' => 'Leistung als einmalige Kapitalzahlung auch nach dem 65. Lebensjahr?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'kap_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'kap_v'],
             ],
         ],
         [
@@ -2913,16 +2811,13 @@ return [
                 'name' => 'haus_v',
                 'options' => [
                     'label' => 'Kosten einer Haushaltshilfe?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'haus_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'haus_v'],
             ],
         ],
         [
@@ -2931,16 +2826,13 @@ return [
                 'name' => 'schul_v',
                 'options' => [
                     'label' => 'Mitversichern von Umschulungsmaßnahmen und behinderungsbedingten Kosten?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schul_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schul_v'],
             ],
         ],
         [
@@ -2949,16 +2841,13 @@ return [
                 'name' => 'berg_v',
                 'options' => [
                     'label' => 'Bergungskosten inkl. Rückholkosten',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'berg_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'berg_v'],
             ],
         ],
         [
@@ -2967,16 +2856,13 @@ return [
                 'name' => 'rett_v',
                 'options' => [
                     'label' => 'Mitversichern von Körperschäden anlässlich der Rettung von Menschen und Sachen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'rett_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'rett_v'],
             ],
         ],
         [
@@ -2985,16 +2871,13 @@ return [
                 'name' => 'leiupd_v',
                 'options' => [
                     'label' => 'Sollen künftige Leistungsverbesserungen automatisch eingeschlossen werden ohne Beantragung?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja (EU)' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'leiupd_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'leiupd_v'],
             ],
         ],
         [

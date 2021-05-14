@@ -26,6 +26,11 @@ return [
     'type' => Form::class,
     'options' => [
         'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
+        'field-required-mark' => '<span class="text-info-required">*</span>',
+        'col_attributes' => ['class' => 'col-sm'],
+        'label_attributes' => ['class' => 'col-sm text-sm-right'],
+        'help_attributes' => ['class' => 'help-content'],
     ],
     'attributes' => [
         'method' => 'post',
@@ -42,16 +47,13 @@ return [
                 'name' => 'beamte',
                 'options' => [
                     'label' => 'Tarifgruppe',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'Normal' => 'Normal',
                         'öffentl. Dienst' => 'öffentlicher Dienst',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'beamte',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'beamte'],
             ],
         ],
         [
@@ -59,9 +61,9 @@ return [
                 'type' => Text::class,
                 'name' => 'gebdatum',
                 'options' => [
-                    'label' => 'Geburtsdatum<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Geburtsdatum',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'gebdatum',
@@ -81,7 +83,7 @@ return [
                 'name' => 'artdestieres',
                 'options' => [
                     'label' => 'Art des Tieres',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'oHund' => [
                             'value' => 'Hund',
@@ -97,10 +99,7 @@ return [
                         ],
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'artdestieres',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'artdestieres'],
             ],
         ],
         [
@@ -109,7 +108,7 @@ return [
                 'name' => 'anzahldertiere',
                 'options' => [
                     'label' => 'Anzahl der Tiere',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '1' => '1',
                         '2' => '2',
@@ -119,10 +118,7 @@ return [
                         '6' => '6',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'anzahldertiere',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'anzahldertiere'],
             ],
         ],
         [
@@ -130,9 +126,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier1',
                 'options' => [
-                    'label' => 'Rasse Hund 1 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 1 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier1',
@@ -147,9 +143,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier2',
                 'options' => [
-                    'label' => 'Rasse Hund 2 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 2 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier2',
@@ -164,9 +160,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier3',
                 'options' => [
-                    'label' => 'Rasse Hund 3 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 3 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier3',
@@ -181,9 +177,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier4',
                 'options' => [
-                    'label' => 'Rasse Hund 4 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 4 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier4',
@@ -198,9 +194,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier5',
                 'options' => [
-                    'label' => 'Rasse Hund 5 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 5 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier5',
@@ -215,9 +211,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier6',
                 'options' => [
-                    'label' => 'Rasse Hund 6 eingeben<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Rasse Hund 6 eingeben',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier6',
@@ -233,16 +229,13 @@ return [
                 'name' => 'mischling_hund1',
                 'options' => [
                     'label' => 'Ist Hund 1 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund1',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund1'],
             ],
         ],
         [
@@ -251,16 +244,13 @@ return [
                 'name' => 'mischling_hund2',
                 'options' => [
                     'label' => 'Ist Hund 2 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund2',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund2'],
             ],
         ],
         [
@@ -269,16 +259,13 @@ return [
                 'name' => 'mischling_hund3',
                 'options' => [
                     'label' => 'Ist Hund 3 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund3',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund3'],
             ],
         ],
         [
@@ -287,16 +274,13 @@ return [
                 'name' => 'mischling_hund4',
                 'options' => [
                     'label' => 'Ist Hund 4 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund4',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund4'],
             ],
         ],
         [
@@ -305,16 +289,13 @@ return [
                 'name' => 'mischling_hund5',
                 'options' => [
                     'label' => 'Ist Hund 5 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund5',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund5'],
             ],
         ],
         [
@@ -323,16 +304,13 @@ return [
                 'name' => 'mischling_hund6',
                 'options' => [
                     'label' => 'Ist Hund 6 ein Mischling?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'mischling_hund6',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'mischling_hund6'],
             ],
         ],
         [
@@ -340,9 +318,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier1a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 1<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 1',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier1a',
@@ -357,9 +335,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier2a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 2<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 2',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier2a',
@@ -374,9 +352,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier3a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 3<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 3',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier3a',
@@ -391,9 +369,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier4a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 4<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 4',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier4a',
@@ -408,9 +386,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier5a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 5<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 5',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier5a',
@@ -425,9 +403,9 @@ return [
                 'type' => Text::class,
                 'name' => 'Rasse_Tier6a',
                 'options' => [
-                    'label' => 'Mischlingsrasse Hund 6<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Mischlingsrasse Hund 6',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                 ],
                 'attributes' => [
                     'id' => 'Rasse_Tier6a',
@@ -443,7 +421,7 @@ return [
                 'name' => 'rasse_pferd_v',
                 'options' => [
                     'label' => 'Rasse des Pferdes',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'Sonstige' => 'Sonstige',
                         'Abaco-Wildpferd' => 'Abaco-Wildpferd',
@@ -567,10 +545,7 @@ return [
                         'Zemaitukas Pony' => 'Zemaitukas Pony',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'rasse_pferd_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'rasse_pferd_v'],
             ],
         ],
         'selbst' => [
@@ -579,7 +554,7 @@ return [
                 'name' => 'selbst',
                 'options' => [
                     'label' => 'Selbstbeteiligung',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'onein' => [
                             'value' => 'nein',
@@ -603,10 +578,7 @@ return [
                         ],
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'selbst',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'selbst'],
             ],
         ],
         [
@@ -622,10 +594,7 @@ return [
                         '12' => 'monatlich',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'zahlweise',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'zahlweise'],
             ],
         ],
         'laufzeit' => [
@@ -634,17 +603,14 @@ return [
                 'name' => 'laufzeit',
                 'options' => [
                     'label' => 'Laufzeit',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '1' => '1 Jahr',
                         '3' => 'bis zu 3 Jahre',
                         '5' => 'bis zu 5 Jahre',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'laufzeit',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'laufzeit'],
             ],
         ],
         [
@@ -652,9 +618,9 @@ return [
                 'type' => Select::class,
                 'name' => 'vorvers5',
                 'options' => [
-                    'label' => 'Bestand in den letzten 5 Jahren eine Vorversicherung?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Bestand in den letzten 5 Jahren eine Vorversicherung?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '' => '-- Bitte wählen --',
                         'nein' => 'nein',
@@ -663,7 +629,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'vorvers5',
-                    'class' => 'form-control form-control-select',
+
                     'required' => 'required',
                 ],
             ],
@@ -673,9 +639,9 @@ return [
                 'type' => Select::class,
                 'name' => 'schaeden5',
                 'options' => [
-                    'label' => 'Schäden in den letzten 5 Jahren<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'Schäden in den letzten 5 Jahren',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '' => '-- Bitte wählen --',
                         '0' => '0',
@@ -687,7 +653,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'schaeden5',
-                    'class' => 'form-control form-control-select',
+
                     'required' => 'required',
                 ],
             ],
@@ -697,9 +663,9 @@ return [
                 'type' => Select::class,
                 'name' => 'schaden1jahr',
                 'options' => [
-                    'label' => 'In welchem Jahr war der 1. Schaden?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'In welchem Jahr war der 1. Schaden?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         date('Y') => date('Y'),
                         date('Y') - 1 => date('Y') - 1,
@@ -709,10 +675,7 @@ return [
                         date('Y') - 5 => date('Y') - 5,
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schaden1jahr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schaden1jahr'],
             ],
         ],
         [
@@ -720,9 +683,9 @@ return [
                 'type' => Select::class,
                 'name' => 'schaden2jahr',
                 'options' => [
-                    'label' => 'In welchem Jahr war der 2. Schaden?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'In welchem Jahr war der 2. Schaden?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         date('Y') => date('Y'),
                         date('Y') - 1 => date('Y') - 1,
@@ -732,10 +695,7 @@ return [
                         date('Y') - 5 => date('Y') - 5,
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schaden2jahr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schaden2jahr'],
             ],
         ],
         [
@@ -743,9 +703,9 @@ return [
                 'type' => Select::class,
                 'name' => 'schaden3jahr',
                 'options' => [
-                    'label' => 'In welchem Jahr war der 3. Schaden?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'In welchem Jahr war der 3. Schaden?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         date('Y') => date('Y'),
                         date('Y') - 1 => date('Y') - 1,
@@ -755,10 +715,7 @@ return [
                         date('Y') - 5 => date('Y') - 5,
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schaden3jahr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schaden3jahr'],
             ],
         ],
         [
@@ -766,9 +723,9 @@ return [
                 'type' => Select::class,
                 'name' => 'schaden4jahr',
                 'options' => [
-                    'label' => 'In welchem Jahr war der 4. Schaden?<span class="text-info-required">*</span>',
-                    'label_options' => ['disable_html_escape' => true],
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label' => 'In welchem Jahr war der 4. Schaden?',
+
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         date('Y') => date('Y'),
                         date('Y') - 1 => date('Y') - 1,
@@ -778,10 +735,7 @@ return [
                         date('Y') - 5 => date('Y') - 5,
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schaden4jahr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schaden4jahr'],
             ],
         ],
         [
@@ -790,16 +744,13 @@ return [
                 'name' => 'chipnr',
                 'options' => [
                     'label' => 'Chip-Nr. vorhanden?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'chipnr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'chipnr'],
             ],
         ],
         [
@@ -808,16 +759,13 @@ return [
                 'name' => 'lebensnr',
                 'options' => [
                     'label' => 'Lebens-Nr. vorhanden?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'lebensnr',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'lebensnr'],
             ],
         ],
         [
@@ -826,7 +774,7 @@ return [
                 'name' => 'kombirabatte',
                 'options' => [
                     'label' => 'Kombirabatte mit berechnen?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
@@ -834,7 +782,7 @@ return [
                 ],
                 'attributes' => [
                     'id' => 'kombirabatte',
-                    'class' => 'form-control form-control-select toggle-trigger',
+                    'class' => 'toggle-trigger',
                     'data-toggle-modus' => 'show',
                     'data-toggle-value' => 'ja',
                 ],
@@ -1062,16 +1010,13 @@ return [
                 'name' => 'pferd_stockmass_v',
                 'options' => [
                     'label' => 'Stockmaß des Pferdes bis 148 cm?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'pferd_stockmass_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'pferd_stockmass_v'],
             ],
         ],
         [
@@ -1080,16 +1025,13 @@ return [
                 'name' => 'pferd_reiten_v',
                 'options' => [
                     'label' => 'Wird das Pferd geritten? (Reitrisiko mitversichern)',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'ja' => 'ja',
                         'nein' => 'nein',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'pferd_reiten_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'pferd_reiten_v'],
             ],
         ],
         [
@@ -1098,16 +1040,13 @@ return [
                 'name' => 'reitpass_v',
                 'options' => [
                     'label' => 'Hat der Halter einen Reitpass?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'reitpass_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'reitpass_v'],
             ],
         ],
         [
@@ -1116,16 +1055,13 @@ return [
                 'name' => 'pferd_reitbeteiligung_v',
                 'options' => [
                     'label' => 'Gibt es eine Reitbeteiligung?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'pferd_reitbeteiligung_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'pferd_reitbeteiligung_v'],
             ],
         ],
         [
@@ -1134,16 +1070,13 @@ return [
                 'name' => 'fremd_v',
                 'options' => [
                     'label' => 'Fremdreiterrisiko?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'ja' => 'ja (AK Empfehlung)',
                         'nein' => 'nein',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'fremd_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'fremd_v'],
             ],
         ],
         [
@@ -1152,16 +1085,13 @@ return [
                 'name' => 'sport_v',
                 'options' => [
                     'label' => 'Nehmen die Tiere an Wettkämpfen/Turnieren teil?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'sport_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'sport_v'],
             ],
         ],
         [
@@ -1170,16 +1100,13 @@ return [
                 'name' => 'pferderennen_v',
                 'options' => [
                     'label' => 'Nimmt das Pferd an Pferderennen teil?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'pferderennen_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'pferderennen_v'],
             ],
         ],
         [
@@ -1188,16 +1115,13 @@ return [
                 'name' => 'verein_v',
                 'options' => [
                     'label' => 'Sind Sie Mitglied im Reitverein?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'verein_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'verein_v'],
             ],
         ],
         [
@@ -1206,16 +1130,13 @@ return [
                 'name' => 'kutsch_v',
                 'options' => [
                     'label' => 'Verwendung für Kutschfahrten?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'kutsch_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'kutsch_v'],
             ],
         ],
         [
@@ -1224,16 +1145,13 @@ return [
                 'name' => 'tier_nebenberuf_v',
                 'options' => [
                     'label' => 'Nebenberufliche Tätigkeit bis 17.500 EUR?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'tier_nebenberuf_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'tier_nebenberuf_v'],
             ],
         ],
         [
@@ -1242,16 +1160,13 @@ return [
                 'name' => 'hund_schule_v',
                 'options' => [
                     'label' => 'Nachweis für den Besuch einer Hundeschule?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'hund_schule_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'hund_schule_v'],
             ],
         ],
         'vs_v' => [
@@ -1260,7 +1175,7 @@ return [
                 'name' => 'vs_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme Personen/Sachschäden',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'o1000000' => [
                             'value' => '1000000',
@@ -1276,10 +1191,7 @@ return [
                         ],
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vs_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vs_v'],
             ],
         ],
         [
@@ -1288,16 +1200,13 @@ return [
                 'name' => 'vsmp_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme Mietsachschäden für Pferd',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '0' => 'keine (EU-Pferd)',
                         '1 - ja' => 'mitversichert laut Tarif',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vsmp_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vsmp_v'],
             ],
         ],
         [
@@ -1306,7 +1215,7 @@ return [
                 'name' => 'vsm_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme Mietsachschäden für Hund',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '0' => 'keine',
                         '50000' => 'mind. 50.000 EUR',
@@ -1315,10 +1224,7 @@ return [
                         '1000000' => 'mind. 1 Mill. EUR',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vsm_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vsm_v'],
             ],
         ],
         [
@@ -1327,16 +1233,13 @@ return [
                 'name' => 'vsmbep_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme Mietsachschäden für Pferd bei beweglichen Objekten',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '0' => 'keine (EU-Pferd)',
                         '1 - ja' => 'mitversichert laut Tarif',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vsmbep_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vsmbep_v'],
             ],
         ],
         [
@@ -1345,16 +1248,13 @@ return [
                 'name' => 'vsmbeh_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme Mietsachschäden für Hund bei beweglichen Objekten',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '0' => 'keine (EU-Hund)',
                         '1 - ja' => 'mitversichert laut Tarif',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vsmbeh_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vsmbeh_v'],
             ],
         ],
         [
@@ -1363,7 +1263,7 @@ return [
                 'name' => 'vsv_v',
                 'options' => [
                     'label' => 'Mindest-Versicherungssumme für Vermögensschäden',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         '0' => 'keine',
                         '50000' => 'mind. 50.000 EUR (AK Empfehlung)',
@@ -1371,10 +1271,7 @@ return [
                         '1000000' => 'mind. 1 Mill EUR',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vsv_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vsv_v'],
             ],
         ],
         [
@@ -1383,16 +1280,13 @@ return [
                 'name' => 'vors_v',
                 'options' => [
                     'label' => 'Vorsorgeversicherung für neugeborene Jungtiere?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'vors_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'vors_v'],
             ],
         ],
         [
@@ -1401,17 +1295,14 @@ return [
                 'name' => 'schul_v',
                 'options' => [
                     'label' => 'Stellen Sie Ihr Pferd Schulungszwecken zur Verfügung?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja, unentgeltlich' => 'ja, unentgeltlich',
                         'ja, auch gegen Entgelt' => 'ja, auch gegen Entgelt',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'schul_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'schul_v'],
             ],
         ],
         [
@@ -1420,16 +1311,13 @@ return [
                 'name' => 'flur_v',
                 'options' => [
                     'label' => 'Flurschäden?',
-                    'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                    'label_attributes' => ['class' => 'col-sm text-sm-right'],
                     'value_options' => [
                         'nein' => 'nein',
                         'ja' => 'ja (AK Empfehlung)',
                     ],
                 ],
-                'attributes' => [
-                    'id' => 'flur_v',
-                    'class' => 'form-control form-control-select',
-                ],
+                'attributes' => ['id' => 'flur_v'],
             ],
         ],
         [

@@ -24,7 +24,7 @@ return [
     'options' => [
         'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
         'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
-        'field-required-mark' => '<span class="text-info-required">*</span>',
+        'field-required-mark' => '',
     ],
     'attributes' => [
         'method' => 'post',
@@ -51,7 +51,7 @@ return [
                             'name' => 'versbeginn',
                             'options' => [
                                 'label' => 'Versicherungsbeginn',
-                                'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                                'label_attributes' => ['class' => 'col-sm text-sm-right'],
                                 'value_options' => [
                                     'sofort' => 'schnellstmöglich',
                                     'datum' => 'Datum angeben',
@@ -59,7 +59,7 @@ return [
                             ],
                             'attributes' => [
                                 'id' => 'versbeginn',
-                                'class' => 'form-control form-control-select toggle-trigger',
+                                'class' => 'toggle-trigger',
                                 'data-toggle-modus' => 'show',
                                 'data-toggle-value' => 'datum',
                             ],
@@ -69,7 +69,7 @@ return [
                         'spec' => [
                             'type' => Text::class,
                             'name' => 'versbeginn_datum',
-                            'label_attributes' => ['class' => 'col-sm col-form-label text-sm-right'],
+                            'label_attributes' => ['class' => 'col-sm text-sm-right'],
                             'options' => ['label' => 'Beginn am'],
                             'attributes' => [
                                 'id' => 'versbeginn_datum',

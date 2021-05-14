@@ -95,7 +95,6 @@ final class FormTest extends AbstractTest
      */
     public function testHrForm(): void
     {
-        //self::markTestSkipped();
         $form = (new Factory())->createForm(require '_files/config/default.hr.config.php');
 
         $expected = $this->getExpected('form/hr.html');
@@ -103,16 +102,19 @@ final class FormTest extends AbstractTest
         self::assertSame($expected, trim($this->helper->render($form)));
     }
 
-//    public function testPhvForm(): void
-//    {
-//        self::markTestSkipped();
-//        $form = (new Factory())->createForm(require '_files/config/default.phv.config.php');
-//
-//        $expected = $this->getExpected('form/phv.html');
-//
-//        self::assertSame($expected, trim($this->helper->render($form)));
-//    }
-//
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testPhvForm(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/default.phv.config.php');
+
+        $expected = $this->getExpected('form/phv.html');
+
+        self::assertSame($expected, trim($this->helper->render($form)));
+    }
+
 //    public function testRsForm(): void
 //    {
 //        self::markTestSkipped();
