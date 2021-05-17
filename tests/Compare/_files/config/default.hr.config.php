@@ -22,6 +22,7 @@ use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\Validator\NotEmpty;
 use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Links\Links;
 
 return [
     'type' => Form::class,
@@ -660,6 +661,37 @@ return [
                 ],
                 'attributes' => ['class' => 'collapse collapse-questions'],
                 'elements' => [
+                    [
+                        'spec' => [
+                            'type' => Links::class,
+                            'name' => 'links',
+                            'options' => [
+                                'label' => 'Wählen Sie eine Vorgabe für Ihre Berechnung',
+                                'help_content' => '<strong>Wählen Sie eine Vorgabe für Ihre Berechnung</strong><p>Die Vorgabe des Arbeitskreis Vermittlerrichlinie (AK-Empfehlung) bietet Ihnen einen empfohlenen Mindestschutz. Heute erfüllen alle wichtigen Tarife diese Vorgaben. Zu Ihrer Sicherheit sollten Sie diese Mindestvorgaben wählen.</p>',
+                                'links' => [
+                                    [
+                                        'href' => '#',
+                                        'class' => 'js-standard js-gtm-event',
+                                        'data-event-type' => 'click',
+                                        'data-event-category' => 'versicherung',
+                                        'data-event-label' => 'hr',
+                                        'data-event-action' => 'choose standard options',
+                                        'label' => 'Standard',
+                                    ],
+                                    [
+                                        'href' => '#',
+                                        'class' => 'recommendation js-recommendation js-gtm-event',
+                                        'data-event-type' => 'click',
+                                        'data-event-category' => 'versicherung',
+                                        'data-event-label' => 'hr',
+                                        'data-event-action' => 'choose AK recommentations',
+                                        'label' => 'AK Empfehlung',
+                                    ],
+                                ],
+                                'separator' => '|',
+                            ],
+                        ],
+                    ],
                     [
                         'spec' => [
                             'type' => Select::class,
