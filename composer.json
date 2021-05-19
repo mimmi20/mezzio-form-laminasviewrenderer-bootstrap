@@ -27,6 +27,7 @@
     "laminas/laminas-servicemanager": "^3.6.4",
     "mimmi20/coding-standard": "^2.2.2",
     "mimmi20/laminas-form-element-group": "^1.0.0",
+    "mimmi20/laminas-form-element-links": "dev-master",
     "pepakriz/phpstan-exception-rules": "^0.11.7",
     "phpstan/extension-installer": "^1.1.0",
     "phpstan/phpstan": "^0.12.88",
@@ -37,7 +38,9 @@
   "suggest": {
     "ext-intl": "required to use the Translator",
     "laminas/laminas-i18n": "^2.11.0, required to use the Translator",
-    "laminas/laminas-servicemanager": "^3.6.4, to use the navigation factories"
+    "laminas/laminas-servicemanager": "^3.6.4, to use the navigation factories",
+    "mimmi20/laminas-form-element-group": "^1.0.0, to render fieldsets just for styling",
+    "mimmi20/laminas-form-element-links": "to render links inside a form"
   },
   "config": {
     "preferred-install": "dist",
