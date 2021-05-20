@@ -259,8 +259,8 @@ final class FormDateTimeSelect extends AbstractHelper
      */
     private function getHoursOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), null, null, null, null, 'HH');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), null, null, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'HH');
+        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
         $date           = new DateTime('1970-01-01 00:00:00');
 
         $result = [];
@@ -294,8 +294,8 @@ final class FormDateTimeSelect extends AbstractHelper
      */
     private function getMinutesOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), null, null, null, null, 'mm');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), null, null, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'mm');
+        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
         $date           = new DateTime('1970-01-01 00:00:00');
 
         $result = [];
@@ -329,8 +329,8 @@ final class FormDateTimeSelect extends AbstractHelper
      */
     private function getSecondsOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), null, null, null, null, 'ss');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), null, null, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'ss');
+        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
         $date           = new DateTime('1970-01-01 00:00:00');
 
         $result = [];

@@ -36,17 +36,17 @@ trait FormMonthSelectTrait
     /**
      * Date formatter to use
      */
-    private int $dateType;
+    private int $dateType = IntlDateFormatter::LONG;
 
     /**
      * Pattern to use for Date rendering
      */
-    private string $pattern;
+    private ?string $pattern = null;
 
     /**
      * Locale to use
      */
-    private string $locale;
+    private ?string $locale = null;
 
     /**
      * @throws Exception\ExtensionNotLoadedException if ext/intl is not present
@@ -166,12 +166,12 @@ trait FormMonthSelectTrait
      *
      * @param string $pattern Pattern to use for months
      *
-     * @return array<string, string>
+     * @return array<int|string, array<string, string>>
      */
     private function getMonthsOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), null, null, null, null, 'MM');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), null, null, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'MM');
+        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
         $date           = new DateTime('1970-01-01');
 
         $result = [];
@@ -188,7 +188,7 @@ trait FormMonthSelectTrait
                 continue;
             }
 
-            $result[$key] = $value;
+            $result[$key] = ['value' => $key, 'label' => $value];
 
             $date->modify('+1 month');
         }
@@ -201,13 +201,13 @@ trait FormMonthSelectTrait
      * NOTE: we don't use a pattern for years, as years written as two digits can lead to hard to
      * read date for users, so we only use four digits years
      *
-     * @return array<int, int>
+     * @return array<int|string, array<string, string>>
      */
     private function getYearsOptions(int $minYear, int $maxYear): array
     {
         $result = [];
         for ($i = $maxYear; $i >= $minYear; --$i) {
-            $result[$i] = $i;
+            $result[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
 
         return $result;

@@ -22,12 +22,12 @@ trait FormDateSelectTrait
      *
      * @param string $pattern Pattern to use for days
      *
-     * @return array<string, string>
+     * @return array<int|string, array<string, string>>
      */
     private function getDaysOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), null, null, null, null, 'dd');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), null, null, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'dd');
+        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
         $date           = new DateTime('1970-01-01');
 
         $result = [];
@@ -44,7 +44,7 @@ trait FormDateSelectTrait
                 continue;
             }
 
-            $result[$key] = $value;
+            $result[$key] = ['value' => $key, 'label' => $value];
 
             $date->modify('+1 day');
         }

@@ -30,6 +30,7 @@ use function array_merge;
 use function array_unique;
 use function assert;
 use function explode;
+use function gettype;
 use function implode;
 use function is_array;
 use function is_scalar;
@@ -197,11 +198,13 @@ final class FormSelect extends AbstractHelper
 
         $this->validTagAttributes = $this->validSelectAttributes;
 
-        $rendered = $indent . sprintf(
+        $rendered = sprintf(
             '<select %s>%s</select>',
             $this->createAttributesString($attributes),
             PHP_EOL . implode(PHP_EOL, $optionContent) . PHP_EOL . $indent
         );
+
+        $rendered = $indent . $rendered;
 
         // Render hidden element
         $useHiddenElement = method_exists($element, 'useHiddenElement')
@@ -286,7 +289,13 @@ final class FormSelect extends AbstractHelper
             $selected = true;
         }
 
-        assert(is_string($label));
+        assert(
+            is_string($label),
+            sprintf(
+                '$label should be a string, but was %s',
+                gettype($label)
+            )
+        );
 
         if ('' !== $label && null !== $this->translate) {
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
@@ -342,11 +351,15 @@ final class FormSelect extends AbstractHelper
             $attributes = ' ' . $attributes;
         }
 
-        return sprintf(
+        $indent  = $this->getIndent();
+        $indent .= $this->getWhitespace($level * 4);
+        $content = sprintf(
             '<optgroup%s>%s</optgroup>',
             $attributes,
-            $this->renderOptions($options, $selectedOptions, $level + 1)
+            PHP_EOL . $this->renderOptions($options, $selectedOptions, $level + 1) . PHP_EOL . $indent
         );
+
+        return $indent . $content;
     }
 
     /**
