@@ -26,6 +26,8 @@
         <ini name="error_reporting" value="-1"/>
         <ini name="memory_limit" value="-1"/>
         <ini name="date.timezone" value="UTC"/>
+        <ini name="intl.use_exceptions" value="1"/>
+        <ini name="intl.default_locale" value="de"/>
     </php>
 
     <testsuite name="mezzio-form-laminasviewrenderer-bootstrap Test Suite">
