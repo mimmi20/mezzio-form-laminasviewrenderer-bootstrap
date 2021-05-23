@@ -42,7 +42,7 @@ final class FormDateSelectFactory
         );
 
         return new FormDateSelect(
-            $plugin->get(FormSelect::class)
+            $plugin->get(FormSelectInterface::class)
         );
     }
 }

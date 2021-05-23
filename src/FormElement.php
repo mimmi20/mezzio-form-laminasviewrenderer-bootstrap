@@ -23,11 +23,9 @@ use Mimmi20\Form\Element\Links\Links;
 use function assert;
 use function method_exists;
 
-final class FormElement extends AbstractHelper
+final class FormElement extends AbstractHelper implements FormElementInterface
 {
     use FormTrait;
-
-    public const DEFAULT_HELPER = 'formInput';
 
     /**
      * Instance map to view helper
@@ -81,7 +79,7 @@ final class FormElement extends AbstractHelper
     /**
      * Default helper name
      */
-    private string $defaultHelper = self::DEFAULT_HELPER;
+    private string $defaultHelper = FormElementInterface::DEFAULT_HELPER;
 
     private HelperPluginManager $helperPluginManager;
 

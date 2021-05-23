@@ -30,7 +30,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 
 use function array_key_exists;
@@ -48,21 +48,21 @@ use function trim;
 
 use const PHP_EOL;
 
-final class FormRow extends BaseFormRow
+final class FormRow extends BaseFormRow implements FormRowInterface
 {
     use FormTrait;
 
-    private FormElement $formElement;
-    private FormElementErrors $formElementErrors;
+    private FormElementInterface $formElement;
+    private FormElementErrorsInterface $formElementErrors;
     private EscapeHtml $escapeHtml;
     private PartialRendererInterface $renderer;
-    private HtmlElement $htmlElement;
+    private HtmlElementInterface $htmlElement;
     private ?Translate $translate;
 
     public function __construct(
-        FormElement $formElement,
-        FormElementErrors $formElementErrors,
-        HtmlElement $htmlElement,
+        FormElementInterface $formElement,
+        FormElementErrorsInterface $formElementErrors,
+        HtmlElementInterface $htmlElement,
         EscapeHtml $escapeHtml,
         PartialRendererInterface $renderer,
         ?Translate $translator = null

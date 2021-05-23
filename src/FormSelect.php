@@ -17,11 +17,10 @@ use Laminas\Form\Element\Select as SelectElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\AbstractHelper;
-use Laminas\Form\View\Helper\FormHidden;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Traversable;
 
@@ -42,7 +41,7 @@ use function trim;
 
 use const PHP_EOL;
 
-final class FormSelect extends AbstractHelper
+final class FormSelect extends AbstractHelper implements FormSelectInterface
 {
     use FormTrait;
 
@@ -61,11 +60,11 @@ final class FormSelect extends AbstractHelper
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $translatableAttributes = ['label' => true];
-    private FormHidden $formHidden;
+    private FormHiddenInterface $formHidden;
     private PartialRendererInterface $renderer;
     private ?Translate $translate;
     private EscapeHtml $escaper;
-    private HtmlElement $htmlElement;
+    private HtmlElementInterface $htmlElement;
 
     /**
      * Attributes valid for select
@@ -106,10 +105,10 @@ final class FormSelect extends AbstractHelper
     ];
 
     public function __construct(
-        HtmlElement $htmlElement,
+        HtmlElementInterface $htmlElement,
         PartialRendererInterface $renderer,
         EscapeHtml $escaper,
-        FormHidden $formHidden,
+        FormHiddenInterface $formHidden,
         ?Translate $translator = null
     ) {
         $this->renderer    = $renderer;
@@ -124,7 +123,7 @@ final class FormSelect extends AbstractHelper
      *
      * Proxies to {@link render()}.
      *
-     * @return FormSelect|string
+     * @return self|string
      *
      * @throws Exception\InvalidArgumentException
      * @throws Exception\DomainException

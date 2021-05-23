@@ -25,7 +25,7 @@ use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Traversable;
 
 use function array_key_exists;
@@ -45,10 +45,10 @@ final class FormCollection extends AbstractHelper
 {
     use FormTrait;
 
-    private FormRow $formRow;
+    private FormRowInterface $formRow;
     private EscapeHtml $escapeHtml;
     private EscapeHtmlAttr $escapeHtmlAttr;
-    private HtmlElement $htmlElement;
+    private HtmlElementInterface $htmlElement;
     private ?Translate $translate;
 
     /**
@@ -76,7 +76,7 @@ final class FormCollection extends AbstractHelper
      */
     private string $defaultElementHelper = 'formrow';
 
-    public function __construct(FormRow $formRow, EscapeHtml $escapeHtml, HtmlElement $htmlElement, ?Translate $translator = null)
+    public function __construct(FormRowInterface $formRow, EscapeHtml $escapeHtml, HtmlElementInterface $htmlElement, ?Translate $translator = null)
     {
         $this->formRow     = $formRow;
         $this->escapeHtml  = $escapeHtml;

@@ -19,7 +19,7 @@ use Traversable;
 use function iterator_to_array;
 use function sprintf;
 
-final class FormHidden extends FormInput
+final class FormHidden extends FormInput implements FormHiddenInterface
 {
     /**
      * Attributes valid for the input tag type="hidden"

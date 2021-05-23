@@ -46,7 +46,7 @@ final class FormDateTimeSelect extends AbstractHelper
     /**
      * @throws Exception\ExtensionNotLoadedException if ext/intl is not present
      */
-    public function __construct(FormSelect $selectHelper)
+    public function __construct(FormSelectInterface $selectHelper)
     {
         if (!extension_loaded('intl')) {
             throw new Exception\ExtensionNotLoadedException(

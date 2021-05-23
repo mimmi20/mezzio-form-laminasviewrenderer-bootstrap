@@ -21,19 +21,22 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Traversable;
 
+use function array_filter;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
+use function is_string;
 use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
 
+use const ARRAY_FILTER_USE_KEY;
 use const PHP_EOL;
 
 final class FormCheckbox extends FormInput
@@ -42,15 +45,15 @@ final class FormCheckbox extends FormInput
     use UseHiddenElementTrait;
 
     private ?Translate $translate;
-    private HtmlElement $htmlElement;
-    private FormLabel $formLabel;
+    private HtmlElementInterface $htmlElement;
+    private FormLabelInterface $formLabel;
 
     public function __construct(
         EscapeHtml $escapeHtml,
         EscapeHtmlAttr $escapeHtmlAttr,
         Doctype $doctype,
-        FormLabel $formLabel,
-        HtmlElement $htmlElement,
+        FormLabelInterface $formLabel,
+        HtmlElementInterface $htmlElement,
         ?Translate $translator = null
     ) {
         parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
@@ -148,15 +151,22 @@ final class FormCheckbox extends FormInput
 
         $indent = $this->getIndent();
 
+        /** @var array<string, bool|string> $filteredAttributes */
+        $filteredAttributes = array_filter(
+            $labelAttributes,
+            static fn ($key): bool => is_string($key),
+            ARRAY_FILTER_USE_KEY
+        );
+
         if (
             array_key_exists('id', $attributes)
             && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
         ) {
             $labelOpen  = '';
             $labelClose = '';
-            $label      = $this->formLabel->openTag($labelAttributes) . $label . $this->formLabel->closeTag();
+            $label      = $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
         } else {
-            $labelOpen  = $this->formLabel->openTag($labelAttributes) . PHP_EOL;
+            $labelOpen  = $this->formLabel->openTag($filteredAttributes) . PHP_EOL;
             $labelClose = $this->formLabel->closeTag() . PHP_EOL;
         }
 

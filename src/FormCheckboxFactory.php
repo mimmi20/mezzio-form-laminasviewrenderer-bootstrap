@@ -19,7 +19,7 @@ use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
@@ -51,7 +51,7 @@ final class FormCheckboxFactory
             $lvhPluginManager instanceof PluginManagerInterface,
             sprintf(
                 '$lvhPluginManager should be an Instance of %s, but was %s',
-                LvhPluginManager::class,
+                PluginManagerInterface::class,
                 is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
             )
         );
@@ -66,8 +66,8 @@ final class FormCheckboxFactory
             $plugin->get(EscapeHtml::class),
             $plugin->get(EscapeHtmlAttr::class),
             $plugin->get(Doctype::class),
-            $plugin->get(FormLabel::class),
-            $lvhPluginManager->get(HtmlElement::class),
+            $plugin->get(FormLabelInterface::class),
+            $lvhPluginManager->get(HtmlElementInterface::class),
             $translator
         );
     }

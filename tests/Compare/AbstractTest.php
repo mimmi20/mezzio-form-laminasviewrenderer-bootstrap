@@ -15,7 +15,6 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
-use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
@@ -50,11 +49,6 @@ abstract class AbstractTest extends TestCase
      * Class name for view helper to test
      */
     protected string $helperName;
-
-    /**
-     * View helper
-     */
-    protected HelperInterface $helper;
 
     /**
      * Prepares the environment before running a test

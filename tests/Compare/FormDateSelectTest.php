@@ -12,34 +12,25 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Factory;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
-use function assert;
 use function trim;
 
 final class FormDateSelectTest extends AbstractTest
 {
     /**
-     * @throws ContainerExceptionInterface
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $plugin = $this->serviceManager->get(HelperPluginManager::class);
-
-        $this->helper = $plugin->get(FormDateSelect::class);
-        assert($this->helper instanceof FormDateSelect);
-    }
-
-    /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws ContainerExceptionInterface
      */
     public function testRender(): void
     {
@@ -47,6 +38,10 @@ final class FormDateSelectTest extends AbstractTest
 
         $expected = $this->getExpected('form/date-select.html');
 
-        self::assertSame($expected, trim($this->helper->render($form->get('inputDate4'))));
+        $helper = new FormDateSelect(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormSelectInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form->get('inputDate4'))));
     }
 }

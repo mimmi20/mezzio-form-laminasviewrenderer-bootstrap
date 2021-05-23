@@ -27,11 +27,8 @@ use function is_array;
 use function is_object;
 use function sprintf;
 
-final class FormLabel extends AbstractHelper
+final class FormLabel extends AbstractHelper implements FormLabelInterface
 {
-    public const APPEND  = 'append';
-    public const PREPEND = 'prepend';
-
     /**
      * Attributes valid for the label tag
      *
@@ -101,10 +98,10 @@ final class FormLabel extends AbstractHelper
 
         if ($label && $labelContent) {
             switch ($position) {
-                case self::APPEND:
+                case FormLabelInterface::APPEND:
                     $labelContent .= $label;
                     break;
-                case self::PREPEND:
+                case FormLabelInterface::PREPEND:
                 default:
                     $labelContent = $label . $labelContent;
                     break;

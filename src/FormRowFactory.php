@@ -17,7 +17,7 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
@@ -62,9 +62,9 @@ final class FormRowFactory
         }
 
         return new FormRow(
-            $plugin->get(FormElement::class),
-            $plugin->get(FormElementErrors::class),
-            $lvhPluginManager->get(HtmlElement::class),
+            $plugin->get(FormElementInterface::class),
+            $plugin->get(FormElementErrorsInterface::class),
+            $lvhPluginManager->get(HtmlElementInterface::class),
             $plugin->get(EscapeHtml::class),
             $lvhPluginManager->get(PartialRendererInterface::class),
             $translator
