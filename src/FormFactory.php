@@ -40,7 +40,7 @@ final class FormFactory
         );
 
         return new Form(
-            $plugin->get(FormCollection::class),
+            $plugin->get(FormCollectionInterface::class),
             $plugin->get(FormRowInterface::class)
         );
     }

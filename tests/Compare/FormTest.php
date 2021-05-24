@@ -19,7 +19,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -47,7 +47,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/vertical.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -72,7 +72,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/horizonal.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -97,7 +97,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/horizontal.collection.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -122,7 +122,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/horizontal.element-group.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -147,7 +147,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/hr.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -172,7 +172,7 @@ final class FormTest extends AbstractTest
         $expected = $this->getExpected('form/phv.html');
 
         $helper = new Form(
-            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
         );
 
@@ -187,7 +187,7 @@ final class FormTest extends AbstractTest
 //        $expected = $this->getExpected('form/rs.html');
 //
 //        $helper = new Form(
-//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
 //            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
 //        );
 //
@@ -202,7 +202,7 @@ final class FormTest extends AbstractTest
 //        $expected = $this->getExpected('form/tier.html');
 //
 //        $helper = new Form(
-//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
 //            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
 //        );
 //
@@ -217,7 +217,7 @@ final class FormTest extends AbstractTest
 //        $expected = $this->getExpected('form/unfall.html');
 //
 //        $helper = new Form(
-//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollection::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
 //            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
 //        );
 //

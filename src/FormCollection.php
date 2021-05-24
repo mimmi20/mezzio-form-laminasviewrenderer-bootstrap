@@ -41,7 +41,7 @@ use function trim;
 
 use const PHP_EOL;
 
-final class FormCollection extends AbstractHelper
+final class FormCollection extends AbstractHelper implements FormCollectionInterface
 {
     use FormTrait;
 
@@ -89,7 +89,7 @@ final class FormCollection extends AbstractHelper
      *
      * Proxies to {@link render()}.
      *
-     * @return FormCollection|string
+     * @return self|string
      *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
