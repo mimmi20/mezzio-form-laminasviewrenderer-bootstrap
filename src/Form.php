@@ -83,10 +83,6 @@ final class Form extends BaseForm
             $class .= ' row row-cols-lg-auto align-items-center';
         }
 
-        if ((self::LAYOUT_VERTICAL === $formLayout || self::LAYOUT_INLINE === $formLayout) && $form->getOption('floating-labels')) {
-            $class .= ' form-floating';
-        }
-
         $form->setAttribute('class', trim($class));
 
         $formContent = '';

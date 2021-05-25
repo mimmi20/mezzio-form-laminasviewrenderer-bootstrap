@@ -72,18 +72,22 @@ final class FormCheckbox extends FormInput
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof CheckboxElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\Checkbox',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Laminas\Form\Element\Checkbox',
+                    __METHOD__
+                )
+            );
         }
 
         $name = $element->getName();
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $label = $element->getLabel();
@@ -174,7 +178,7 @@ final class FormCheckbox extends FormInput
             '' !== $label && !array_key_exists('id', $attributes)
             || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
         ) {
-            $label = '<span>' . $label . '</span>';
+            $label = '<span>' . $label . '</span>' . PHP_EOL;
         }
 
         $rendered = sprintf(
