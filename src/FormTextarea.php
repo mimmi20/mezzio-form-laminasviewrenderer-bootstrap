@@ -16,7 +16,7 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Traversable;
 
 use function array_key_exists;
@@ -55,11 +55,11 @@ final class FormTextarea extends AbstractHelper
         'wrap' => true,
     ];
 
-    private HtmlElement $htmlElement;
+    private HtmlElementInterface $htmlElement;
     private EscapeHtml $escapeHtml;
 
     public function __construct(
-        HtmlElement $htmlElement,
+        HtmlElementInterface $htmlElement,
         EscapeHtml $escapeHtml
     ) {
         $this->htmlElement = $htmlElement;

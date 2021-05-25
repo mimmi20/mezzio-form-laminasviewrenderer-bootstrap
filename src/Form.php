@@ -39,10 +39,10 @@ final class Form extends BaseForm
     public const LAYOUT_VERTICAL   = 'vertical';
     public const LAYOUT_INLINE     = 'inline';
 
-    private FormCollection $formCollection;
-    private FormRow $formRow;
+    private FormCollectionInterface $formCollection;
+    private FormRowInterface $formRow;
 
-    public function __construct(FormCollection $formCollection, FormRow $formRow)
+    public function __construct(FormCollectionInterface $formCollection, FormRowInterface $formRow)
     {
         $this->formCollection = $formCollection;
         $this->formRow        = $formRow;

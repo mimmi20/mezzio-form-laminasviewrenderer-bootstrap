@@ -108,11 +108,11 @@ final class FormButton extends FormInput
 
         if (null === $buttonContent) {
             $buttonContent = $element->getLabel();
+
             if (null === $buttonContent) {
                 throw new Exception\DomainException(
                     sprintf(
-                        '%s expects either button content as the second argument, '
-                        . 'or that the element provided has a label value; neither found',
+                        '%s expects either button content as the second argument, or that the element provided has a label value; neither found',
                         __METHOD__
                     )
                 );
@@ -156,20 +156,24 @@ final class FormButton extends FormInput
         }
 
         if (!$attributesOrElement instanceof ElementInterface) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
-                __METHOD__,
-                is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s expects null, an array or a \Laminas\Form\ElementInterface instance; received "%s"',
+                    __METHOD__,
+                    is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
+                )
+            );
         }
 
         $element = $attributesOrElement;
         $name    = $element->getName();
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $attributes = $element->getAttributes();

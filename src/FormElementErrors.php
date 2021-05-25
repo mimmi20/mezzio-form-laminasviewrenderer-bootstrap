@@ -19,7 +19,7 @@ use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Traversable;
 
 use function array_merge;
@@ -31,19 +31,19 @@ use function sprintf;
 
 use const PHP_EOL;
 
-final class FormElementErrors extends AbstractHelper
+final class FormElementErrors extends AbstractHelper implements FormElementErrorsInterface
 {
     use FormTrait;
 
-    /** @var array<int|string, string> Default attributes for the open format tag */
+    /** @var array<string, string> Default attributes for the open format tag */
     private array $attributes = [];
 
     private ?Translate $translate;
     private EscapeHtml $escapeHtml;
-    private HtmlElement $htmlElement;
+    private HtmlElementInterface $htmlElement;
 
     public function __construct(
-        HtmlElement $htmlElement,
+        HtmlElementInterface $htmlElement,
         EscapeHtml $escapeHtml,
         ?Translate $translate = null
     ) {
@@ -57,7 +57,7 @@ final class FormElementErrors extends AbstractHelper
      *
      * Proxies to {@link render()} if an element is passed.
      *
-     * @param array<int|string, string> $attributes
+     * @param array<string, string> $attributes
      *
      * @return FormElementErrors|string
      *
@@ -79,7 +79,7 @@ final class FormElementErrors extends AbstractHelper
      * composed, messages retrieved from the element will be translated; if
      * either is not the case, they will not.
      *
-     * @param array<int|string, string> $attributes
+     * @param array<string, string> $attributes
      *
      * @throws Exception\DomainException
      */
@@ -141,7 +141,7 @@ final class FormElementErrors extends AbstractHelper
     /**
      * Set the attributes that will go on the message open format
      *
-     * @param array<int|string, string> $attributes key value pairs of attributes
+     * @param array<string, string> $attributes key value pairs of attributes
      */
     public function setAttributes(array $attributes): self
     {
@@ -153,7 +153,7 @@ final class FormElementErrors extends AbstractHelper
     /**
      * Get the attributes that will go on the message open format
      *
-     * @return array<int|string, string>
+     * @return array<string, string>
      */
     public function getAttributes(): array
     {

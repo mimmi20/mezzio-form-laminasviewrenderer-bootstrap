@@ -12,34 +12,30 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Factory;
+use Laminas\View\Helper\Doctype;
+use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
-use function assert;
 use function trim;
 
 final class FormCheckboxTest extends AbstractTest
 {
     /**
-     * @throws ContainerExceptionInterface
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $plugin = $this->serviceManager->get(HelperPluginManager::class);
-
-        $this->helper = $plugin->get(FormCheckbox::class);
-        assert($this->helper instanceof FormCheckbox);
-    }
-
-    /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws ContainerExceptionInterface
      */
     public function testRender(): void
     {
@@ -47,6 +43,15 @@ final class FormCheckboxTest extends AbstractTest
 
         $expected = $this->getExpected('form/checkbox.html');
 
-        self::assertSame($expected, trim($this->helper->render($form->get('gridCheck1'))));
+        $helper = new FormCheckbox(
+            $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtml::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtmlAttr::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(Doctype::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormLabelInterface::class),
+            $this->serviceManager->get(LvhPluginManager::class)->get(HtmlElementInterface::class),
+            null
+        );
+
+        self::assertSame($expected, trim($helper->render($form->get('gridCheck1'))));
     }
 }

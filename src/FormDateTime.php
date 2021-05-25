@@ -14,6 +14,9 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 
+/**
+ * @deprecated use {@see \Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeLocal} instead
+ */
 final class FormDateTime extends FormInput
 {
     /**

@@ -16,7 +16,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
@@ -54,7 +54,7 @@ final class FormTextareaFactory
         );
 
         return new FormTextarea(
-            $lvhPluginManager->get(HtmlElement::class),
+            $lvhPluginManager->get(HtmlElementInterface::class),
             $plugin->get(EscapeHtml::class)
         );
     }

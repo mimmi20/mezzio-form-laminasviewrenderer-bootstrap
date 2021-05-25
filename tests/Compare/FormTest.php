@@ -12,34 +12,33 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Factory;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\RuntimeException;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
-use function assert;
 use function trim;
 
 final class FormTest extends AbstractTest
 {
     /**
-     * @throws ContainerExceptionInterface
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $plugin = $this->serviceManager->get(HelperPluginManager::class);
-
-        $this->helper = $plugin->get(Form::class);
-        assert($this->helper instanceof Form);
-    }
-
-    /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testVerticalForm(): void
     {
@@ -47,12 +46,24 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/vertical.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testHorizontalForm(): void
     {
@@ -60,12 +71,24 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/horizonal.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testHorizontalFormWithCollection(): void
     {
@@ -73,12 +96,24 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/horizontal.collection.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testHorizontalFormWithElementGroup(): void
     {
@@ -86,12 +121,24 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/horizontal.element-group.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testHrForm(): void
     {
@@ -99,12 +146,24 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/hr.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
      */
     public function testPhvForm(): void
     {
@@ -112,7 +171,12 @@ final class FormTest extends AbstractTest
 
         $expected = $this->getExpected('form/phv.html');
 
-        self::assertSame($expected, trim($this->helper->render($form)));
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
     }
 
 //    public function testRsForm(): void
@@ -122,7 +186,12 @@ final class FormTest extends AbstractTest
 //
 //        $expected = $this->getExpected('form/rs.html');
 //
-//        self::assertSame($expected, trim($this->helper->render($form)));
+//        $helper = new Form(
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+//        );
+//
+//        self::assertSame($expected, trim($helper->render($form)));
 //    }
 //
 //    public function testTierForm(): void
@@ -132,7 +201,12 @@ final class FormTest extends AbstractTest
 //
 //        $expected = $this->getExpected('form/tier.html');
 //
-//        self::assertSame($expected, trim($this->helper->render($form)));
+//        $helper = new Form(
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+//        );
+//
+//        self::assertSame($expected, trim($helper->render($form)));
 //    }
 //
 //    public function testUnfallForm(): void
@@ -142,6 +216,11 @@ final class FormTest extends AbstractTest
 //
 //        $expected = $this->getExpected('form/unfall.html');
 //
-//        self::assertSame($expected, trim($this->helper->render($form)));
+//        $helper = new Form(
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+//            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+//        );
+//
+//        self::assertSame($expected, trim($helper->render($form)));
 //    }
 }

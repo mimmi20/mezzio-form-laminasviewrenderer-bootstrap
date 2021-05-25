@@ -13,12 +13,11 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
-use Laminas\Form\View\Helper\FormHidden;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElement;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
@@ -63,10 +62,10 @@ final class FormSelectFactory
         }
 
         return new FormSelect(
-            $lvhPluginManager->get(HtmlElement::class),
+            $lvhPluginManager->get(HtmlElementInterface::class),
             $lvhPluginManager->get(PartialRendererInterface::class),
             $plugin->get(EscapeHtml::class),
-            $plugin->get(FormHidden::class),
+            $plugin->get(FormHiddenInterface::class),
             $translator
         );
     }

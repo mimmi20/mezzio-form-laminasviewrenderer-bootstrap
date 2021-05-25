@@ -25,6 +25,9 @@ use function gettype;
 use function is_object;
 use function sprintf;
 
+/**
+ * @deprecated
+ */
 final class FormDateTimeFactory
 {
     /**

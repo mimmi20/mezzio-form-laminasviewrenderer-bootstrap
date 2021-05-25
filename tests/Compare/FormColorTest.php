@@ -12,34 +12,26 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Factory;
+use Laminas\View\Helper\Doctype;
+use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormColor;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
-use function assert;
 use function trim;
 
 final class FormColorTest extends AbstractTest
 {
     /**
-     * @throws ContainerExceptionInterface
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $plugin = $this->serviceManager->get(HelperPluginManager::class);
-
-        $this->helper = $plugin->get(FormColor::class);
-        assert($this->helper instanceof FormColor);
-    }
-
-    /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws DomainException
+     * @throws ContainerExceptionInterface
      */
     public function testRender(): void
     {
@@ -47,6 +39,12 @@ final class FormColorTest extends AbstractTest
 
         $expected = $this->getExpected('form/color.html');
 
-        self::assertSame($expected, trim($this->helper->render($form->get('inputColor'))));
+        $helper = new FormColor(
+            $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtml::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtmlAttr::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(Doctype::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form->get('inputColor'))));
     }
 }
