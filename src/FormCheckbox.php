@@ -205,7 +205,7 @@ final class FormCheckbox extends FormInput
 
         switch ($labelPosition) {
             case BaseFormRow::LABEL_PREPEND:
-                $rendered = $labelOpen . $label . PHP_EOL . $indent . $this->getWhitespace(4) . $rendered . $labelClose;
+                $rendered = $labelOpen . $indent . $this->getWhitespace(4) . $label . $rendered . PHP_EOL . $indent . $labelClose;
                 break;
             case BaseFormRow::LABEL_APPEND:
             default:

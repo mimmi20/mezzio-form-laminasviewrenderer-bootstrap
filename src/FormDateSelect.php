@@ -66,18 +66,22 @@ final class FormDateSelect extends AbstractHelper
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof DateSelectElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\DateSelect',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Laminas\Form\Element\DateSelect',
+                    __METHOD__
+                )
+            );
         }
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $pattern = $this->parsePattern($element->shouldRenderDelimiters());

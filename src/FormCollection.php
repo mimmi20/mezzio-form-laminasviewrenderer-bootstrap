@@ -258,7 +258,9 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             $templateMarkup .= $this->formRow->render($elementOrFieldset) . PHP_EOL;
         }
 
-        return $indent . $this->htmlElement->toHtml('template', [], $templateMarkup . $indent);
+        $templateAttrbutes = $collection->getOption('template_attributes') ?? [];
+
+        return $indent . $this->htmlElement->toHtml('template', $templateAttrbutes, $templateMarkup . $indent);
     }
 
     /**
