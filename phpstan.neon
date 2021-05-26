@@ -29,3 +29,4 @@ parameters:
     - '~Parameter #1 \$attributesOrElement of method .* expects .*, int given~'
     - '~Fetching class constant class of deprecated class~'
     - '~Instantiation of deprecated class~'
+    - '~Laminas\\Form\\Exception\\DomainException is never thrown in the corresponding try block~'
