@@ -15,17 +15,16 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 use ArrayObject;
 use Laminas\Form\Element\File;
 use Laminas\Form\Exception\DomainException;
-use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
-use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHidden;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function sprintf;
 
-final class FormHiddenTest extends TestCase
+final class FormTextareaTest extends TestCase
 {
     /**
      * @throws Exception
@@ -33,25 +32,19 @@ final class FormHiddenTest extends TestCase
      */
     public function testRenderWithoutName(): void
     {
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtmlAttr->expects(self::never())
-            ->method('__invoke');
-
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $doctype->expects(self::never())
-            ->method('__invoke');
-
-        $helper = new FormHidden($escapeHtml, $escapeHtmlAttr, $doctype);
+        $helper = new FormTextarea($htmlElement, $escapeHtml);
 
         $element = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -64,7 +57,7 @@ final class FormHiddenTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormHidden::render'
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea::render'
             )
         );
         $this->expectExceptionCode(0);
@@ -77,30 +70,34 @@ final class FormHiddenTest extends TestCase
      * @throws DomainException
      * @throws InvalidArgumentException
      */
-    public function testRenderWithName1(): void
+    public function testRenderWithName(): void
     {
-        $name     = 'name';
-        $expexted = '<input class="abc" name="name" type="hidden" value="xyz">';
+        $name         = 'name';
+        $value        = 'xyz';
+        $escapedValue = 'uvwxyz';
+        $expexted     = '<textarea class="form-control abc" name="name">uvwxyz</textarea>';
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::once())
+            ->method('toHtml')
+            ->with(
+                'textarea',
+                ['class' => 'form-control abc', 'name' => $name],
+                $escapedValue
+            )
+            ->willReturn($expexted);
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $escapeHtml->expects(self::never())
-            ->method('__invoke');
+        $escapeHtml->expects(self::once())
+            ->method('__invoke')
+            ->with($value)
+            ->willReturn($escapedValue);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtmlAttr->expects(self::never())
-            ->method('__invoke');
-
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $doctype->expects(self::never())
-            ->method('__invoke');
-
-        $helper = new FormHidden($escapeHtml, $escapeHtmlAttr, $doctype);
+        $helper = new FormTextarea($htmlElement, $escapeHtml);
 
         $element = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -113,7 +110,7 @@ final class FormHiddenTest extends TestCase
             ->willReturn(new ArrayObject(['class' => 'abc']));
         $element->expects(self::once())
             ->method('getValue')
-            ->willReturn('xyz');
+            ->willReturn($value);
 
         self::assertSame($expexted, $helper->render($element));
     }
