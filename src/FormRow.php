@@ -378,9 +378,14 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $elementString . PHP_EOL . $indent);
         }
 
-        if ($element instanceof LabelAwareInterface) {
-            $floating = $element->getOption('floating');
+        $floating   = $element->getOption('floating');
+        $baseIndent = $indent;
 
+        if ($floating) {
+            $indent .= $this->getWhitespace(4);
+        }
+
+        if ($element instanceof LabelAwareInterface) {
             if ($floating) {
                 $labelPosition = BaseFormRow::LABEL_APPEND;
             } elseif ($element->getLabelOption('label_position')) {
@@ -390,7 +395,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
         }
 
-        $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
+        $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label);
 
         $errorContent = '';
         $helpContent  = '';
@@ -408,17 +413,21 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
         switch ($labelPosition) {
             case BaseFormRow::LABEL_PREPEND:
-                $rendered = $legend . $elementString;
+                $rendered = $legend . PHP_EOL . $elementString;
                 break;
             case BaseFormRow::LABEL_APPEND:
             default:
-                $rendered = $elementString . $legend;
+                $rendered = $elementString . PHP_EOL . $legend;
                 break;
         }
 
         $rendered .= $errorContent . $helpContent;
 
-        return $indent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $rendered . PHP_EOL . $indent);
+        if ($floating) {
+            $rendered = $indent . $this->htmlElement->toHtml('div', ['class' => 'form-floating'], PHP_EOL . $rendered . PHP_EOL . $indent);
+        }
+
+        return $baseIndent . $this->htmlElement->toHtml('div', $colAttributes, PHP_EOL . $rendered . PHP_EOL . $baseIndent);
     }
 
     /**

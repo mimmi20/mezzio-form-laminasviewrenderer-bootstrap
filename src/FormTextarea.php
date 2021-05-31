@@ -94,10 +94,12 @@ final class FormTextarea extends AbstractHelper
         $name = $element->getName();
 
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $attributes = $element->getAttributes();

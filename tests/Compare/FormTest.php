@@ -65,6 +65,31 @@ final class FormTest extends AbstractTest
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
      */
+    public function testVerticalWithFloatingLabelsForm(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/vertical.floating.config.php');
+
+        $expected = $this->getExpected('form/vertical.floating.html');
+
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
+     */
     public function testHorizontalForm(): void
     {
         $form = (new Factory())->createForm(require '_files/config/horizontal.config.php');
@@ -120,6 +145,31 @@ final class FormTest extends AbstractTest
         $form = (new Factory())->createForm(require '_files/config/horizontal.element-group.config.php');
 
         $expected = $this->getExpected('form/horizontal.element-group.html');
+
+        $helper = new Form(
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormRowInterface::class)
+        );
+
+        self::assertSame($expected, trim($helper->render($form)));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
+     */
+    public function testInlineForm(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/inline.config.php');
+
+        $expected = $this->getExpected('form/inline.html');
 
         $helper = new Form(
             $this->serviceManager->get(HelperPluginManager::class)->get(FormCollectionInterface::class),

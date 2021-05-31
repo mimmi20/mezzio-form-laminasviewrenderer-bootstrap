@@ -15,7 +15,6 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use IntlDateFormatter;
 use Laminas\Form\Element\DateSelect as DateSelectElement;
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
@@ -60,24 +59,28 @@ final class FormDateSelect extends AbstractHelper
     /**
      * Render a date element that is composed of three selects
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws InvalidArgumentException
+     * @throws DomainException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof DateSelectElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\DateSelect',
-                __METHOD__
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type Laminas\Form\Element\DateSelect',
+                    __METHOD__
+                )
+            );
         }
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $pattern = $this->parsePattern($element->shouldRenderDelimiters());
