@@ -663,7 +663,7 @@ final class FormLabelTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function testInvokeWithLabelAndPositionAndTranslator(): void
+    public function testInvokeWithLabelAndPositionAndTranslator1(): void
     {
         $for                   = 'test-type';
         $class                 = 'xyz';
@@ -724,5 +724,72 @@ final class FormLabelTest extends TestCase
         $helper->setTranslatorTextDomain($textDomain);
 
         self::assertSame($expected, $helper($element, $labelContent, $position));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testInvokeWithLabelAndPositionAndTranslator2(): void
+    {
+        $for                   = 'test-type';
+        $class                 = 'xyz';
+        $labelContent          = 'test';
+        $label                 = 'test-label';
+        $textDomain            = 'text-domain';
+        $tranlatedLabel        = 'test-label-translated';
+        $escapedTranlatedLabel = 'test-label-translated-escaped';
+        $expected              = sprintf('<label for="%s" class="%s">%s</label>', $for, $class, $escapedTranlatedLabel);
+        $position              = FormLabelInterface::PREPEND;
+
+        $element = $this->getMockBuilder(Text::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::never())
+            ->method('getName');
+        $element->expects(self::never())
+            ->method('getValue');
+        $element->expects(self::never())
+            ->method('getAttributes');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('id')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getAttribute')
+            ->with('id')
+            ->willReturn($for);
+        $element->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($label);
+        $element->expects(self::exactly(2))
+            ->method('getLabelOption')
+            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
+            ->willReturnOnConsecutiveCalls(false, false);
+        $element->expects(self::once())
+            ->method('getLabelAttributes')
+            ->willReturn(['class' => $class]);
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::once())
+            ->method('__invoke')
+            ->with($tranlatedLabel)
+            ->willReturn($escapedTranlatedLabel);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::once())
+            ->method('__invoke')
+            ->with($label, $textDomain)
+            ->willReturn($tranlatedLabel);
+
+        $helper = new FormLabel($escapeHtml, $translator);
+
+        $helper->setTranslatorTextDomain($textDomain);
+
+        self::assertSame($expected, $helper($element, null, $position));
     }
 }
