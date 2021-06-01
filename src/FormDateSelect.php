@@ -117,8 +117,6 @@ final class FormDateSelect extends AbstractHelper
             }
         }
 
-        $indent = $this->getIndent();
-
         return $indent . PHP_EOL . implode(PHP_EOL, $markups) . PHP_EOL . $indent;
     }
 }

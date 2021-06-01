@@ -20,8 +20,11 @@ use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
 
+use function implode;
 use function is_numeric;
 use function sprintf;
+
+use const PHP_EOL;
 
 final class FormMonthSelect extends AbstractHelper
 {
@@ -92,22 +95,23 @@ final class FormMonthSelect extends AbstractHelper
             $yearElement->setEmptyOption('');
         }
 
+        $indent = $this->getIndent();
+        $this->selectHelper->setIndent($indent);
+
         $data                    = [];
         $data[$pattern['month']] = $this->selectHelper->render($monthElement);
         $data[$pattern['year']]  = $this->selectHelper->render($yearElement);
 
-        $markup = '';
+        $markups = [];
         foreach ($pattern as $key => $value) {
             // Delimiter
             if (is_numeric($key)) {
-                $markup .= $value;
+                $markups[] = $indent . $value;
             } else {
-                $markup .= $data[$value];
+                $markups[] = $data[$value];
             }
         }
 
-        $indent = $this->getIndent();
-
-        return $indent . $markup;
+        return $indent . PHP_EOL . implode(PHP_EOL, $markups) . PHP_EOL . $indent;
     }
 }
