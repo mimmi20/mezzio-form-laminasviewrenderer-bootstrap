@@ -66,33 +66,35 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
             return $this;
         }
 
-        $openTag = $this->openTag($element);
-        $label   = '';
+        $label = '';
+
         if (null === $labelContent || null !== $position) {
             $label = $element->getLabel();
-            if (empty($label)) {
+
+            if (null === $labelContent && empty($label)) {
                 throw new Exception\DomainException(
                     sprintf(
-                        '%s expects either label content as the second argument, '
-                        . 'or that the element provided has a label attribute; neither found',
+                        '%s expects either label content as the second argument, or that the element provided has a label attribute; neither found',
                         __METHOD__
                     )
                 );
             }
 
-            if (null !== $this->translate) {
-                $label = ($this->translate)($label, $this->getTranslatorTextDomain());
-            }
+            if (!empty($label)) {
+                if (null !== $this->translate) {
+                    $label = ($this->translate)($label, $this->getTranslatorTextDomain());
+                }
 
-            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
-                $label = ($this->escaper)($label);
-            }
+                if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+                    $label = ($this->escaper)($label);
+                }
 
-            if (
-                '' !== $label && !$element->hasAttribute('id')
-                || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
-            ) {
-                $label = '<span>' . $label . '</span>';
+                if (
+                    '' !== $label && !$element->hasAttribute('id')
+                    || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+                ) {
+                    $label = '<span>' . $label . '</span>';
+                }
             }
         }
 
@@ -112,7 +114,7 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
             $labelContent = $label;
         }
 
-        return $openTag . $labelContent . $this->closeTag();
+        return $this->openTag($element) . $labelContent . $this->closeTag();
     }
 
     /**
@@ -136,19 +138,23 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
         }
 
         if (!$attributesOrElement instanceof ElementInterface) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
-                __METHOD__,
-                is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
+                    __METHOD__,
+                    is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
+                )
+            );
         }
 
         $id = $this->getId($attributesOrElement);
         if (null === $id) {
-            throw new Exception\DomainException(sprintf(
-                '%s expects the Element provided to have either a name or an id present; neither found',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s expects the Element provided to have either a name or an id present; neither found',
+                    __METHOD__
+                )
+            );
         }
 
         $labelAttributes = [];
@@ -159,7 +165,7 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
         $attributes = ['for' => $id];
 
         if (!empty($labelAttributes)) {
-            $attributes = array_merge($labelAttributes, $attributes);
+            $attributes = array_merge($attributes, $labelAttributes);
         }
 
         $attributes = $this->createAttributesString($attributes);

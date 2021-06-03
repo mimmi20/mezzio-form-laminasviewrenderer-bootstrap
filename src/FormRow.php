@@ -116,11 +116,9 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $labelPosition = $this->getLabelPosition();
         }
 
-        if ('' !== $label) {
-            // Translate the label
-            if (null !== $this->translate) {
-                $label = ($this->translate)($label, $this->getTranslatorTextDomain());
-            }
+        // Translate the label
+        if ('' !== $label && null !== $this->translate) {
+            $label = ($this->translate)($label, $this->getTranslatorTextDomain());
         }
 
         // Does this element have errors ?

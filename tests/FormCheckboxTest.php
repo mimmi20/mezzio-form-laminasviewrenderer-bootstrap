@@ -85,8 +85,9 @@ final class FormCheckboxTest extends TestCase
         $this->expectException(\Laminas\Form\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\Checkbox',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox::render'
+                '%s requires that the element is of type %s',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox::render',
+                Checkbox::class
             )
         );
         $this->expectExceptionCode(0);
@@ -207,7 +208,9 @@ final class FormCheckboxTest extends TestCase
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(['class' => 'form-check-label abc', 'for' => $id])
-            ->willReturn(sprintf('<label for="%s">', $id));
+            ->willReturn(
+                sprintf('<label for="%s">', $id)
+            );
         $formLabel->expects(self::once())
             ->method('closeTag')
             ->willReturn('</label>');
@@ -303,7 +306,9 @@ final class FormCheckboxTest extends TestCase
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(['class' => 'form-check-label abc', 'for' => $id])
-            ->willReturn(sprintf('<label for="%s">', $id));
+            ->willReturn(
+                sprintf('<label for="%s">', $id)
+            );
         $formLabel->expects(self::once())
             ->method('closeTag')
             ->willReturn('</label>');

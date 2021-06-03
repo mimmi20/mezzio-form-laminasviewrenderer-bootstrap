@@ -146,18 +146,23 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof SelectElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\Select',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type %s',
+                    __METHOD__,
+                    SelectElement::class
+                )
+            );
         }
 
         $name = $element->getName();
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $options     = $element->getValueOptions();
@@ -387,11 +392,13 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
         }
 
         if (!isset($attributes['multiple']) || !$attributes['multiple']) {
-            throw new Exception\DomainException(sprintf(
-                '%s does not allow specifying multiple selected values when the element does not have a multiple '
-                . 'attribute set to a boolean true',
-                self::class
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s does not allow specifying multiple selected values when the element does not have a multiple '
+                    . 'attribute set to a boolean true',
+                    self::class
+                )
+            );
         }
 
         return $value;

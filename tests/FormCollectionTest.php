@@ -15,6 +15,7 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
+use Laminas\Form\FieldsetInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\RuntimeException;
@@ -71,8 +72,9 @@ final class FormCollectionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
-                '%s requires that the element is of type Laminas\Form\FieldsetInterface',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection::render'
+                '%s requires that the element is of type %s',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection::render',
+                FieldsetInterface::class
             )
         );
         $this->expectExceptionCode(0);

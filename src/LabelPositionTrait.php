@@ -35,13 +35,15 @@ trait LabelPositionTrait
     {
         $labelPosition = mb_strtolower($labelPosition);
         if (!in_array($labelPosition, [BaseFormRow::LABEL_APPEND, BaseFormRow::LABEL_PREPEND], true)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects either %s::LABEL_APPEND or %s::LABEL_PREPEND; received "%s"',
-                __METHOD__,
-                BaseFormRow::class,
-                BaseFormRow::class,
-                (string) $labelPosition
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s expects either %s::LABEL_APPEND or %s::LABEL_PREPEND; received "%s"',
+                    __METHOD__,
+                    BaseFormRow::class,
+                    BaseFormRow::class,
+                    (string) $labelPosition
+                )
+            );
         }
 
         $this->labelPosition = $labelPosition;

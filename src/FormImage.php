@@ -52,10 +52,12 @@ final class FormImage extends FormInput
         $src = $element->getAttribute('src');
 
         if (empty($src)) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned src; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned src; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         return parent::render($element);
