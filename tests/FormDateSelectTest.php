@@ -57,8 +57,9 @@ final class FormDateSelectTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\DateSelect',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render'
+                '%s requires that the element is of type %s',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render',
+                DateSelectElement::class
             )
         );
         $this->expectExceptionCode(0);

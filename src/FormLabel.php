@@ -138,19 +138,23 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
         }
 
         if (!$attributesOrElement instanceof ElementInterface) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
-                __METHOD__,
-                is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
+                    __METHOD__,
+                    is_object($attributesOrElement) ? get_class($attributesOrElement) : gettype($attributesOrElement)
+                )
+            );
         }
 
         $id = $this->getId($attributesOrElement);
         if (null === $id) {
-            throw new Exception\DomainException(sprintf(
-                '%s expects the Element provided to have either a name or an id present; neither found',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s expects the Element provided to have either a name or an id present; neither found',
+                    __METHOD__
+                )
+            );
         }
 
         $labelAttributes = [];

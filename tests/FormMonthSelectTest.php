@@ -57,8 +57,9 @@ final class FormMonthSelectTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\MonthSelect',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render'
+                '%s requires that the element is of type %s',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render',
+                MonthSelectElement::class
             )
         );
         $this->expectExceptionCode(0);

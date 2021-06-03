@@ -20,6 +20,7 @@ use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\AbstractHelper;
 
 use function extension_loaded;
+use function implode;
 use function is_numeric;
 use function mb_stripos;
 use function mb_strpos;
@@ -27,8 +28,8 @@ use function preg_split;
 use function rtrim;
 use function sprintf;
 use function str_replace;
-use function trim;
 
+use const PHP_EOL;
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
@@ -105,18 +106,23 @@ final class FormDateTimeSelect extends AbstractHelper
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof DateTimeSelectElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\DateTimeSelect',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type %s',
+                    __METHOD__,
+                    DateTimeSelectElement::class
+                )
+            );
         }
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $shouldRenderDelimiters = $element->shouldRenderDelimiters();
@@ -127,14 +133,12 @@ final class FormDateTimeSelect extends AbstractHelper
         $yearOptions   = $this->getYearsOptions($element->getMinYear(), $element->getMaxYear());
         $hourOptions   = $this->getHoursOptions($pattern['hour']);
         $minuteOptions = $this->getMinutesOptions($pattern['minute']);
-        $secondOptions = $this->getSecondsOptions($pattern['second']);
 
         $dayElement    = $element->getDayElement()->setValueOptions($daysOptions);
         $monthElement  = $element->getMonthElement()->setValueOptions($monthsOptions);
         $yearElement   = $element->getYearElement()->setValueOptions($yearOptions);
         $hourElement   = $element->getHourElement()->setValueOptions($hourOptions);
         $minuteElement = $element->getMinuteElement()->setValueOptions($minuteOptions);
-        $secondElement = $element->getSecondElement()->setValueOptions($secondOptions);
 
         if ($element->shouldCreateEmptyOption()) {
             $dayElement->setEmptyOption('');
@@ -142,8 +146,10 @@ final class FormDateTimeSelect extends AbstractHelper
             $monthElement->setEmptyOption('');
             $hourElement->setEmptyOption('');
             $minuteElement->setEmptyOption('');
-            $secondElement->setEmptyOption('');
         }
+
+        $indent = $this->getIndent();
+        $this->selectHelper->setIndent($indent);
 
         $data                     = [];
         $data[$pattern['day']]    = $this->selectHelper->render($dayElement);
@@ -153,6 +159,13 @@ final class FormDateTimeSelect extends AbstractHelper
         $data[$pattern['minute']] = $this->selectHelper->render($minuteElement);
 
         if ($element->shouldShowSeconds()) {
+            $secondOptions = $this->getSecondsOptions($pattern['second']);
+            $secondElement = $element->getSecondElement()->setValueOptions($secondOptions);
+
+            if ($element->shouldCreateEmptyOption()) {
+                $secondElement->setEmptyOption('');
+            }
+
             $data[$pattern['second']] = $this->selectHelper->render($secondElement);
         } else {
             unset($pattern['second']);
@@ -161,17 +174,17 @@ final class FormDateTimeSelect extends AbstractHelper
             }
         }
 
-        $markup = '';
+        $markups = [];
         foreach ($pattern as $key => $value) {
             // Delimiter
             if (is_numeric($key)) {
-                $markup .= $value;
+                $markups[] = $indent . $value;
             } else {
-                $markup .= $data[$value];
+                $markups[] = $data[$value];
             }
         }
 
-        return trim($markup);
+        return $indent . PHP_EOL . implode(PHP_EOL, $markups) . PHP_EOL . $indent;
     }
 
     public function setTimeType(int $timeType): self
@@ -255,7 +268,7 @@ final class FormDateTimeSelect extends AbstractHelper
      *
      * @param string $pattern Pattern to use for hours
      *
-     * @return array<string, string>
+     * @return array<int|string, array<string, string>>
      */
     private function getHoursOptions(string $pattern): array
     {
@@ -277,7 +290,7 @@ final class FormDateTimeSelect extends AbstractHelper
                 continue;
             }
 
-            $result[$key] = $value;
+            $result[$key] = ['value' => $key, 'label' => $value];
 
             $date->modify('+1 hour');
         }
@@ -290,7 +303,7 @@ final class FormDateTimeSelect extends AbstractHelper
      *
      * @param string $pattern Pattern to use for minutes
      *
-     * @return array<string, string>
+     * @return array<int|string, array<string, string>>
      */
     private function getMinutesOptions(string $pattern): array
     {
@@ -312,7 +325,7 @@ final class FormDateTimeSelect extends AbstractHelper
                 continue;
             }
 
-            $result[$key] = $value;
+            $result[$key] = ['value' => $key, 'label' => $value];
 
             $date->modify('+1 minute');
         }
@@ -325,7 +338,7 @@ final class FormDateTimeSelect extends AbstractHelper
      *
      * @param string $pattern Pattern to use for seconds
      *
-     * @return array<string, string>
+     * @return array<int|string, array<string, string>>
      */
     private function getSecondsOptions(string $pattern): array
     {
@@ -347,7 +360,7 @@ final class FormDateTimeSelect extends AbstractHelper
                 continue;
             }
 
-            $result[$key] = $value;
+            $result[$key] = ['value' => $key, 'label' => $value];
 
             $date->modify('+1 second');
         }

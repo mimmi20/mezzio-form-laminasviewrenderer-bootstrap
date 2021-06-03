@@ -89,11 +89,13 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
         if ($messages instanceof Traversable) {
             $messages = iterator_to_array($messages);
         } elseif (!is_array($messages)) {
-            throw new Exception\DomainException(sprintf(
-                '%s expects that $element->getMessages() will return an array or Traversable; received "%s"',
-                __METHOD__,
-                get_class($messages)
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s expects that $element->getMessages() will return an array or Traversable; received "%s"',
+                    __METHOD__,
+                    get_class($messages)
+                )
+            );
         }
 
         if (!$messages) {

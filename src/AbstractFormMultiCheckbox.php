@@ -109,10 +109,13 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof MultiCheckboxElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\MultiCheckbox',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type %s',
+                    __METHOD__,
+                    MultiCheckboxElement::class
+                )
+            );
         }
 
         $name = static::getName($element);

@@ -65,18 +65,23 @@ final class FormMonthSelect extends AbstractHelper
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof MonthSelectElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type Laminas\Form\Element\MonthSelect',
-                __METHOD__
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type %s',
+                    __METHOD__,
+                    MonthSelectElement::class
+                )
+            );
         }
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
         }
 
         $pattern = $this->parsePattern($element->shouldRenderDelimiters());

@@ -90,11 +90,13 @@ final class FormLinks extends AbstractHelper
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof LinksElement) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s requires that the element is of type %s',
-                __METHOD__,
-                LinksElement::class
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    '%s requires that the element is of type %s',
+                    __METHOD__,
+                    LinksElement::class
+                )
+            );
         }
 
         $attributes = $element->getAttributes();
