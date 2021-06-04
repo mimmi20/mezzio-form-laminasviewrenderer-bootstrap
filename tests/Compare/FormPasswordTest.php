@@ -32,6 +32,8 @@ final class FormPasswordTest extends AbstractTest
      * @throws Exception
      * @throws DomainException
      * @throws ContainerExceptionInterface
+     *
+     * @coversNothing
      */
     public function testRender(): void
     {
