@@ -68,12 +68,14 @@ abstract class FormInput extends BaseFormInput
             $attributes = iterator_to_array($attributes);
         }
 
-        $attributes['name']  = $name;
-        $type                = $this->getType($element);
-        $attributes['type']  = $type;
-        $attributes['value'] = $element->getValue();
+        $attributes['name'] = $name;
+        $type               = $this->getType($element);
+        $attributes['type'] = $type;
+
         if ('password' === $type) {
             $attributes['value'] = '';
+        } else {
+            $attributes['value'] = $element->getValue();
         }
 
         if (isset($attributes['readonly']) && $element->getOption('plain')) {
