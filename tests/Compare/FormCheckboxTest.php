@@ -37,6 +37,8 @@ final class FormCheckboxTest extends AbstractTest
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
      * @throws ContainerExceptionInterface
+     *
+     * @coversNothing
      */
     public function testRender(): void
     {
