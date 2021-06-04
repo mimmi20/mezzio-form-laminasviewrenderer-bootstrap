@@ -80,7 +80,7 @@ final class FormFileTest extends TestCase
     public function testRenderWithName1(): void
     {
         $name     = 'name';
-        $expexted = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
+        $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
@@ -115,7 +115,7 @@ final class FormFileTest extends TestCase
             ->method('getValue')
             ->willReturn(['value' => 'xyz']);
 
-        self::assertSame($expexted, $helper->render($element));
+        self::assertSame($expected, $helper->render($element));
     }
 
     /**
@@ -126,7 +126,7 @@ final class FormFileTest extends TestCase
     public function testRenderWithName2(): void
     {
         $name     = 'name';
-        $expexted = '<input class="abc" type="file" name="name">';
+        $expected = '<input class="abc" type="file" name="name">';
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
@@ -161,6 +161,98 @@ final class FormFileTest extends TestCase
             ->method('getValue')
             ->willReturn('efg');
 
-        self::assertSame($expexted, $helper->render($element));
+        self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws DomainException
+     * @throws InvalidArgumentException
+     */
+    public function testRenderWithName3(): void
+    {
+        $name     = 'name';
+        $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
+
+        $element = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject(['class' => 'abc', 'multiple' => true]));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn(['name' => 'xyz']);
+
+        self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws DomainException
+     * @throws InvalidArgumentException
+     */
+    public function testRenderWithName4(): void
+    {
+        $name     = 'name';
+        $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
+
+        $element = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject(['class' => 'abc', 'multiple' => true]));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn(['name' => ['xyz']]);
+
+        self::assertSame($expected, $helper->render($element));
     }
 }

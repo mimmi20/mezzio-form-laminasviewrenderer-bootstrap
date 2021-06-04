@@ -3031,4 +3031,28 @@ final class FormDateTimeSelectTest extends TestCase
 
         self::assertSame($excpected, $helper->render($element));
     }
+
+    /**
+     * @throws Exception
+     * @throws DomainException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testRenderSetGetTimeType(): void
+    {
+        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectHelper->expects(self::never())
+            ->method('setIndent');
+        $selectHelper->expects(self::never())
+            ->method('render');
+
+        $helper = new FormDateTimeSelect($selectHelper);
+
+        $type = IntlDateFormatter::MEDIUM;
+
+        $helper->setTimeType($type);
+
+        self::assertSame($type, $helper->getTimeType());
+    }
 }

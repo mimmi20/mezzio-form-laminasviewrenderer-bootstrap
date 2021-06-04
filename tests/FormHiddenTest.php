@@ -80,7 +80,7 @@ final class FormHiddenTest extends TestCase
     public function testRenderWithName1(): void
     {
         $name     = 'name';
-        $expexted = '<input class="abc" name="name" type="hidden" value="xyz">';
+        $expected = '<input class="abc" name="name" type="hidden" value="xyz">';
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
@@ -115,6 +115,6 @@ final class FormHiddenTest extends TestCase
             ->method('getValue')
             ->willReturn('xyz');
 
-        self::assertSame($expexted, $helper->render($element));
+        self::assertSame($expected, $helper->render($element));
     }
 }
