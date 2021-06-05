@@ -38,6 +38,111 @@ final class FormCheckboxTest extends TestCase
     /**
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
+     */
+    public function testSetWrongLabelPosition(): void
+    {
+        $labelPosition = 'abc';
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+
+        $this->expectException(\Laminas\Form\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                '%s expects either %s::LABEL_APPEND or %s::LABEL_PREPEND; received "%s"',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\LabelPositionTrait::setLabelPosition',
+                BaseFormRow::class,
+                BaseFormRow::class,
+                $labelPosition
+            )
+        );
+        $this->expectExceptionCode(0);
+
+        $helper->setLabelPosition($labelPosition);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     */
+    public function testSetGetLabelPosition(): void
+    {
+        $labelPosition = BaseFormRow::LABEL_PREPEND;
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+
+        $helper->setLabelPosition($labelPosition);
+
+        self::assertSame($labelPosition, $helper->getLabelPosition());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderWithWrongElement(): void
