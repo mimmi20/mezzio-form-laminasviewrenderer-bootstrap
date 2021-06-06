@@ -13,8 +13,11 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Checkbox as CheckboxElement;
+use Laminas\Form\Element\Hidden;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
@@ -47,6 +50,7 @@ final class FormCheckbox extends FormInput
     private ?Translate $translate;
     private HtmlElementInterface $htmlElement;
     private FormLabelInterface $formLabel;
+    private FormHiddenInterface $formHidden;
 
     public function __construct(
         EscapeHtml $escapeHtml,
@@ -54,13 +58,15 @@ final class FormCheckbox extends FormInput
         Doctype $doctype,
         FormLabelInterface $formLabel,
         HtmlElementInterface $htmlElement,
+        FormHiddenInterface $formHidden,
         ?Translate $translator = null
     ) {
         parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
 
         $this->htmlElement = $htmlElement;
-        $this->translate   = $translator;
         $this->formLabel   = $formLabel;
+        $this->formHidden  = $formHidden;
+        $this->translate   = $translator;
     }
 
     /**
@@ -198,7 +204,7 @@ final class FormCheckbox extends FormInput
             : $this->useHiddenElement;
 
         if ($useHiddenElement) {
-            $hidden = $this->renderHiddenElement($element, $attributes);
+            $hidden = $this->renderHiddenElement($element);
             $hidden = $indent . $this->getWhitespace(4) . $hidden . PHP_EOL;
         }
 
@@ -228,25 +234,17 @@ final class FormCheckbox extends FormInput
     /**
      * Render a hidden element for empty/unchecked value
      *
-     * @param array<string, bool> $attributes
+     * @throws InvalidArgumentException
+     * @throws DomainException
      */
-    private function renderHiddenElement(CheckboxElement $element, array $attributes): string
+    private function renderHiddenElement(CheckboxElement $element): string
     {
-        $closingBracket = $this->getInlineClosingBracket();
-
         $uncheckedValue = $element->getUncheckedValue()
             ?: $this->uncheckedValue;
 
-        $hiddenAttributes = [
-            'name' => $element->getName(),
-            'value' => $uncheckedValue,
-            'disabled' => $attributes['disabled'] ?? null,
-        ];
+        $hiddenElement = new Hidden($element->getName());
+        $hiddenElement->setValue($uncheckedValue);
 
-        return sprintf(
-            '<input type="hidden" %s%s',
-            $this->createAttributesString($hiddenAttributes),
-            $closingBracket
-        );
+        return $this->formHidden->render($hiddenElement);
     }
 }

@@ -23,6 +23,7 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
@@ -75,7 +76,13 @@ final class FormCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $this->expectException(\Laminas\Form\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -133,7 +140,13 @@ final class FormCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $helper->setLabelPosition($labelPosition);
 
@@ -179,7 +192,13 @@ final class FormCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Text::class)
             ->disableOriginalConstructor()
@@ -239,7 +258,13 @@ final class FormCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Checkbox::class)
             ->disableOriginalConstructor()
@@ -320,7 +345,13 @@ final class FormCheckboxTest extends TestCase
             ->method('closeTag')
             ->willReturn('</label>');
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Checkbox::class)
             ->disableOriginalConstructor()
@@ -426,7 +457,13 @@ final class FormCheckboxTest extends TestCase
             ->with($label, $textDomain)
             ->willReturn($tranlatedLabel);
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $translator);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
         $helper->setTranslatorTextDomain($textDomain);
         $helper->setLabelPosition(BaseFormRow::LABEL_PREPEND);

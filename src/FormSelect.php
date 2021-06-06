@@ -20,8 +20,6 @@ use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Traversable;
 
 use function array_key_exists;
@@ -61,10 +59,8 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      */
     protected $translatableAttributes = ['label' => true];
     private FormHiddenInterface $formHidden;
-    private PartialRendererInterface $renderer;
     private ?Translate $translate;
     private EscapeHtml $escaper;
-    private HtmlElementInterface $htmlElement;
 
     /**
      * Attributes valid for select
@@ -105,17 +101,13 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
     ];
 
     public function __construct(
-        HtmlElementInterface $htmlElement,
-        PartialRendererInterface $renderer,
         EscapeHtml $escaper,
         FormHiddenInterface $formHidden,
         ?Translate $translator = null
     ) {
-        $this->renderer    = $renderer;
-        $this->htmlElement = $htmlElement;
-        $this->formHidden  = $formHidden;
-        $this->escaper     = $escaper;
-        $this->translate   = $translator;
+        $this->formHidden = $formHidden;
+        $this->escaper    = $escaper;
+        $this->translate  = $translator;
     }
 
     /**
@@ -321,9 +313,14 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
 
         $this->validTagAttributes = $this->validOptionAttributes;
 
+        $attributesString = $this->createAttributesString($attributes);
+        if (!empty($attributesString)) {
+            $attributesString = ' ' . $attributesString;
+        }
+
         $content = sprintf(
-            '<option %s>%s</option>',
-            $this->createAttributesString($attributes),
+            '<option%s>%s</option>',
+            $attributesString,
             $label
         );
         $indent  = $this->getIndent();
@@ -391,11 +388,10 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             return [$value];
         }
 
-        if (!isset($attributes['multiple']) || !$attributes['multiple']) {
+        if (!array_key_exists('multiple', $attributes) || !$attributes['multiple']) {
             throw new Exception\DomainException(
                 sprintf(
-                    '%s does not allow specifying multiple selected values when the element does not have a multiple '
-                    . 'attribute set to a boolean true',
+                    '%s does not allow specifying multiple selected values when the element does not have a multiple attribute set to a boolean true',
                     self::class
                 )
             );

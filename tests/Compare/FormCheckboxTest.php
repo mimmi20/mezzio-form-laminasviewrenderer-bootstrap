@@ -19,6 +19,7 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
@@ -51,6 +52,7 @@ final class FormCheckboxTest extends AbstractTest
             $this->serviceManager->get(HelperPluginManager::class)->get(Doctype::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormLabelInterface::class),
             $this->serviceManager->get(LvhPluginManager::class)->get(HtmlElementInterface::class),
+            $this->serviceManager->get(HelperPluginManager::class)->get(FormHiddenInterface::class),
             null
         );
 

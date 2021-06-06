@@ -14,12 +14,8 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
@@ -45,16 +41,6 @@ final class FormSelectFactory
             )
         );
 
-        $lvhPluginManager = $container->get(LvhPluginManager::class);
-        assert(
-            $lvhPluginManager instanceof PluginManagerInterface,
-            sprintf(
-                '$lvhPluginManager should be an Instance of %s, but was %s',
-                LvhPluginManager::class,
-                is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
-            )
-        );
-
         $translator = null;
 
         if ($plugin->has(Translate::class)) {
@@ -62,8 +48,6 @@ final class FormSelectFactory
         }
 
         return new FormSelect(
-            $lvhPluginManager->get(HtmlElementInterface::class),
-            $lvhPluginManager->get(PartialRendererInterface::class),
             $plugin->get(EscapeHtml::class),
             $plugin->get(FormHiddenInterface::class),
             $translator

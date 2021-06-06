@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
 use ArrayObject;
+use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Text;
@@ -24,9 +25,11 @@ use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -74,7 +77,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         self::assertSame([], $helper->getLabelAttributes());
 
@@ -123,7 +132,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         self::assertSame('', $helper->getSeparator());
 
@@ -174,7 +189,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -232,7 +253,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $helper->setLabelPosition($labelPosition);
 
@@ -279,7 +306,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         self::assertFalse($helper->getUseHiddenElement());
 
@@ -330,7 +363,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         self::assertSame('', $helper->getUncheckedValue());
 
@@ -378,7 +417,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Text::class)
             ->disableOriginalConstructor()
@@ -450,7 +495,13 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -564,7 +615,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -681,7 +738,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -797,7 +860,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -916,7 +985,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -1032,7 +1107,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, null);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -1161,7 +1242,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->with($value2, $textDomain)
             ->willReturn($value2Translated);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $translator);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -1359,7 +1446,13 @@ final class FormMultiCheckboxTest extends TestCase
             ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
             ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $translator);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -1468,7 +1561,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s" disabled="disabled"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
@@ -1504,7 +1597,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->getMock();
         $doctype->expects(self::never())
             ->method('__invoke');
-        $doctype->expects(self::exactly(2))
+        $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
@@ -1558,7 +1651,15 @@ final class FormMultiCheckboxTest extends TestCase
             ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
             ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $translator);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
@@ -1669,7 +1770,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="" disabled="disabled"/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
@@ -1705,7 +1806,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->getMock();
         $doctype->expects(self::never())
             ->method('__invoke');
-        $doctype->expects(self::exactly(2))
+        $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
@@ -1759,7 +1860,15 @@ final class FormMultiCheckboxTest extends TestCase
             ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
             ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $translator);
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+
+        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
         $element = $this->getMockBuilder(Radio::class)
             ->disableOriginalConstructor()
