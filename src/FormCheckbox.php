@@ -108,14 +108,6 @@ final class FormCheckbox extends FormInput
         }
 
         $id = $this->getId($element);
-        if (null === $id) {
-            throw new Exception\DomainException(
-                sprintf(
-                    '%s expects the Element provided to have either a name or an id present; neither found',
-                    __METHOD__
-                )
-            );
-        }
 
         $groupClasses = ['form-check'];
         $labelClasses = ['form-check-label'];
@@ -169,32 +161,11 @@ final class FormCheckbox extends FormInput
             ARRAY_FILTER_USE_KEY
         );
 
-        if (
-            array_key_exists('id', $attributes)
-            && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
-        ) {
-            $labelOpen  = '';
-            $labelClose = '';
-            $label      = $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
-        } else {
-            $labelOpen  = $this->formLabel->openTag($filteredAttributes) . PHP_EOL;
-            $labelClose = $this->formLabel->closeTag() . PHP_EOL;
-        }
-
-        if (
-            '' !== $label && !array_key_exists('id', $attributes)
-            || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
-        ) {
-            $label = '<span>' . $label . '</span>' . PHP_EOL;
-        }
-
         $rendered = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
             $closingBracket
         );
-
-        $rendered = $indent . $this->getWhitespace(4) . $rendered;
 
         $hidden = '';
 
@@ -205,22 +176,54 @@ final class FormCheckbox extends FormInput
 
         if ($useHiddenElement) {
             $hidden = $this->renderHiddenElement($element);
-            $hidden = $indent . $this->getWhitespace(4) . $hidden . PHP_EOL;
+        }
+
+        if (
+            array_key_exists('id', $attributes)
+            && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
+        ) {
+            $labelOpen  = '';
+            $labelClose = '';
+            $label      = $indent . $this->getWhitespace(4) . $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
+            $rendered   = $indent . $this->getWhitespace(4) . $rendered;
+
+            if ($useHiddenElement) {
+                $hidden = $indent . $this->getWhitespace(4) . $hidden . PHP_EOL;
+            }
+        } else {
+            $labelOpen  = $indent . $this->formLabel->openTag($filteredAttributes) . PHP_EOL;
+            $labelClose = PHP_EOL . $indent . $this->formLabel->closeTag();
+            $rendered   = $indent . $this->getWhitespace(4) . $rendered;
+
+            if ($useHiddenElement) {
+                $hidden = $indent . $hidden . PHP_EOL;
+            }
+        }
+
+        if (
+            '' !== $label && !array_key_exists('id', $attributes)
+            || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+        ) {
+            $label = '<span>' . $label . '</span>';
+
+            if ('' !== $labelClose) {
+                $label = $indent . $this->getWhitespace(4) . $label;
+            }
         }
 
         $labelPosition = $this->getLabelPosition();
 
         switch ($labelPosition) {
             case BaseFormRow::LABEL_PREPEND:
-                $rendered = $labelOpen . $indent . $this->getWhitespace(4) . $label . $rendered . PHP_EOL . $indent . $labelClose;
+                $markup = $labelOpen . $label . PHP_EOL . $rendered . $labelClose;
                 break;
             case BaseFormRow::LABEL_APPEND:
             default:
-                $rendered = $labelOpen . $rendered . PHP_EOL . $indent . $this->getWhitespace(4) . $label . $labelClose;
+                $markup = $labelOpen . $rendered . PHP_EOL . $label . $labelClose;
                 break;
         }
 
-        return $indent . $this->htmlElement->toHtml('div', ['class' => $groupClasses], PHP_EOL . $hidden . $rendered . PHP_EOL . $indent);
+        return $indent . $this->htmlElement->toHtml('div', ['class' => $groupClasses], PHP_EOL . $hidden . $markup . PHP_EOL . $indent);
     }
 
     /**

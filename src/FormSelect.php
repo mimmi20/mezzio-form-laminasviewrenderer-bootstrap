@@ -208,7 +208,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             && $element->useHiddenElement();
 
         if ($useHiddenElement) {
-            $rendered = $this->renderHiddenElement($element) . PHP_EOL . $rendered;
+            $rendered = $indent . $this->renderHiddenElement($element) . PHP_EOL . $rendered;
         }
 
         return $rendered;

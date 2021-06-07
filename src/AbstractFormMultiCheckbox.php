@@ -62,7 +62,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * The attributes applied to option label
      *
-     * @var array<string, bool|string>
+     * @var array<int|string, bool|string>
      */
     private array $labelAttributes = [];
 
@@ -160,7 +160,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * Sets the attributes applied to option label.
      *
-     * @param array<string, bool|string> $attributes
+     * @param array<int|string, bool|string> $attributes
      */
     public function setLabelAttributes(array $attributes): self
     {
@@ -172,7 +172,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * Returns the attributes applied to each option label.
      *
-     * @return array<string, bool|string>
+     * @return array<int|string, bool|string>
      */
     public function getLabelAttributes(): array
     {
@@ -262,7 +262,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $label           = '';
             $inputAttributes = $attributes;
 
-            /** @var array<string, array<string, string>|bool|string> $labelAttributes */
+            /** @var array<int|string, array<string, string>|bool|string> $labelAttributes */
             $labelAttributes = $globalLabelAttributes;
             $selected        = isset($inputAttributes['selected'])
                 && 'radio' !== $inputAttributes['type']
@@ -350,12 +350,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             }
 
             $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
-
-            if (!is_array($labelAttributes)) {
-                $labelAttributes = [];
-            }
-
-            $labelClasses = ['form-check-label'];
+            $labelClasses             = ['form-check-label'];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
                 $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));

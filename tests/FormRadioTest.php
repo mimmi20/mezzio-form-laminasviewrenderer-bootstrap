@@ -33,6 +33,7 @@ use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
 use function sprintf;
 
 use const PHP_EOL;
@@ -1839,5 +1840,841 @@ final class FormRadioTest extends TestCase
         $helper->setTranslatorTextDomain($textDomain);
 
         self::assertSame($expectedSummary, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testRenderMultiOptionInlineWithHiddenField3(): void
+    {
+        $name                    = 'test-name';
+        $id                      = 'test-id';
+        $value1                  = 'xyz';
+        $value2                  = 'def';
+        $value2Translated        = 'def-translated';
+        $value2TranslatedEscaped = 'def-translated-escaped';
+        $value3                  = 'abc';
+        $value3Translated        = 'abc-translated';
+        $value3TranslatedEscaped = 'abc-translated-escaped';
+        $name4                   = 'ghj';
+        $name4Translated         = 'ghj-translated';
+        $name4TranslatedEscaped  = 'ghj-translated-escaped';
+        $value4                  = 'jkl';
+        $class                   = 'test-class';
+        $ariaLabel               = 'test';
+        $labelClass              = 'xyz';
+        $valueOptions            = [
+            [
+                'value' => $value3,
+                'label' => $value2,
+                'selected' => false,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst'],
+                'attributes' => [
+                    'class' => 'efg',
+                    'id' => $id,
+                ],
+            ],
+            [
+                'value' => $value1,
+                'label' => $value3,
+                'selected' => false,
+                'label_attributes' => ['class' => 'rst2'],
+                'attributes' => [
+                    'class' => 'efg2',
+                    'aria-disabled' => 'true',
+                    'id' => 'test-id2',
+                ],
+            ],
+            [
+                'value' => $value4,
+                'label' => $name4,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst3'],
+                'attributes' => [
+                    'class' => 'efg3',
+                    'aria-disabled' => 'false',
+                    'id' => 'test-id3',
+                ],
+            ],
+        ];
+        $attributes              = ['class' => $class, 'aria-label' => $ariaLabel, 'disabled' => true, 'selected' => true, 'id' => 'zero-id'];
+        $labelAttributes         = ['class' => $labelClass, 'test'];
+        $labelStart              = '<label>';
+        $labelEnd                = '</label>';
+        $expected                = '<div></div>';
+        $uncheckedValue          = '0';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $textDomain              = 'test-domain';
+        $renderedField1          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s" type="radio" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
+            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField2          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s" type="radio" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
+            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField3          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s" type="radio" aria-disabled="false" id="test-id3" value="%s"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
+            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $wrap                    = false;
+        $disableEscape           = false;
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
+            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::once())
+            ->method('isXhtml')
+            ->willReturn(true);
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::exactly(3))
+            ->method('openTag')
+            ->withConsecutive(
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst', $labelClass),
+                        'for' => $id,
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst2', $labelClass),
+                        'for' => 'test-id2',
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst3', $labelClass),
+                        'for' => 'test-id3',
+                    ],
+                ]
+            )
+            ->willReturn($labelStart);
+        $formLabel->expects(self::exactly(3))
+            ->method('closeTag')
+            ->willReturn($labelEnd);
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::exactly(3))
+            ->method('toHtml')
+            ->withConsecutive(
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
+            )
+            ->willReturn($expected);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
+            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+
+        $element = $this->getMockBuilder(Radio::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::exactly(2))
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getValueOptions')
+            ->willReturn($valueOptions);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject($attributes));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn($value1);
+        $element->expects(self::exactly(2))
+            ->method('useHiddenElement')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getLabelAttributes')
+            ->willReturn([]);
+        $element->expects(self::once())
+            ->method('getOption')
+            ->with('layout')
+            ->willReturn(Form::LAYOUT_INLINE);
+        $element->expects(self::exactly(9))
+            ->method('getLabelOption')
+            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
+            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+        $element->expects(self::once())
+            ->method('hasLabelOption')
+            ->with('label_position')
+            ->willReturn(false);
+        $element->expects(self::once())
+            ->method('getUncheckedValue')
+            ->willReturn($uncheckedValue);
+
+        $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
+        $helper->setTranslatorTextDomain($textDomain);
+        $helper->setLabelAttributes($labelAttributes);
+
+        self::assertSame($expectedSummary, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testInvokeMultiOptionInlineWithHiddenField1(): void
+    {
+        $name                    = 'test-name';
+        $id                      = 'test-id';
+        $value1                  = 'xyz';
+        $value2                  = 'def';
+        $value2Translated        = 'def-translated';
+        $value2TranslatedEscaped = 'def-translated-escaped';
+        $value3                  = 'abc';
+        $value3Translated        = 'abc-translated';
+        $value3TranslatedEscaped = 'abc-translated-escaped';
+        $name4                   = 'ghj';
+        $name4Translated         = 'ghj-translated';
+        $name4TranslatedEscaped  = 'ghj-translated-escaped';
+        $value4                  = 'jkl';
+        $class                   = 'test-class';
+        $ariaLabel               = 'test';
+        $labelClass              = 'xyz';
+        $valueOptions            = [
+            [
+                'value' => $value3,
+                'label' => $value2,
+                'selected' => false,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst'],
+                'attributes' => [
+                    'class' => 'efg',
+                    'id' => $id,
+                ],
+            ],
+            [
+                'value' => $value1,
+                'label' => $value3,
+                'selected' => false,
+                'label_attributes' => ['class' => 'rst2'],
+                'attributes' => [
+                    'class' => 'efg2',
+                    'aria-disabled' => 'true',
+                    'id' => 'test-id2',
+                ],
+            ],
+            [
+                'value' => $value4,
+                'label' => $name4,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst3'],
+                'attributes' => [
+                    'class' => 'efg3',
+                    'aria-disabled' => 'false',
+                    'id' => 'test-id3',
+                ],
+            ],
+        ];
+        $attributes              = ['class' => $class, 'aria-label' => $ariaLabel, 'disabled' => true, 'selected' => true, 'id' => 'zero-id'];
+        $labelAttributes         = ['class' => $labelClass, 'test'];
+        $labelStart              = '<label>';
+        $labelEnd                = '</label>';
+        $expected                = '<div></div>';
+        $uncheckedValue          = '0';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $textDomain              = 'test-domain';
+        $renderedField1          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s" type="radio" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
+            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField2          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s" type="radio" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
+            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField3          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s" type="radio" aria-disabled="false" id="test-id3" value="%s"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
+            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $wrap                    = false;
+        $disableEscape           = false;
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
+            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::once())
+            ->method('isXhtml')
+            ->willReturn(true);
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::exactly(3))
+            ->method('openTag')
+            ->withConsecutive(
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst', $labelClass),
+                        'for' => $id,
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst2', $labelClass),
+                        'for' => 'test-id2',
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst3', $labelClass),
+                        'for' => 'test-id3',
+                    ],
+                ]
+            )
+            ->willReturn($labelStart);
+        $formLabel->expects(self::exactly(3))
+            ->method('closeTag')
+            ->willReturn($labelEnd);
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::exactly(3))
+            ->method('toHtml')
+            ->withConsecutive(
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
+            )
+            ->willReturn($expected);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
+            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+
+        $element = $this->getMockBuilder(Radio::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::exactly(2))
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getValueOptions')
+            ->willReturn($valueOptions);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject($attributes));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn($value1);
+        $element->expects(self::exactly(2))
+            ->method('useHiddenElement')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getLabelAttributes')
+            ->willReturn([]);
+        $element->expects(self::once())
+            ->method('getOption')
+            ->with('layout')
+            ->willReturn(Form::LAYOUT_INLINE);
+        $element->expects(self::exactly(9))
+            ->method('getLabelOption')
+            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
+            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+        $element->expects(self::once())
+            ->method('hasLabelOption')
+            ->with('label_position')
+            ->willReturn(false);
+        $element->expects(self::once())
+            ->method('getUncheckedValue')
+            ->willReturn($uncheckedValue);
+
+        $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
+        $helper->setTranslatorTextDomain($textDomain);
+        $helper->setLabelAttributes($labelAttributes);
+
+        $helperObject = $helper();
+
+        assert($helperObject instanceof FormRadio);
+
+        self::assertSame($expectedSummary, $helperObject->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testInvokeMultiOptionInlineWithHiddenField2(): void
+    {
+        $name                    = 'test-name';
+        $id                      = 'test-id';
+        $value1                  = 'xyz';
+        $value2                  = 'def';
+        $value2Translated        = 'def-translated';
+        $value2TranslatedEscaped = 'def-translated-escaped';
+        $value3                  = 'abc';
+        $value3Translated        = 'abc-translated';
+        $value3TranslatedEscaped = 'abc-translated-escaped';
+        $name4                   = 'ghj';
+        $name4Translated         = 'ghj-translated';
+        $name4TranslatedEscaped  = 'ghj-translated-escaped';
+        $value4                  = 'jkl';
+        $class                   = 'test-class';
+        $ariaLabel               = 'test';
+        $labelClass              = 'xyz';
+        $valueOptions            = [
+            [
+                'value' => $value3,
+                'label' => $value2,
+                'selected' => false,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst'],
+                'attributes' => [
+                    'class' => 'efg',
+                    'id' => $id,
+                ],
+            ],
+            [
+                'value' => $value1,
+                'label' => $value3,
+                'selected' => false,
+                'label_attributes' => ['class' => 'rst2'],
+                'attributes' => [
+                    'class' => 'efg2',
+                    'aria-disabled' => 'true',
+                    'id' => 'test-id2',
+                ],
+            ],
+            [
+                'value' => $value4,
+                'label' => $name4,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst3'],
+                'attributes' => [
+                    'class' => 'efg3',
+                    'aria-disabled' => 'false',
+                    'id' => 'test-id3',
+                ],
+            ],
+        ];
+        $attributes              = ['class' => $class, 'aria-label' => $ariaLabel, 'disabled' => true, 'selected' => true, 'id' => 'zero-id'];
+        $labelAttributes         = ['class' => $labelClass, 'test'];
+        $labelStart              = '<label>';
+        $labelEnd                = '</label>';
+        $expected                = '<div></div>';
+        $uncheckedValue          = '0';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $textDomain              = 'test-domain';
+        $renderedField1          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s" type="radio" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
+            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField2          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s" type="radio" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
+            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField3          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s" type="radio" aria-disabled="false" id="test-id3" value="%s"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
+            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $wrap                    = false;
+        $disableEscape           = false;
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
+            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::once())
+            ->method('isXhtml')
+            ->willReturn(true);
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::exactly(3))
+            ->method('openTag')
+            ->withConsecutive(
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst', $labelClass),
+                        'for' => $id,
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst2', $labelClass),
+                        'for' => 'test-id2',
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst3', $labelClass),
+                        'for' => 'test-id3',
+                    ],
+                ]
+            )
+            ->willReturn($labelStart);
+        $formLabel->expects(self::exactly(3))
+            ->method('closeTag')
+            ->willReturn($labelEnd);
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::exactly(3))
+            ->method('toHtml')
+            ->withConsecutive(
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
+            )
+            ->willReturn($expected);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
+            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+
+        $element = $this->getMockBuilder(Radio::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::exactly(2))
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getValueOptions')
+            ->willReturn($valueOptions);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject($attributes));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn($value1);
+        $element->expects(self::exactly(2))
+            ->method('useHiddenElement')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getLabelAttributes')
+            ->willReturn([]);
+        $element->expects(self::once())
+            ->method('getOption')
+            ->with('layout')
+            ->willReturn(Form::LAYOUT_INLINE);
+        $element->expects(self::exactly(9))
+            ->method('getLabelOption')
+            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
+            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+        $element->expects(self::once())
+            ->method('hasLabelOption')
+            ->with('label_position')
+            ->willReturn(false);
+        $element->expects(self::once())
+            ->method('getUncheckedValue')
+            ->willReturn($uncheckedValue);
+
+        $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
+        $helper->setTranslatorTextDomain($textDomain);
+        $helper->setLabelAttributes($labelAttributes);
+
+        self::assertSame($expectedSummary, $helper($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testInvokeMultiOptionInlineWithHiddenField3(): void
+    {
+        $name                    = 'test-name';
+        $id                      = 'test-id';
+        $value1                  = 'xyz';
+        $value2                  = 'def';
+        $value2Translated        = 'def-translated';
+        $value2TranslatedEscaped = 'def-translated-escaped';
+        $value3                  = 'abc';
+        $value3Translated        = 'abc-translated';
+        $value3TranslatedEscaped = 'abc-translated-escaped';
+        $name4                   = 'ghj';
+        $name4Translated         = 'ghj-translated';
+        $name4TranslatedEscaped  = 'ghj-translated-escaped';
+        $value4                  = 'jkl';
+        $class                   = 'test-class';
+        $ariaLabel               = 'test';
+        $labelClass              = 'xyz';
+        $valueOptions            = [
+            [
+                'value' => $value3,
+                'label' => $value2,
+                'selected' => false,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst'],
+                'attributes' => [
+                    'class' => 'efg',
+                    'id' => $id,
+                ],
+            ],
+            [
+                'value' => $value1,
+                'label' => $value3,
+                'selected' => false,
+                'label_attributes' => ['class' => 'rst2'],
+                'attributes' => [
+                    'class' => 'efg2',
+                    'aria-disabled' => 'true',
+                    'id' => 'test-id2',
+                ],
+            ],
+            [
+                'value' => $value4,
+                'label' => $name4,
+                'disabled' => false,
+                'label_attributes' => ['class' => 'rst3'],
+                'attributes' => [
+                    'class' => 'efg3',
+                    'aria-disabled' => 'false',
+                    'id' => 'test-id3',
+                ],
+            ],
+        ];
+        $attributes              = ['class' => $class, 'aria-label' => $ariaLabel, 'disabled' => true, 'selected' => true, 'id' => 'zero-id'];
+        $labelAttributes         = ['class' => $labelClass, 'test'];
+        $labelStart              = '<label>';
+        $labelEnd                = '</label>';
+        $expected                = '<div></div>';
+        $uncheckedValue          = '0';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $textDomain              = 'test-domain';
+        $renderedField1          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s" type="radio" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
+            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField2          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s" type="radio" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
+            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $renderedField3          = PHP_EOL .
+            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s" type="radio" aria-disabled="false" id="test-id3" value="%s"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
+            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
+            '    ';
+        $wrap                    = false;
+        $disableEscape           = false;
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
+            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::once())
+            ->method('isXhtml')
+            ->willReturn(true);
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::exactly(3))
+            ->method('openTag')
+            ->withConsecutive(
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst', $labelClass),
+                        'for' => $id,
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst2', $labelClass),
+                        'for' => 'test-id2',
+                    ],
+                ],
+                [
+                    [
+                        'class' => sprintf('form-check-label %s rst3', $labelClass),
+                        'for' => 'test-id3',
+                    ],
+                ]
+            )
+            ->willReturn($labelStart);
+        $formLabel->expects(self::exactly(3))
+            ->method('closeTag')
+            ->willReturn($labelEnd);
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::exactly(3))
+            ->method('toHtml')
+            ->withConsecutive(
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
+                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
+            )
+            ->willReturn($expected);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::exactly(3))
+            ->method('__invoke')
+            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
+            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::once())
+            ->method('render')
+            ->with(new IsInstanceOf(Hidden::class))
+            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+
+        $element = $this->getMockBuilder(Radio::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::exactly(2))
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getValueOptions')
+            ->willReturn($valueOptions);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn(new ArrayObject($attributes));
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn($value1);
+        $element->expects(self::exactly(2))
+            ->method('useHiddenElement')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getLabelAttributes')
+            ->willReturn([]);
+        $element->expects(self::once())
+            ->method('getOption')
+            ->with('layout')
+            ->willReturn(Form::LAYOUT_INLINE);
+        $element->expects(self::exactly(9))
+            ->method('getLabelOption')
+            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
+            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+        $element->expects(self::once())
+            ->method('hasLabelOption')
+            ->with('label_position')
+            ->willReturn(false);
+        $element->expects(self::once())
+            ->method('getUncheckedValue')
+            ->willReturn($uncheckedValue);
+
+        $helper->setTranslatorTextDomain($textDomain);
+        $helper->setLabelAttributes($labelAttributes);
+
+        self::assertSame($expectedSummary, $helper($element, BaseFormRow::LABEL_APPEND));
     }
 }
