@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select as SelectElement;
 use Laminas\Form\Element\Text;
@@ -272,7 +271,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -338,7 +337,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value3]);
@@ -422,7 +421,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value1, $value3]);
@@ -561,7 +560,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value7, $value8]);
@@ -718,7 +717,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([]);
@@ -800,7 +799,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value1, $value3]);
@@ -881,7 +880,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value1, $value3]);
@@ -964,7 +963,7 @@ final class FormSelectTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn([$value1, $value3]);

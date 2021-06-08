@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\File;
 use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
@@ -110,7 +109,7 @@ final class FormHiddenTest extends TestCase
             ->willReturn($name);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'abc']));
+            ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn('xyz');

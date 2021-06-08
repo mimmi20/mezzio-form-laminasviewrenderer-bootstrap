@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\File;
 use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
@@ -110,7 +109,7 @@ final class FormFileTest extends TestCase
             ->willReturn($name);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'abc', 'multiple' => true]));
+            ->willReturn(['class' => 'abc', 'multiple' => true]);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn(['value' => 'xyz']);
@@ -156,7 +155,7 @@ final class FormFileTest extends TestCase
             ->willReturn($name);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'abc']));
+            ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn('efg');
@@ -202,7 +201,7 @@ final class FormFileTest extends TestCase
             ->willReturn($name);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'abc', 'multiple' => true]));
+            ->willReturn(['class' => 'abc', 'multiple' => true]);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn(['name' => 'xyz']);
@@ -248,7 +247,7 @@ final class FormFileTest extends TestCase
             ->willReturn($name);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'abc', 'multiple' => true]));
+            ->willReturn(['class' => 'abc', 'multiple' => true]);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn(['name' => ['xyz']]);

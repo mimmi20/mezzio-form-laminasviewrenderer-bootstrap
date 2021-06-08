@@ -20,7 +20,6 @@ use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Helper\EscapeHtml;
-use Traversable;
 
 use function array_key_exists;
 use function array_merge;
@@ -32,7 +31,6 @@ use function implode;
 use function is_array;
 use function is_scalar;
 use function is_string;
-use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
@@ -165,12 +163,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
-
-        $value = $this->validateMultiValue($element->getValue(), $attributes);
+        $value      = $this->validateMultiValue($element->getValue(), $attributes);
 
         $attributes['name'] = $name;
         if (array_key_exists('multiple', $attributes) && $attributes['multiple']) {

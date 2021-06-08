@@ -18,14 +18,12 @@ use Laminas\Form\View\Helper\FormInput as BaseFormInput;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Traversable;
 
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
-use function iterator_to_array;
 use function sprintf;
 use function trim;
 
@@ -63,10 +61,6 @@ abstract class FormInput extends BaseFormInput
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name'] = $name;
         $type               = $this->getType($element);

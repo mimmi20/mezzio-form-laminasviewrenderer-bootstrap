@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
@@ -229,7 +228,7 @@ final class FormMonthTest extends TestCase
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => $class, 'readonly' => true]));
+            ->willReturn(['class' => $class, 'readonly' => true]);
         $element->expects(self::never())
             ->method('getAttribute');
         $element->expects(self::never())

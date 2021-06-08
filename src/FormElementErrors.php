@@ -20,14 +20,9 @@ use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Traversable;
 
 use function array_merge;
 use function array_walk_recursive;
-use function get_class;
-use function is_array;
-use function iterator_to_array;
-use function sprintf;
 
 use const PHP_EOL;
 
@@ -86,19 +81,8 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
     public function render(ElementInterface $element, array $attributes = []): string
     {
         $messages = $element->getMessages();
-        if ($messages instanceof Traversable) {
-            $messages = iterator_to_array($messages);
-        } elseif (!is_array($messages)) {
-            throw new Exception\DomainException(
-                sprintf(
-                    '%s expects that $element->getMessages() will return an array or Traversable; received "%s"',
-                    __METHOD__,
-                    get_class($messages)
-                )
-            );
-        }
 
-        if (!$messages) {
+        if ([] === $messages) {
             return '';
         }
 

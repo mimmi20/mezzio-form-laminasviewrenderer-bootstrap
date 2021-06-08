@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\Element\Radio;
@@ -1127,7 +1126,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1262,7 +1261,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1466,7 +1465,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1673,7 +1672,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1697,7 +1696,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(false);
         $element->expects(self::once())
             ->method('getUncheckedValue')
-            ->willReturn(null);
+            ->willReturn('');
 
         $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
         $helper->setTranslatorTextDomain($textDomain);
@@ -1882,7 +1881,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2090,7 +2089,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2299,7 +2298,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2511,7 +2510,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2718,7 +2717,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);

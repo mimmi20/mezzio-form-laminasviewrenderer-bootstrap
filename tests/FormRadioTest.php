@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\Element\Radio;
@@ -462,6 +461,92 @@ final class FormRadioTest extends TestCase
                 '%s requires that the element is of type %s',
                 'Mezzio\BootstrapForm\LaminasView\View\Helper\AbstractFormMultiCheckbox::render',
                 MultiCheckboxElement::class
+            )
+        );
+        $this->expectExceptionCode(0);
+
+        $helper->render($element);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    public function testRenderWithoutName(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::never())
+            ->method('isXhtml');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+
+        $element = $this->getMockBuilder(Radio::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn(null);
+        $element->expects(self::never())
+            ->method('getValueOptions');
+        $element->expects(self::never())
+            ->method('getAttributes');
+        $element->expects(self::never())
+            ->method('getValue');
+        $element->expects(self::never())
+            ->method('useHiddenElement');
+        $element->expects(self::never())
+            ->method('getLabelAttributes');
+        $element->expects(self::never())
+            ->method('getOption');
+        $element->expects(self::never())
+            ->method('getLabelOption');
+        $element->expects(self::never())
+            ->method('hasLabelOption');
+        $element->expects(self::never())
+            ->method('getUncheckedValue');
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                '%s requires that the element has an assigned name; none discovered',
+                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio::getName'
             )
         );
         $this->expectExceptionCode(0);
@@ -1055,7 +1140,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1190,7 +1275,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1394,7 +1479,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1601,7 +1686,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -1625,7 +1710,7 @@ final class FormRadioTest extends TestCase
             ->willReturn(false);
         $element->expects(self::once())
             ->method('getUncheckedValue')
-            ->willReturn(null);
+            ->willReturn('');
 
         $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
         $helper->setTranslatorTextDomain($textDomain);
@@ -1810,7 +1895,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2018,7 +2103,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2227,7 +2312,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2439,7 +2524,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
@@ -2646,7 +2731,7 @@ final class FormRadioTest extends TestCase
             ->willReturn($valueOptions);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject($attributes));
+            ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);

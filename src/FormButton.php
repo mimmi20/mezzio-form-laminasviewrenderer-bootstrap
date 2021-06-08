@@ -19,13 +19,11 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Traversable;
 
 use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
-use function iterator_to_array;
 use function mb_strtolower;
 use function sprintf;
 
@@ -177,10 +175,6 @@ final class FormButton extends FormInput
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name'] = $name;
         $attributes['type'] = $this->getType($element);

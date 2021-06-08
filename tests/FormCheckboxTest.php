@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
@@ -378,7 +377,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'xyz']));
+            ->willReturn(['class' => 'xyz']);
         $element->expects(self::once())
             ->method('isChecked')
             ->willReturn(true);
@@ -502,7 +501,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'xyz']));
+            ->willReturn(['class' => 'xyz']);
         $element->expects(self::once())
             ->method('isChecked')
             ->willReturn(true);
@@ -626,7 +625,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'xyz', 'id' => $id]));
+            ->willReturn(['class' => 'xyz', 'id' => $id]);
         $element->expects(self::once())
             ->method('isChecked')
             ->willReturn(true);
@@ -754,7 +753,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'xyz', 'id' => $id]));
+            ->willReturn(['class' => 'xyz', 'id' => $id]);
         $element->expects(self::once())
             ->method('isChecked')
             ->willReturn(true);
@@ -770,7 +769,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(true);
         $element->expects(self::once())
             ->method('getUncheckedValue')
-            ->willReturn(null);
+            ->willReturn('');
 
         $helper->setUncheckedValue($uncheckedValue);
 
@@ -887,7 +886,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(['class' => 'abc']);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['class' => 'xyz', 'id' => $id]));
+            ->willReturn(['class' => 'xyz', 'id' => $id]);
         $element->expects(self::once())
             ->method('isChecked')
             ->willReturn(true);
@@ -903,7 +902,7 @@ final class FormCheckboxTest extends TestCase
             ->willReturn(true);
         $element->expects(self::once())
             ->method('getUncheckedValue')
-            ->willReturn(null);
+            ->willReturn('');
 
         $helper->setUncheckedValue($uncheckedValue);
 

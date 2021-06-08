@@ -26,7 +26,6 @@ use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Traversable;
 
 use function array_key_exists;
 use function array_merge;
@@ -35,7 +34,6 @@ use function assert;
 use function explode;
 use function implode;
 use function is_array;
-use function iterator_to_array;
 use function sprintf;
 use function trim;
 
@@ -178,10 +176,6 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 
         // Every collection is wrapped by a fieldset if needed
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         unset($attributes['name']);
 

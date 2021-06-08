@@ -17,15 +17,13 @@ use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mimmi20\Form\Element\Links\Links as LinksElement;
-use Traversable;
+use Mimmi20\Form\Element\Links\LinksInterface as LinksElement;
 
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
-use function iterator_to_array;
 use function sprintf;
 use function trim;
 
@@ -99,12 +97,6 @@ final class FormLinks extends AbstractHelper
             );
         }
 
-        $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
-
         $renderedLinks = [];
 
         foreach ($element->getLinks() as $link) {
@@ -112,16 +104,19 @@ final class FormLinks extends AbstractHelper
             $label   = $link['label'] ?? '';
             unset($link['label']);
 
-            $linkAttributes = array_merge($attributes, $link);
+            $attributes = $element->getAttributes();
 
             if (array_key_exists('class', $attributes)) {
                 $classes = array_merge($classes, explode(' ', $attributes['class']));
+                unset($attributes['class']);
             }
 
             if (array_key_exists('class', $link)) {
                 $classes = array_merge($classes, explode(' ', (string) $link['class']));
+                unset($link['class']);
             }
 
+            $linkAttributes          = array_merge($attributes, $link);
             $linkAttributes['class'] = trim(implode(' ', array_unique($classes)));
 
             if ('' !== $label) {

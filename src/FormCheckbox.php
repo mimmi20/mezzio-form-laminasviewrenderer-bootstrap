@@ -25,7 +25,6 @@ use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Traversable;
 
 use function array_filter;
 use function array_key_exists;
@@ -34,7 +33,6 @@ use function array_unique;
 use function explode;
 use function implode;
 use function is_string;
-use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
@@ -132,10 +130,6 @@ final class FormCheckbox extends FormInput
         $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name']  = $name;
         $attributes['type']  = $this->getInputType();
