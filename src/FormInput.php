@@ -27,7 +27,7 @@ use function implode;
 use function sprintf;
 use function trim;
 
-abstract class FormInput extends BaseFormInput
+abstract class FormInput extends BaseFormInput implements FormInputInterface
 {
     use FormTrait;
 

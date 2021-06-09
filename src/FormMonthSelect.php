@@ -26,7 +26,7 @@ use function sprintf;
 
 use const PHP_EOL;
 
-final class FormMonthSelect extends AbstractHelper
+final class FormMonthSelect extends AbstractHelper implements FormIndentInterface, FormRenderInterface
 {
     use FormMonthSelectTrait;
     use FormTrait;

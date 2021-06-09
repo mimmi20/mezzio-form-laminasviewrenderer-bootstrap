@@ -29,7 +29,7 @@ use function trim;
 
 use const PHP_EOL;
 
-final class FormLinks extends AbstractHelper
+final class FormLinks extends AbstractHelper implements FormIndentInterface, FormRenderInterface
 {
     use FormTrait;
 

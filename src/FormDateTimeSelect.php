@@ -33,7 +33,7 @@ use const PHP_EOL;
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
-final class FormDateTimeSelect extends AbstractHelper
+final class FormDateTimeSelect extends AbstractHelper implements FormIndentInterface, FormRenderInterface
 {
     use FormDateSelectTrait;
     use FormMonthSelectTrait;

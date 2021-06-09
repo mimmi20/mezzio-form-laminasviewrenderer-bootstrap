@@ -15,13 +15,13 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\Element;
 use Laminas\Form\Element\DateTime;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
 use Mimmi20\Form\Element\Links\Links;
 
-use function assert;
 use function get_class;
 use function method_exists;
 use function var_dump;
@@ -100,6 +100,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      *
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -118,6 +119,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      *
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     public function render(ElementInterface $element): string
     {
@@ -159,6 +161,14 @@ final class FormElement extends AbstractHelper implements FormElementInterface
     }
 
     /**
+     * Set default helper name
+     */
+    public function getDefaultHelper(): string
+    {
+        return $this->defaultHelper;
+    }
+
+    /**
      * Add form element type to plugin map
      */
     public function addType(string $type, string $plugin): self
@@ -183,17 +193,21 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      *
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     private function renderHelper(string $name, ElementInterface $element): string
     {
         $helper = $this->helperPluginManager->get($name);
-        assert($helper instanceof AbstractHelper);
 
-        if (method_exists($helper, 'setIndent')) {
+        if ($helper instanceof FormIndentInterface || method_exists($helper, 'setIndent')) {
             $helper->setIndent($this->getIndent());
         }
 
-        return $helper->render($element);
+        if ($helper instanceof FormRenderInterface || method_exists($helper, 'render')) {
+            return $helper->render($element);
+        }
+
+        throw new InvalidArgumentException('the element does not support the render function');
     }
 
     /**
@@ -201,6 +215,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      *
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     private function renderInstance(ElementInterface $element): ?string
     {
@@ -218,6 +233,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      *
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
+     * @throws InvalidArgumentException
      */
     private function renderType(ElementInterface $element): ?string
     {
