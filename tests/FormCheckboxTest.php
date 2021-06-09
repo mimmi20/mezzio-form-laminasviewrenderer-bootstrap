@@ -908,4 +908,104 @@ final class FormCheckboxTest extends TestCase
 
         self::assertSame($expected, $helper->render($element));
     }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
+    }
 }

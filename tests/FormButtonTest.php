@@ -719,4 +719,76 @@ final class FormButtonTest extends AbstractTest
 
         self::assertSame($expected, $helperObject->render($element));
     }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testSetGetIndent1(): void
+    {
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormButton($escapeHtml, $escapeHtmlAttr, $doctype, $translator);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testSetGetIndent2(): void
+    {
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormButton($escapeHtml, $escapeHtmlAttr, $doctype, $translator);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
+    }
 }

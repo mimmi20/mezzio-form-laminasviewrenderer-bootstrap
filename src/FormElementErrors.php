@@ -98,19 +98,11 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
         $markups = [];
 
         foreach ($messages as $message) {
-            if ('' === $message) {
-                continue;
-            }
-
             if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
                 $message = ($this->escapeHtml)($message);
             }
 
             $markups[] = $indent . $this->getWhitespace(8) . $this->htmlElement->toHtml('li', [], $message);
-        }
-
-        if ([] === $markups) {
-            return '';
         }
 
         // Prepare attributes for opening tag

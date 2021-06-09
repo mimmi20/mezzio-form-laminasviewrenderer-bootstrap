@@ -91,8 +91,7 @@ final class FormRadioTest extends TestCase
 
         $labelAttributes = ['class' => 'test-class', 'aria-label' => 'test'];
 
-        $helper->setLabelAttributes($labelAttributes);
-
+        self::assertSame($helper, $helper->setLabelAttributes($labelAttributes));
         self::assertSame($labelAttributes, $helper->getLabelAttributes());
     }
 
@@ -148,8 +147,7 @@ final class FormRadioTest extends TestCase
 
         $seperator = '::test::';
 
-        $helper->setSeparator($seperator);
-
+        self::assertSame($helper, $helper->setSeparator($seperator));
         self::assertSame($seperator, $helper->getSeparator());
     }
 
@@ -2131,8 +2129,8 @@ final class FormRadioTest extends TestCase
 
         $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
         $helper->setTranslatorTextDomain($textDomain);
-        $helper->setLabelAttributes($labelAttributes);
 
+        self::assertSame($helper, $helper->setLabelAttributes($labelAttributes));
         self::assertSame($expectedSummary, $helper->render($element));
     }
 
@@ -2340,7 +2338,8 @@ final class FormRadioTest extends TestCase
 
         $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
         $helper->setTranslatorTextDomain($textDomain);
-        $helper->setLabelAttributes($labelAttributes);
+
+        self::assertSame($helper, $helper->setLabelAttributes($labelAttributes));
 
         $helperObject = $helper();
 
@@ -2552,8 +2551,8 @@ final class FormRadioTest extends TestCase
 
         $helper->setLabelPosition(BaseFormRow::LABEL_APPEND);
         $helper->setTranslatorTextDomain($textDomain);
-        $helper->setLabelAttributes($labelAttributes);
 
+        self::assertSame($helper, $helper->setLabelAttributes($labelAttributes));
         self::assertSame($expectedSummary, $helper($element));
     }
 
@@ -2758,8 +2757,112 @@ final class FormRadioTest extends TestCase
             ->willReturn($uncheckedValue);
 
         $helper->setTranslatorTextDomain($textDomain);
-        $helper->setLabelAttributes($labelAttributes);
 
+        self::assertSame($helper, $helper->setLabelAttributes($labelAttributes));
         self::assertSame($expectedSummary, $helper($element, BaseFormRow::LABEL_APPEND));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::never())
+            ->method('isXhtml');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+        $doctype->expects(self::never())
+            ->method('isXhtml');
+
+        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formLabel->expects(self::never())
+            ->method('openTag');
+        $formLabel->expects(self::never())
+            ->method('closeTag');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
     }
 }

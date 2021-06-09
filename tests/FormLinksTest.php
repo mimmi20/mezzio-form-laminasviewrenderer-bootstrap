@@ -79,9 +79,7 @@ final class FormLinksTest extends TestCase
      */
     public function testRenderEmptyLinkList(): void
     {
-        $class     = 'test-class';
-        $ariaLabel = 'test';
-        $expected  = '';
+        $expected = '';
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
@@ -514,5 +512,41 @@ final class FormLinksTest extends TestCase
         $helper->setTranslatorTextDomain($textDomain);
 
         self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormLinks($escapeHtml, null);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormLinks($escapeHtml, null);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
     }
 }

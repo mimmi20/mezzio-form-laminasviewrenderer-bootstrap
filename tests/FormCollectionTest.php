@@ -81,4 +81,68 @@ final class FormCollectionTest extends TestCase
 
         $helper->render($element);
     }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $formRow = $this->getMockBuilder(FormRowInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formRow->expects(self::never())
+            ->method('setIndent');
+        $formRow->expects(self::never())
+            ->method('render');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $formRow = $this->getMockBuilder(FormRowInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formRow->expects(self::never())
+            ->method('setIndent');
+        $formRow->expects(self::never())
+            ->method('render');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::never())
+            ->method('toHtml');
+
+        $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
+    }
 }

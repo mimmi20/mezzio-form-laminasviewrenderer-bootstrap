@@ -987,4 +987,52 @@ final class FormSelectTest extends TestCase
 
         self::assertSame($expected, $helper($element));
     }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormSelect($escapeHtml, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $helper = new FormSelect($escapeHtml, $formHidden, null);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
+    }
 }
