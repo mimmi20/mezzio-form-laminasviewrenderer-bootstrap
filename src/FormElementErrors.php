@@ -23,6 +23,7 @@ use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 
 use function array_merge;
 use function array_walk_recursive;
+use function implode;
 
 use const PHP_EOL;
 
@@ -88,20 +89,13 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
 
         // Flatten message array
         $messages = $this->flattenMessages($messages);
-        if (!$messages) {
+
+        if ([] === $messages) {
             return '';
         }
 
-        // Prepare attributes for opening tag
-        $attributes = array_merge($this->attributes, $attributes);
-
-        $errorAttributes = [
-            'id' => $element->getAttribute('id') . 'Feedback',
-            'class' => 'invalid-feedback',
-        ];
-
-        $indent = $this->getIndent();
-        $markup = '';
+        $indent  = $this->getIndent();
+        $markups = [];
 
         foreach ($messages as $message) {
             if ('' === $message) {
@@ -112,14 +106,22 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
                 $message = ($this->escapeHtml)($message);
             }
 
-            $markup .= $indent . $this->getWhitespace(8) . $this->htmlElement->toHtml('li', [], $message) . PHP_EOL;
+            $markups[] = $indent . $this->getWhitespace(8) . $this->htmlElement->toHtml('li', [], $message);
         }
 
-        if ('' === $markup) {
+        if ([] === $markups) {
             return '';
         }
 
-        $ul = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('ul', $attributes, $markup . $indent . $this->getWhitespace(4));
+        // Prepare attributes for opening tag
+        $attributes      = array_merge($this->attributes, $attributes);
+        $errorAttributes = ['class' => 'invalid-feedback'];
+
+        if ($element->hasAttribute('id')) {
+            $errorAttributes['id'] = $element->getAttribute('id') . 'Feedback';
+        }
+
+        $ul = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('ul', $attributes, implode(PHP_EOL, $markups) . PHP_EOL . $indent . $this->getWhitespace(4));
 
         return $indent . $this->htmlElement->toHtml('div', $errorAttributes, $ul);
     }
@@ -156,14 +158,22 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
         $messagesToPrint = [];
 
         if (null === $this->translate) {
-            $messageCallback = static function ($item) use (&$messagesToPrint): void {
-                $messagesToPrint[] = $item;
+            $messageCallback = static function ($message) use (&$messagesToPrint): void {
+                if ('' === $message) {
+                    return;
+                }
+
+                $messagesToPrint[] = $message;
             };
         } else {
             $translator      = $this->translate;
             $textDomain      = $this->getTranslatorTextDomain();
-            $messageCallback = static function ($item) use (&$messagesToPrint, $translator, $textDomain): void {
-                $messagesToPrint[] = ($translator)($item, $textDomain);
+            $messageCallback = static function ($message) use (&$messagesToPrint, $translator, $textDomain): void {
+                if ('' === $message) {
+                    return;
+                }
+
+                $messagesToPrint[] = ($translator)($message, $textDomain);
             };
         }
 
