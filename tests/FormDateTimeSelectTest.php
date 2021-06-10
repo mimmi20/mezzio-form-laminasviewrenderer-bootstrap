@@ -17,6 +17,7 @@ use Laminas\Form\Element\DateTimeSelect as DateTimeSelectElement;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\ExtensionNotLoadedException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
@@ -3030,5 +3031,70 @@ final class FormDateTimeSelectTest extends TestCase
             ->willReturn(true);
 
         self::assertSame($excpected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws DomainException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testRenderSetGetTimeType(): void
+    {
+        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectHelper->expects(self::never())
+            ->method('setIndent');
+        $selectHelper->expects(self::never())
+            ->method('render');
+
+        $helper = new FormDateTimeSelect($selectHelper);
+
+        $type = IntlDateFormatter::MEDIUM;
+
+        self::assertSame($helper, $helper->setTimeType($type));
+        self::assertSame($type, $helper->getTimeType());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExtensionNotLoadedException
+     */
+    public function testSetGetIndent1(): void
+    {
+        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectHelper->expects(self::never())
+            ->method('setIndent');
+        $selectHelper->expects(self::never())
+            ->method('render');
+
+        $helper = new FormDateTimeSelect($selectHelper);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExtensionNotLoadedException
+     */
+    public function testSetGetIndent2(): void
+    {
+        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectHelper->expects(self::never())
+            ->method('setIndent');
+        $selectHelper->expects(self::never())
+            ->method('render');
+
+        $helper = new FormDateTimeSelect($selectHelper);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
     }
 }

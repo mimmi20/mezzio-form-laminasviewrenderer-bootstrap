@@ -17,14 +17,12 @@ use Laminas\Form\Exception;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\View\Helper\EscapeHtml;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Traversable;
 
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
-use function iterator_to_array;
 use function sprintf;
 use function trim;
 
@@ -103,10 +101,6 @@ final class FormTextarea extends AbstractHelper
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name'] = $name;
 

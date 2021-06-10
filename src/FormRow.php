@@ -103,7 +103,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
         if (
             null !== $form
-            && !$element->getAttribute('required')
+            && !$element->hasAttribute('required')
+            && null !== $element->getName()
             && $form->getInputFilter()->has($element->getName())
             && $form->getInputFilter()->get($element->getName())->isRequired()
         ) {
@@ -386,7 +387,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         if ($element instanceof LabelAwareInterface) {
             if ($floating) {
                 $labelPosition = BaseFormRow::LABEL_APPEND;
-            } elseif ($element->getLabelOption('label_position')) {
+            } elseif ($element->hasLabelOption('label_position')) {
                 $labelPosition = $element->getLabelOption('label_position');
             } else {
                 $labelPosition = BaseFormRow::LABEL_PREPEND;

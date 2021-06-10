@@ -13,6 +13,9 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception;
+
+use function sprintf;
 
 final class FormRadio extends AbstractFormMultiCheckbox
 {
@@ -29,6 +32,17 @@ final class FormRadio extends AbstractFormMultiCheckbox
      */
     protected static function getName(ElementInterface $element): string
     {
-        return $element->getName();
+        $name = $element->getName();
+
+        if (null === $name || '' === $name) {
+            throw new Exception\DomainException(
+                sprintf(
+                    '%s requires that the element has an assigned name; none discovered',
+                    __METHOD__
+                )
+            );
+        }
+
+        return $name;
     }
 }

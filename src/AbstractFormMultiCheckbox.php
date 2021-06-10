@@ -12,9 +12,12 @@ declare(strict_types = 1);
 
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
+use Laminas\Form\Element;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
@@ -22,7 +25,6 @@ use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Traversable;
 
 use function array_filter;
 use function array_key_exists;
@@ -35,7 +37,6 @@ use function in_array;
 use function is_array;
 use function is_scalar;
 use function is_string;
-use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
@@ -54,11 +55,12 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     private FormLabelInterface $formLabel;
     private ?Translate $translate;
     private HtmlElementInterface $htmlElement;
+    private FormHiddenInterface $formHidden;
 
     /**
      * The attributes applied to option label
      *
-     * @var array<string, bool|string>
+     * @var array<int|string, bool|string>
      */
     private array $labelAttributes = [];
 
@@ -67,13 +69,21 @@ abstract class AbstractFormMultiCheckbox extends FormInput
      */
     private string $separator = '';
 
-    public function __construct(EscapeHtml $escapeHtml, EscapeHtmlAttr $escapeHtmlAttr, Doctype $doctype, FormLabelInterface $formLabel, HtmlElementInterface $htmlElement, ?Translate $translator = null)
-    {
+    public function __construct(
+        EscapeHtml $escapeHtml,
+        EscapeHtmlAttr $escapeHtmlAttr,
+        Doctype $doctype,
+        FormLabelInterface $formLabel,
+        HtmlElementInterface $htmlElement,
+        FormHiddenInterface $formHidden,
+        ?Translate $translator = null
+    ) {
         parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
 
         $this->formLabel   = $formLabel;
         $this->htmlElement = $htmlElement;
         $this->escapeHtml  = $escapeHtml;
+        $this->formHidden  = $formHidden;
         $this->translate   = $translator;
     }
 
@@ -118,15 +128,9 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             );
         }
 
-        $name = static::getName($element);
-
-        $options = $element->getValueOptions();
-
+        $name       = static::getName($element);
+        $options    = $element->getValueOptions();
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name'] = $name;
         $attributes['type'] = $this->getInputType();
@@ -141,7 +145,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
         if ($useHiddenElement) {
             $indent   = $this->getIndent();
-            $rendered = $indent . $this->getWhitespace(4) . $this->renderHiddenElement($element, $attributes) . PHP_EOL . $rendered;
+            $rendered = $indent . $this->getWhitespace(4) . $this->renderHiddenElement($element) . PHP_EOL . $rendered;
         }
 
         return $rendered;
@@ -150,7 +154,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * Sets the attributes applied to option label.
      *
-     * @param array<string, bool|string> $attributes
+     * @param array<int|string, bool|string> $attributes
      */
     public function setLabelAttributes(array $attributes): self
     {
@@ -162,9 +166,9 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * Returns the attributes applied to each option label.
      *
-     * @return array<string, bool|string>
+     * @return array<int|string, bool|string>
      */
-    public function getLabelAttributes(): ?array
+    public function getLabelAttributes(): array
     {
         return $this->labelAttributes;
     }
@@ -174,7 +178,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
      */
     public function setSeparator(string $separator): self
     {
-        $this->separator = (string) $separator;
+        $this->separator = $separator;
 
         return $this;
     }
@@ -215,7 +219,12 @@ abstract class AbstractFormMultiCheckbox extends FormInput
         array $selectedOptions,
         array $attributes
     ): string {
-        $labelPosition         = $this->getLabelPosition();
+        if ($element->hasLabelOption('label_position')) {
+            $labelPosition = $element->getLabelOption('label_position');
+        } else {
+            $labelPosition = $this->getLabelPosition();
+        }
+
         $globalLabelAttributes = [];
         $closingBracket        = $this->getInlineClosingBracket();
 
@@ -247,7 +256,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $label           = '';
             $inputAttributes = $attributes;
 
-            /** @var array<string, bool|string> $labelAttributes */
+            /** @var array<int|string, array<string, string>|bool|string> $labelAttributes */
             $labelAttributes = $globalLabelAttributes;
             $selected        = isset($inputAttributes['selected'])
                 && 'radio' !== $inputAttributes['type']
@@ -277,13 +286,43 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $disabled = $optionSpec['disabled'];
             }
 
+            $labelClasses = [];
+            $inputClasses = [];
+
+            if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
+                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+            }
+
+            if (array_key_exists('class', $inputAttributes) && is_string($inputAttributes['class'])) {
+                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
+            }
+
             if (array_key_exists('label_attributes', $optionSpec) && is_array($optionSpec['label_attributes'])) {
+                if (array_key_exists('class', $optionSpec['label_attributes']) && is_string($optionSpec['label_attributes']['class'])) {
+                    $labelClasses = array_merge($labelClasses, explode(' ', $optionSpec['label_attributes']['class']));
+
+                    unset($optionSpec['label_attributes']['class']);
+                }
+
+                assert(is_array($optionSpec['label_attributes']));
+
                 $labelAttributes = array_merge($labelAttributes, $optionSpec['label_attributes']);
             }
 
             if (array_key_exists('attributes', $optionSpec) && is_array($optionSpec['attributes'])) {
+                if (array_key_exists('class', $optionSpec['attributes']) && is_string($optionSpec['attributes']['class'])) {
+                    $inputClasses = array_merge($inputClasses, explode(' ', $optionSpec['attributes']['class']));
+
+                    unset($optionSpec['attributes']['class']);
+                }
+
+                assert(is_array($optionSpec['attributes']));
+
                 $inputAttributes = array_merge($inputAttributes, $optionSpec['attributes']);
             }
+
+            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
+            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
 
             if (in_array($value, $selectedOptions, true)) {
                 $selected = true;
@@ -293,6 +332,10 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $inputAttributes['checked']  = $selected;
             $inputAttributes['disabled'] = $disabled;
 
+            if ($disabled) {
+                $inputAttributes['aria-disabled'] = 'true';
+            }
+
             $inputClasses = ['form-check-input'];
 
             if (array_key_exists('class', $inputAttributes)) {
@@ -301,12 +344,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             }
 
             $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
-
-            if (!is_array($labelAttributes)) {
-                $labelAttributes = [];
-            }
-
-            $labelClasses = ['form-check-label'];
+            $labelClasses             = ['form-check-label'];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
                 $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
@@ -323,8 +361,6 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $this->createAttributesString($inputAttributes),
                 $closingBracket
             );
-
-            $input = $indent . $this->getWhitespace(8) . $input;
 
             assert(is_string($label));
 
@@ -352,10 +388,12 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             ) {
                 $labelOpen  = '';
                 $labelClose = '';
-                $label      = $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
+                $label      = $indent . $this->getWhitespace(8) . $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
+                $input      = $indent . $this->getWhitespace(8) . $input;
             } else {
-                $labelOpen  = $this->formLabel->openTag($filteredAttributes) . PHP_EOL;
-                $labelClose = $this->formLabel->closeTag() . PHP_EOL;
+                $labelOpen  = $indent . $this->getWhitespace(4) . $this->formLabel->openTag($filteredAttributes) . PHP_EOL;
+                $labelClose = PHP_EOL . $indent . $this->getWhitespace(4) . $this->formLabel->closeTag();
+                $input      = $indent . $this->getWhitespace(8) . $input;
             }
 
             if (
@@ -363,15 +401,19 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
             ) {
                 $label = '<span>' . $label . '</span>';
+
+                if ('' !== $labelClose) {
+                    $label = $indent . $this->getWhitespace(8) . $label;
+                }
             }
 
             switch ($labelPosition) {
                 case BaseFormRow::LABEL_PREPEND:
-                    $markup = $labelOpen . $label . PHP_EOL . $indent . $this->getWhitespace(8) . $input . $labelClose;
+                    $markup = $labelOpen . $label . PHP_EOL . $input . $labelClose;
                     break;
                 case BaseFormRow::LABEL_APPEND:
                 default:
-                    $markup = $labelOpen . $input . PHP_EOL . $indent . $this->getWhitespace(8) . $label . $labelClose;
+                    $markup = $labelOpen . $input . PHP_EOL . $label . $labelClose;
                     break;
             }
 
@@ -384,25 +426,17 @@ abstract class AbstractFormMultiCheckbox extends FormInput
     /**
      * Render a hidden element for empty/unchecked value
      *
-     * @param array<string, bool> $attributes
+     * @throws InvalidArgumentException
+     * @throws DomainException
      */
-    private function renderHiddenElement(MultiCheckboxElement $element, array $attributes): string
+    private function renderHiddenElement(MultiCheckboxElement $element): string
     {
-        $closingBracket = $this->getInlineClosingBracket();
-
         $uncheckedValue = $element->getUncheckedValue()
             ?: $this->uncheckedValue;
 
-        $hiddenAttributes = [
-            'name' => $element->getName(),
-            'value' => $uncheckedValue,
-            'disabled' => $attributes['disabled'] ?? null,
-        ];
+        $hiddenElement = new Element\Hidden($element->getName());
+        $hiddenElement->setValue($uncheckedValue);
 
-        return sprintf(
-            '<input type="hidden" %s%s',
-            $this->createAttributesString($hiddenAttributes),
-            $closingBracket
-        );
+        return $this->formHidden->render($hiddenElement);
     }
 }

@@ -19,6 +19,7 @@ use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
+use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadioFactory;
@@ -51,6 +52,7 @@ final class FormRadioFactoryTest extends TestCase
         $formLabel       = $this->createMock(FormLabelInterface::class);
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $translatePlugin = $this->createMock(Translate::class);
+        $formHidden      = $this->createMock(FormHiddenInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -59,10 +61,10 @@ final class FormRadioFactoryTest extends TestCase
             ->method('has')
             ->with(Translate::class)
             ->willReturn(true);
-        $helperPluginManager->expects(self::exactly(5))
+        $helperPluginManager->expects(self::exactly(6))
             ->method('get')
-            ->withConsecutive([Translate::class], [EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class])
-            ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml, $escapeHtmlAttr, $doctype, $formLabel);
+            ->withConsecutive([Translate::class], [EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class], [FormHiddenInterface::class])
+            ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden);
 
         $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
             ->disableOriginalConstructor()
@@ -97,6 +99,7 @@ final class FormRadioFactoryTest extends TestCase
         $doctype        = $this->createMock(Doctype::class);
         $formLabel      = $this->createMock(FormLabelInterface::class);
         $htmlElement    = $this->createMock(HtmlElementInterface::class);
+        $formHidden     = $this->createMock(FormHiddenInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -105,10 +108,10 @@ final class FormRadioFactoryTest extends TestCase
             ->method('has')
             ->with(Translate::class)
             ->willReturn(false);
-        $helperPluginManager->expects(self::exactly(4))
+        $helperPluginManager->expects(self::exactly(5))
             ->method('get')
-            ->withConsecutive([EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class])
-            ->willReturnOnConsecutiveCalls($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel);
+            ->withConsecutive([EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class], [FormHiddenInterface::class])
+            ->willReturnOnConsecutiveCalls($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden);
 
         $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
             ->disableOriginalConstructor()

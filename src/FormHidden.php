@@ -14,9 +14,7 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
-use Traversable;
 
-use function iterator_to_array;
 use function sprintf;
 
 final class FormHidden extends FormInput implements FormHiddenInterface
@@ -55,10 +53,6 @@ final class FormHidden extends FormInput implements FormHiddenInterface
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['name']  = $name;
         $type                = $this->getType($element);

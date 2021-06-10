@@ -18,9 +18,6 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelect;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -43,8 +40,6 @@ final class FormSelectTest extends AbstractTest
         $expected = $this->getExpected('form/select.html');
 
         $helper = new FormSelect(
-            $this->serviceManager->get(LvhPluginManager::class)->get(HtmlElementInterface::class),
-            $this->serviceManager->get(LvhPluginManager::class)->get(PartialRendererInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtml::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormHiddenInterface::class),
             null

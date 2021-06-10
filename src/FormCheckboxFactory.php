@@ -68,6 +68,7 @@ final class FormCheckboxFactory
             $plugin->get(Doctype::class),
             $plugin->get(FormLabelInterface::class),
             $lvhPluginManager->get(HtmlElementInterface::class),
+            $plugin->get(FormHiddenInterface::class),
             $translator
         );
     }

@@ -20,9 +20,6 @@ use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Traversable;
 
 use function array_key_exists;
 use function array_merge;
@@ -34,7 +31,6 @@ use function implode;
 use function is_array;
 use function is_scalar;
 use function is_string;
-use function iterator_to_array;
 use function method_exists;
 use function sprintf;
 use function trim;
@@ -61,10 +57,8 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      */
     protected $translatableAttributes = ['label' => true];
     private FormHiddenInterface $formHidden;
-    private PartialRendererInterface $renderer;
     private ?Translate $translate;
     private EscapeHtml $escaper;
-    private HtmlElementInterface $htmlElement;
 
     /**
      * Attributes valid for select
@@ -105,17 +99,13 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
     ];
 
     public function __construct(
-        HtmlElementInterface $htmlElement,
-        PartialRendererInterface $renderer,
         EscapeHtml $escaper,
         FormHiddenInterface $formHidden,
         ?Translate $translator = null
     ) {
-        $this->renderer    = $renderer;
-        $this->htmlElement = $htmlElement;
-        $this->formHidden  = $formHidden;
-        $this->escaper     = $escaper;
-        $this->translate   = $translator;
+        $this->formHidden = $formHidden;
+        $this->escaper    = $escaper;
+        $this->translate  = $translator;
     }
 
     /**
@@ -173,12 +163,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
-
-        $value = $this->validateMultiValue($element->getValue(), $attributes);
+        $value      = $this->validateMultiValue($element->getValue(), $attributes);
 
         $attributes['name'] = $name;
         if (array_key_exists('multiple', $attributes) && $attributes['multiple']) {
@@ -216,7 +201,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             && $element->useHiddenElement();
 
         if ($useHiddenElement) {
-            $rendered = $this->renderHiddenElement($element) . PHP_EOL . $rendered;
+            $rendered = $indent . $this->renderHiddenElement($element) . PHP_EOL . $rendered;
         }
 
         return $rendered;
@@ -321,9 +306,14 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
 
         $this->validTagAttributes = $this->validOptionAttributes;
 
+        $attributesString = $this->createAttributesString($attributes);
+        if (!empty($attributesString)) {
+            $attributesString = ' ' . $attributesString;
+        }
+
         $content = sprintf(
-            '<option %s>%s</option>',
-            $this->createAttributesString($attributes),
+            '<option%s>%s</option>',
+            $attributesString,
             $label
         );
         $indent  = $this->getIndent();
@@ -391,11 +381,10 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             return [$value];
         }
 
-        if (!isset($attributes['multiple']) || !$attributes['multiple']) {
+        if (!array_key_exists('multiple', $attributes) || !$attributes['multiple']) {
             throw new Exception\DomainException(
                 sprintf(
-                    '%s does not allow specifying multiple selected values when the element does not have a multiple '
-                    . 'attribute set to a boolean true',
+                    '%s does not allow specifying multiple selected values when the element does not have a multiple attribute set to a boolean true',
                     self::class
                 )
             );

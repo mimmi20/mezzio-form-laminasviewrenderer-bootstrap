@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
-use ArrayObject;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Exception\DomainException;
 use Laminas\I18n\View\Helper\Translate;
@@ -218,7 +217,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn(null);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['type' => $type]));
+            ->willReturn(['type' => $type]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -276,7 +275,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['type' => $type]));
+            ->willReturn(['type' => $type]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -334,7 +333,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject([]));
+            ->willReturn([]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -392,7 +391,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject([]));
+            ->willReturn([]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -446,7 +445,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject([]));
+            ->willReturn([]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -517,7 +516,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['type' => $type]));
+            ->willReturn(['type' => $type]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -592,7 +591,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['type' => $type]));
+            ->willReturn(['type' => $type]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -669,7 +668,7 @@ final class FormButtonTest extends AbstractTest
             ->willReturn($value);
         $element->expects(self::once())
             ->method('getAttributes')
-            ->willReturn(new ArrayObject(['type' => $type]));
+            ->willReturn(['type' => $type]);
         $element->expects(self::once())
             ->method('getAttribute')
             ->with('type')
@@ -719,5 +718,77 @@ final class FormButtonTest extends AbstractTest
         assert($helperObject instanceof FormButton);
 
         self::assertSame($expected, $helperObject->render($element));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testSetGetIndent1(): void
+    {
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormButton($escapeHtml, $escapeHtmlAttr, $doctype, $translator);
+
+        self::assertSame($helper, $helper->setIndent(4));
+        self::assertSame('    ', $helper->getIndent());
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
+    public function testSetGetIndent2(): void
+    {
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::never())
+            ->method('__invoke');
+
+        $doctype = $this->getMockBuilder(Doctype::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $doctype->expects(self::never())
+            ->method('__invoke');
+
+        $helper = new FormButton($escapeHtml, $escapeHtmlAttr, $doctype, $translator);
+
+        self::assertSame($helper, $helper->setIndent('  '));
+        self::assertSame('  ', $helper->getIndent());
     }
 }

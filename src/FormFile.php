@@ -14,12 +14,10 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
-use Traversable;
 
 use function array_key_exists;
 use function is_array;
 use function is_string;
-use function iterator_to_array;
 use function sprintf;
 
 final class FormFile extends FormInput
@@ -59,10 +57,6 @@ final class FormFile extends FormInput
         }
 
         $attributes = $element->getAttributes();
-
-        if ($attributes instanceof Traversable) {
-            $attributes = iterator_to_array($attributes);
-        }
 
         $attributes['type'] = $this->getType($element);
         $attributes['name'] = $name;

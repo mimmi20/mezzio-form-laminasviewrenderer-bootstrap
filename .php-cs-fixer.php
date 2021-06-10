@@ -44,6 +44,7 @@ return $config
                 ],
                 'nullable_type_declaration_for_default_null_value' => false,
                 'final_public_method_for_abstract_class' => false,
+                'class_definition' => false,
             ]
         )
     )
