@@ -12,12 +12,14 @@ declare(strict_types = 1);
 
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
+use Laminas\Form\Element;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Collection;
 use Laminas\Form\Element\Color;
 use Laminas\Form\Element\Date;
 use Laminas\Form\Element\DateSelect;
+use Laminas\Form\Element\DateTime;
 use Laminas\Form\Element\DateTimeLocal;
 use Laminas\Form\Element\DateTimeSelect;
 use Laminas\Form\Element\Email;
@@ -51,6 +53,8 @@ use Mimmi20\Form\Element\Links\Links;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
+
+use function assert;
 
 final class FormElementTest extends TestCase
 {
@@ -326,6 +330,19 @@ final class FormElementTest extends TestCase
                 FormInputInterface::class,
                 '<week>',
             ],
+            [
+                new DateTime(),
+                'formDatetime',
+                FormInputInterface::class,
+                '<datetime>',
+            ],
+            [
+                new class () extends Element {
+                },
+                'formInput',
+                FormInputInterface::class,
+                '<custom>',
+            ],
         ];
     }
 
@@ -340,13 +357,13 @@ final class FormElementTest extends TestCase
      */
     public function testRender(ElementInterface $element, string $helperType, string $class, string $rendered): void
     {
-        $helper = $this->getMockBuilder($class)
+        $subHelper = $this->getMockBuilder($class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helper->expects(self::once())
+        $subHelper->expects(self::once())
             ->method('setIndent')
             ->with('');
-        $helper->expects(self::once())
+        $subHelper->expects(self::once())
             ->method('render')
             ->with($element)
             ->willReturn($rendered);
@@ -357,10 +374,86 @@ final class FormElementTest extends TestCase
         $helperPluginManager->expects(self::once())
             ->method('get')
             ->with($helperType)
-            ->willReturn($helper);
+            ->willReturn($subHelper);
 
         $helper = new FormElement($helperPluginManager);
 
         self::assertSame($rendered, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws ServiceNotFoundException
+     * @throws InvalidServiceException
+     */
+    public function testInvoke1(): void
+    {
+        $element    = new Text();
+        $helperType = 'formText';
+        $rendered   = '<text>';
+
+        $subHelper = $this->getMockBuilder(FormInputInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $subHelper->expects(self::once())
+            ->method('setIndent')
+            ->with('');
+        $subHelper->expects(self::once())
+            ->method('render')
+            ->with($element)
+            ->willReturn($rendered);
+
+        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $helperPluginManager->expects(self::once())
+            ->method('get')
+            ->with($helperType)
+            ->willReturn($subHelper);
+
+        $helper = new FormElement($helperPluginManager);
+
+        $helperObject = $helper();
+
+        assert($helperObject instanceof FormElement);
+
+        self::assertSame($rendered, $helperObject->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     */
+    public function testInvoke2(): void
+    {
+        $element    = new Text();
+        $helperType = 'formText';
+        $rendered   = '<text>';
+
+        $subHelper = $this->getMockBuilder(FormInputInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $subHelper->expects(self::once())
+            ->method('setIndent')
+            ->with('');
+        $subHelper->expects(self::once())
+            ->method('render')
+            ->with($element)
+            ->willReturn($rendered);
+
+        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $helperPluginManager->expects(self::once())
+            ->method('get')
+            ->with($helperType)
+            ->willReturn($subHelper);
+
+        $helper = new FormElement($helperPluginManager);
+
+        self::assertSame($rendered, $helper($element));
     }
 }

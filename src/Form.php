@@ -65,7 +65,7 @@ final class Form extends BaseForm
         }
 
         // Set form role
-        if (!$form->getAttribute('role')) {
+        if (!$form->hasAttribute('role')) {
             $form->setAttribute('role', 'form');
         }
 

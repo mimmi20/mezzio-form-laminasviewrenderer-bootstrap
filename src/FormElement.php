@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element;
-use Laminas\Form\Element\DateTime;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
@@ -22,9 +21,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
 use Mimmi20\Form\Element\Links\Links;
 
-use function get_class;
 use function method_exists;
-use function var_dump;
 
 final class FormElement extends AbstractHelper implements FormElementInterface
 {
@@ -126,25 +123,13 @@ final class FormElement extends AbstractHelper implements FormElementInterface
         $renderedInstance = $this->renderInstance($element);
 
         if (null !== $renderedInstance) {
-            if ($element instanceof DateTime) {
-                var_dump('null !== $renderedInstance', get_class($element));
-            }
-
             return $renderedInstance;
         }
 
         $renderedType = $this->renderType($element);
 
         if (null !== $renderedType) {
-            if ($element instanceof DateTime) {
-                var_dump('null !== $renderedType', get_class($element));
-            }
-
             return $renderedType;
-        }
-
-        if ($element instanceof DateTime) {
-            var_dump('null', get_class($element));
         }
 
         return $this->renderHelper($this->defaultHelper, $element);
