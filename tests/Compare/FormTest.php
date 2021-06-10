@@ -39,8 +39,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testVerticalForm(): void
     {
@@ -66,8 +64,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testVerticalWithFloatingLabelsForm(): void
     {
@@ -93,8 +89,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testHorizontalForm(): void
     {
@@ -120,8 +114,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testHorizontalFormWithCollection(): void
     {
@@ -147,8 +139,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testHorizontalFormWithElementGroup(): void
     {
@@ -174,8 +164,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testInlineForm(): void
     {
@@ -201,8 +189,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testHrForm(): void
     {
@@ -228,8 +214,6 @@ final class FormTest extends AbstractTest
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
-     *
-     * @coversNothing
      */
     public function testPhvForm(): void
     {
