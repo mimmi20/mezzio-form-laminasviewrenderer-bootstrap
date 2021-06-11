@@ -28,6 +28,11 @@
         <ini name="date.timezone" value="UTC"/>
         <ini name="intl.use_exceptions" value="1"/>
         <ini name="intl.default_locale" value="de"/>
+        <ini name="opcache.enable" value="1"/>
+        <ini name="opcache.enable_cli" value="1"/>
+        <ini name="zend.assertions" value="1"/>
+        <ini name="assert.exception" value="On"/>
+        <ini name="opcache.enable" value="1"/>
     </php>
 
     <testsuite name="mezzio-form-laminasviewrenderer-bootstrap Test Suite">
