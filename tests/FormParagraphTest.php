@@ -21,6 +21,7 @@ use Mimmi20\Form\Element\Paragraph\ParagraphInterface as ParagraphElement;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
 use function sprintf;
 
 final class FormParagraphTest extends TestCase
@@ -245,6 +246,117 @@ final class FormParagraphTest extends TestCase
         $helper->setTranslatorTextDomain($textDomain);
 
         self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testInvokeTextWithTranslator1(): void
+    {
+        $textDomain           = 'test-domain';
+        $text                 = 'test-text';
+        $textTranlated        = 'test-text-translated';
+        $textTranlatedEscaped = 'test-text-translated-escaped';
+        $class                = 'test-class';
+        $ariaLabel            = 'test';
+        $attributes           = ['class' => $class, 'aria-label' => $ariaLabel];
+
+        $expected = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textTranlatedEscaped);
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::once())
+            ->method('__invoke')
+            ->with($textTranlated)
+            ->willReturn($textTranlatedEscaped);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::once())
+            ->method('__invoke')
+            ->with($text, $textDomain)
+            ->willReturn($textTranlated);
+
+        $helper = new FormParagraph($escapeHtml, $translator);
+
+        $element = $this->getMockBuilder(ParagraphElement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn($attributes);
+        $element->expects(self::never())
+            ->method('getValue');
+        $element->expects(self::never())
+            ->method('getOption');
+        $element->expects(self::once())
+            ->method('getText')
+            ->willReturn($text);
+
+        $helper->setTranslatorTextDomain($textDomain);
+
+        $helperObject = $helper();
+
+        assert($helperObject instanceof FormParagraph);
+
+        self::assertSame($expected, $helperObject->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testInvokeTextWithTranslator2(): void
+    {
+        $textDomain           = 'test-domain';
+        $text                 = 'test-text';
+        $textTranlated        = 'test-text-translated';
+        $textTranlatedEscaped = 'test-text-translated-escaped';
+        $class                = 'test-class';
+        $ariaLabel            = 'test';
+        $attributes           = ['class' => $class, 'aria-label' => $ariaLabel];
+
+        $expected = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textTranlatedEscaped);
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::once())
+            ->method('__invoke')
+            ->with($textTranlated)
+            ->willReturn($textTranlatedEscaped);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::once())
+            ->method('__invoke')
+            ->with($text, $textDomain)
+            ->willReturn($textTranlated);
+
+        $helper = new FormParagraph($escapeHtml, $translator);
+
+        $element = $this->getMockBuilder(ParagraphElement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn($attributes);
+        $element->expects(self::never())
+            ->method('getValue');
+        $element->expects(self::never())
+            ->method('getOption');
+        $element->expects(self::once())
+            ->method('getText')
+            ->willReturn($text);
+
+        $helper->setTranslatorTextDomain($textDomain);
+
+        self::assertSame($expected, $helper($element));
     }
 
     /**

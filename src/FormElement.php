@@ -20,6 +20,7 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
 use Mimmi20\Form\Element\Links\Links;
+use Mimmi20\Form\Element\Paragraph\Paragraph;
 
 use function method_exists;
 
@@ -41,6 +42,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
         Element\DateSelect::class => 'formDateSelect',
         Element\MonthSelect::class => 'formMonthSelect',
         Links::class => 'formLinks',
+        Paragraph::class => 'formParagraph',
     ];
 
     /**
