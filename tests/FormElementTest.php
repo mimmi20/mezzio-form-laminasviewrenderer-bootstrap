@@ -50,6 +50,7 @@ use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormInputInterface;
 use Mimmi20\Form\Element\Links\Links;
+use Mimmi20\Form\Element\Paragraph\Paragraph;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -342,6 +343,12 @@ final class FormElementTest extends TestCase
                 'formInput',
                 FormInputInterface::class,
                 '<custom>',
+            ],
+            [
+                new Paragraph(),
+                'formParagraph',
+                FormInputInterface::class,
+                '<paragraph>',
             ],
         ];
     }
