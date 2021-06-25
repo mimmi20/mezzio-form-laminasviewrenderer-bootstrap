@@ -26,7 +26,7 @@
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-servicemanager": "^3.6.4",
     "mimmi20/coding-standard": "^2.2.2",
-    "mimmi20/laminas-form-element-group": "^1.0.2",
+    "mimmi20/laminas-form-element-group": "^1.0.3",
     "mimmi20/laminas-form-element-links": "^1.0.0",
     "mimmi20/laminas-form-element-paragraph": "dev-master",
     "pepakriz/phpstan-exception-rules": "^0.11.7",
