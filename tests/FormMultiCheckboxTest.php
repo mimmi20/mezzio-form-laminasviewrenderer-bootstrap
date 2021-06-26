@@ -1768,7 +1768,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
@@ -1864,7 +1864,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -1976,7 +1976,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
@@ -2072,7 +2072,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -2185,7 +2185,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
@@ -2281,7 +2281,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -2398,7 +2398,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
@@ -2494,7 +2494,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -2606,7 +2606,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
@@ -2702,7 +2702,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -2817,7 +2817,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
@@ -2922,7 +2922,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
@@ -3037,7 +3037,7 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value=""/>', $name) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             $indent . '    ' . $labelStart . PHP_EOL .
@@ -3148,7 +3148,7 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value=""/>', $name));
+            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
 
         $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 

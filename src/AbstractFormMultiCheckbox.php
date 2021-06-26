@@ -38,7 +38,6 @@ use function is_scalar;
 use function is_string;
 use function method_exists;
 use function sprintf;
-use function trim;
 
 use const ARRAY_FILTER_USE_KEY;
 use const PHP_EOL;
@@ -281,15 +280,15 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $disabled = $optionSpec['disabled'];
             }
 
-            $labelClasses = [];
-            $inputClasses = [];
+            $labelClasses = ['form-check-label'];
+            $inputClasses = ['form-check-input'];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
-                $labelClasses = explode(' ', $labelAttributes['class']);
+                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
             }
 
             if (array_key_exists('class', $inputAttributes) && is_string($inputAttributes['class'])) {
-                $inputClasses = explode(' ', $inputAttributes['class']);
+                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
             }
 
             if (array_key_exists('label_attributes', $optionSpec) && is_array($optionSpec['label_attributes'])) {
@@ -316,9 +315,6 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputAttributes = array_merge($inputAttributes, $optionSpec['attributes']);
             }
 
-            $labelAttributes['class'] = $this->combineClasses($labelClasses);
-            $inputAttributes['class'] = $this->combineClasses($inputClasses);
-
             if (in_array($value, $selectedOptions, true)) {
                 $selected = true;
             }
@@ -331,20 +327,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputAttributes['aria-disabled'] = 'true';
             }
 
-            $inputClasses = ['form-check-input'];
-
-            if (array_key_exists('class', $inputAttributes)) {
-                assert(is_string($inputAttributes['class']));
-                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
-            }
-
             $inputAttributes['class'] = $this->combineClasses($inputClasses);
-            $labelClasses             = ['form-check-label'];
-
-            if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
-            }
-
             $labelAttributes['class'] = $this->combineClasses($labelClasses);
 
             if (array_key_exists('id', $inputAttributes)) {
@@ -440,6 +423,6 @@ abstract class AbstractFormMultiCheckbox extends FormInput
      */
     private function combineClasses(array $classes): string
     {
-        return trim(implode(' ', array_unique(array_filter($classes))));
+        return implode(' ', array_unique(array_filter($classes)));
     }
 }

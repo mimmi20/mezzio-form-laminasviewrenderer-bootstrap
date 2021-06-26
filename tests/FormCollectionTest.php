@@ -31,6 +31,7 @@ use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
+use function assert;
 use function sprintf;
 
 use const PHP_EOL;
@@ -1869,5 +1870,357 @@ final class FormCollectionTest extends TestCase
         $helper->setShouldWrap(false);
 
         self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testRenderWithCollectionAndElementsAndOptionsAndTranslator7(): void
+    {
+        $form               = 'test-form';
+        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $floating           = true;
+        $indent             = '<!-- -->  ';
+        $textDomain         = 'test-domain';
+        $templateAttributes = ['class' => 'template-class'];
+
+        $textElement = $this->getMockBuilder(Text::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $textElement->expects(self::exactly(2))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'])
+            ->willReturnOnConsecutiveCalls($form, $layout);
+        $textElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+
+        $templateList = new PriorityList();
+
+        $templateElement = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $templateElement->expects(self::exactly(3))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'], ['floating'])
+            ->willReturnOnConsecutiveCalls($form, $layout, $floating);
+        $templateElement->expects(self::never())
+            ->method('setOption');
+        $templateElement->expects(self::never())
+            ->method('getAttributes');
+        $templateElement->expects(self::never())
+            ->method('getLabel');
+        $templateElement->expects(self::never())
+            ->method('getLabelOption');
+        $templateElement->expects(self::never())
+            ->method('hasAttribute');
+        $templateElement->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($templateList);
+        $templateElement->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $templateElement->expects(self::never())
+            ->method('getTemplateElement');
+
+        $buttonElement = $this->getMockBuilder(Button::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buttonElement->expects(self::exactly(2))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'])
+            ->willReturnOnConsecutiveCalls($form, $layout);
+        $buttonElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+
+        $expectedButton   = $indent . '    <button></button>';
+        $expectedText     = $indent . '    <text></text>';
+        $expectedTemplate = $indent . '    ';
+        $renderedTemplate = '<template>template-content</template>';
+
+        $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
+
+        $formRow = $this->getMockBuilder(FormRowInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formRow->expects(self::exactly(2))
+            ->method('setIndent')
+            ->with($indent . '    ');
+        $formRow->expects(self::exactly(2))
+            ->method('render')
+            ->withConsecutive([$buttonElement], [$textElement])
+            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::once())
+            ->method('toHtml')
+            ->with('template', ['class' => 'template-class'], PHP_EOL . $indent)
+            ->willReturn($renderedTemplate);
+
+        $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, $translator);
+
+        $innerList = new PriorityList();
+
+        $collectionElement = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionElement->expects(self::exactly(5))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
+            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+        $collectionElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+        $collectionElement->expects(self::never())
+            ->method('getAttributes');
+        $collectionElement->expects(self::never())
+            ->method('getLabel');
+        $collectionElement->expects(self::never())
+            ->method('getLabelOption');
+        $collectionElement->expects(self::never())
+            ->method('hasAttribute');
+        $collectionElement->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($innerList);
+        $collectionElement->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $collectionElement->expects(self::never())
+            ->method('getTemplateElement');
+
+        $list = new PriorityList();
+        $list->insert('x', $textElement);
+        $list->insert('y', $buttonElement);
+        $list->insert('z', $collectionElement);
+
+        $element = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::never())
+            ->method('getName');
+        $element->expects(self::exactly(7))
+            ->method('getOption')
+            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
+            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+        $element->expects(self::never())
+            ->method('getAttributes');
+        $element->expects(self::never())
+            ->method('getLabel');
+        $element->expects(self::never())
+            ->method('getLabelOption');
+        $element->expects(self::never())
+            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($list);
+        $element->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getTemplateElement')
+            ->willReturn($templateElement);
+
+        $helper->setIndent($indent);
+        $helper->setTranslatorTextDomain($textDomain);
+        $helper->setShouldWrap(false);
+
+        $helperObject = $helper();
+
+        assert($helperObject instanceof FormCollection);
+
+        self::assertSame($expected, $helperObject->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testRenderWithCollectionAndElementsAndOptionsAndTranslator8(): void
+    {
+        $form               = 'test-form';
+        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $floating           = true;
+        $indent             = '<!-- -->  ';
+        $textDomain         = 'test-domain';
+        $templateAttributes = ['class' => 'template-class'];
+
+        $textElement = $this->getMockBuilder(Text::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $textElement->expects(self::exactly(2))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'])
+            ->willReturnOnConsecutiveCalls($form, $layout);
+        $textElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+
+        $templateList = new PriorityList();
+
+        $templateElement = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $templateElement->expects(self::exactly(3))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'], ['floating'])
+            ->willReturnOnConsecutiveCalls($form, $layout, $floating);
+        $templateElement->expects(self::never())
+            ->method('setOption');
+        $templateElement->expects(self::never())
+            ->method('getAttributes');
+        $templateElement->expects(self::never())
+            ->method('getLabel');
+        $templateElement->expects(self::never())
+            ->method('getLabelOption');
+        $templateElement->expects(self::never())
+            ->method('hasAttribute');
+        $templateElement->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($templateList);
+        $templateElement->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $templateElement->expects(self::never())
+            ->method('getTemplateElement');
+
+        $buttonElement = $this->getMockBuilder(Button::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buttonElement->expects(self::exactly(2))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'])
+            ->willReturnOnConsecutiveCalls($form, $layout);
+        $buttonElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+
+        $expectedButton   = $indent . '    <button></button>';
+        $expectedText     = $indent . '    <text></text>';
+        $expectedTemplate = $indent . '    ';
+        $renderedTemplate = '<template>template-content</template>';
+
+        $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
+
+        $formRow = $this->getMockBuilder(FormRowInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formRow->expects(self::exactly(2))
+            ->method('setIndent')
+            ->with($indent . '    ');
+        $formRow->expects(self::exactly(2))
+            ->method('render')
+            ->withConsecutive([$buttonElement], [$textElement])
+            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::never())
+            ->method('__invoke');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::never())
+            ->method('__invoke');
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::once())
+            ->method('toHtml')
+            ->with('template', ['class' => 'template-class'], PHP_EOL . $indent)
+            ->willReturn($renderedTemplate);
+
+        $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, $translator);
+
+        $innerList = new PriorityList();
+
+        $collectionElement = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionElement->expects(self::exactly(5))
+            ->method('getOption')
+            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
+            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+        $collectionElement->expects(self::once())
+            ->method('setOption')
+            ->with('floating', true);
+        $collectionElement->expects(self::never())
+            ->method('getAttributes');
+        $collectionElement->expects(self::never())
+            ->method('getLabel');
+        $collectionElement->expects(self::never())
+            ->method('getLabelOption');
+        $collectionElement->expects(self::never())
+            ->method('hasAttribute');
+        $collectionElement->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($innerList);
+        $collectionElement->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $collectionElement->expects(self::never())
+            ->method('getTemplateElement');
+
+        $list = new PriorityList();
+        $list->insert('x', $textElement);
+        $list->insert('y', $buttonElement);
+        $list->insert('z', $collectionElement);
+
+        $element = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $element->expects(self::never())
+            ->method('getName');
+        $element->expects(self::exactly(7))
+            ->method('getOption')
+            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
+            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+        $element->expects(self::never())
+            ->method('getAttributes');
+        $element->expects(self::never())
+            ->method('getLabel');
+        $element->expects(self::never())
+            ->method('getLabelOption');
+        $element->expects(self::never())
+            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($list);
+        $element->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getTemplateElement')
+            ->willReturn($templateElement);
+
+        $helper->setIndent($indent);
+        $helper->setTranslatorTextDomain($textDomain);
+
+        self::assertSame($expected, $helper($element, false));
+        self::assertFalse($helper->shouldWrap());
     }
 }

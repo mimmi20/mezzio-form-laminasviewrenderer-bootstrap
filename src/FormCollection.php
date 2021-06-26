@@ -142,8 +142,6 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
         $floating = $element->getOption('floating');
 
         foreach ($element->getIterator() as $elementOrFieldset) {
-            assert($elementOrFieldset instanceof FieldsetInterface || $elementOrFieldset instanceof ElementInterface);
-
             if (null !== $form && !$elementOrFieldset->getOption('form')) {
                 $elementOrFieldset->setOption('form', $form);
             }
