@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
@@ -22,7 +21,6 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 
-use function assert;
 use function method_exists;
 use function trim;
 
@@ -89,8 +87,6 @@ final class Form extends BaseForm
         $indent      = $this->getIndent();
 
         foreach ($form->getIterator() as $element) {
-            assert($element instanceof FieldsetInterface || $element instanceof ElementInterface);
-
             $element->setOption('form', $form);
 
             if (null !== $formLayout && !$element->getOption('layout')) {

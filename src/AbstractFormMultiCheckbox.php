@@ -18,7 +18,6 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
@@ -39,7 +38,6 @@ use function is_scalar;
 use function is_string;
 use function method_exists;
 use function sprintf;
-use function trim;
 
 use const ARRAY_FILTER_USE_KEY;
 use const PHP_EOL;
@@ -225,12 +223,8 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $labelPosition = $this->getLabelPosition();
         }
 
-        $globalLabelAttributes = [];
         $closingBracket        = $this->getInlineClosingBracket();
-
-        if ($element instanceof LabelAwareInterface) {
-            $globalLabelAttributes = $element->getLabelAttributes();
-        }
+        $globalLabelAttributes = $element->getLabelAttributes();
 
         if (empty($globalLabelAttributes)) {
             $globalLabelAttributes = $this->labelAttributes;
@@ -286,8 +280,8 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $disabled = $optionSpec['disabled'];
             }
 
-            $labelClasses = [];
-            $inputClasses = [];
+            $labelClasses = ['form-check-label'];
+            $inputClasses = ['form-check-input'];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
                 $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
@@ -321,9 +315,6 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputAttributes = array_merge($inputAttributes, $optionSpec['attributes']);
             }
 
-            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
-            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
-
             if (in_array($value, $selectedOptions, true)) {
                 $selected = true;
             }
@@ -336,21 +327,8 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputAttributes['aria-disabled'] = 'true';
             }
 
-            $inputClasses = ['form-check-input'];
-
-            if (array_key_exists('class', $inputAttributes)) {
-                assert(is_string($inputAttributes['class']));
-                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
-            }
-
-            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
-            $labelClasses             = ['form-check-label'];
-
-            if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
-            }
-
-            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
+            $inputAttributes['class'] = $this->combineClasses($inputClasses);
+            $labelAttributes['class'] = $this->combineClasses($labelClasses);
 
             if (array_key_exists('id', $inputAttributes)) {
                 $labelAttributes['for'] = $inputAttributes['id'];
@@ -371,7 +349,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 );
             }
 
-            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+            if (!$element->getLabelOption('disable_html_escape')) {
                 $label = ($this->escapeHtml)($label);
             }
 
@@ -384,7 +362,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
             if (
                 array_key_exists('id', $inputAttributes)
-                && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
+                && !$element->getLabelOption('always_wrap')
             ) {
                 $labelOpen  = '';
                 $labelClose = '';
@@ -398,7 +376,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
             if (
                 '' !== $label && !array_key_exists('id', $inputAttributes)
-                || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+                || $element->getLabelOption('always_wrap')
             ) {
                 $label = '<span>' . $label . '</span>';
 
@@ -438,5 +416,13 @@ abstract class AbstractFormMultiCheckbox extends FormInput
         $hiddenElement->setValue($uncheckedValue);
 
         return $this->formHidden->render($hiddenElement);
+    }
+
+    /**
+     * @param array<int|string, string> $classes
+     */
+    private function combineClasses(array $classes): string
+    {
+        return implode(' ', array_unique(array_filter($classes)));
     }
 }
