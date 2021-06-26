@@ -134,7 +134,7 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
         $indent         = $this->getIndent();
 
         if ($element instanceof CollectionElement && $element->shouldCreateTemplate()) {
-            $templateMarkup = PHP_EOL . $indent . $this->getWhitespace(4) . $this->renderTemplate($element);
+            $templateMarkup = $this->renderTemplate($element);
         }
 
         $form     = $element->getOption('form');
@@ -242,23 +242,22 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             return '';
         }
 
-        $templateMarkup = '';
-        $indent         = $this->getIndent();
+        $indent = $this->getIndent();
 
         if ($elementOrFieldset instanceof FieldsetInterface) {
             $this->setIndent($indent . $this->getWhitespace(4));
 
-            $templateMarkup .= $this->render($elementOrFieldset) . PHP_EOL;
+            $templateMarkup = $this->render($elementOrFieldset) . PHP_EOL;
 
             $this->setIndent($indent);
         } else {
             $this->formRow->setIndent($indent . $this->getWhitespace(4));
-            $templateMarkup .= $this->formRow->render($elementOrFieldset) . PHP_EOL;
+            $templateMarkup = $this->formRow->render($elementOrFieldset) . PHP_EOL;
         }
 
         $templateAttrbutes = $collection->getOption('template_attributes') ?? [];
 
-        return $indent . $this->htmlElement->toHtml('template', $templateAttrbutes, $templateMarkup . $indent);
+        return $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('template', $templateAttrbutes, $templateMarkup . $indent) . PHP_EOL;
     }
 
     /**
