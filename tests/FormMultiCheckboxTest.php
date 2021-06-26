@@ -2772,7 +2772,7 @@ final class FormMultiCheckboxTest extends TestCase
         $name4Translated         = 'ghj-translated';
         $name4TranslatedEscaped  = 'ghj-translated-escaped';
         $value4                  = 'jkl';
-        $class                   = 'test-class';
+        $class                   = 'test-class test-class ';
         $ariaLabel               = 'test';
         $labelClass              = 'xyz';
         $indent                  = '<!-- -->  ';
@@ -2792,9 +2792,9 @@ final class FormMultiCheckboxTest extends TestCase
                 'value' => $value1,
                 'label' => $value3,
                 'selected' => false,
-                'label_attributes' => ['class' => 'rst2', 'data-vid' => 'sample2'],
+                'label_attributes' => ['class' => 'rst2 rst2 ', 'data-vid' => 'sample2'],
                 'attributes' => [
-                    'class' => 'efg2',
+                    'class' => 'efg2 test-efg2 ',
                     'aria-disabled' => 'true',
                     'id' => 'test-id2',
                 ],
@@ -2805,7 +2805,7 @@ final class FormMultiCheckboxTest extends TestCase
                 'disabled' => false,
                 'label_attributes' => ['class' => null, 'data-img' => 'sample3'],
                 'attributes' => [
-                    'class' => 'efg3',
+                    'class' => 'efg3 test-efg3 ',
                     'aria-disabled' => 'false',
                     'id' => 'test-id3',
                 ],
@@ -2821,15 +2821,15 @@ final class FormMultiCheckboxTest extends TestCase
         $textDomain              = 'test-domain';
         $renderedField1          = PHP_EOL .
             $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
+            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $ariaLabel, $id, $name, $value3) . PHP_EOL .
             $indent . '    ';
         $renderedField2          = PHP_EOL .
             $indent . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
+            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg2&#x20;test-efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $ariaLabel, $name, $value1) . PHP_EOL .
             $indent . '    ';
         $renderedField3          = PHP_EOL .
             $indent . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
+            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg3&#x20;test-efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $ariaLabel, $name, $value4) . PHP_EOL .
             $indent . '    ';
         $wrap                    = false;
         $disableEscape           = false;

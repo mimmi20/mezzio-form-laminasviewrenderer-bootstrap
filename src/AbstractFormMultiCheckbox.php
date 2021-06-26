@@ -321,8 +321,8 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputAttributes = array_merge($inputAttributes, $optionSpec['attributes']);
             }
 
-            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
-            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
+            $labelAttributes['class'] = $this->combineClasses($labelClasses);
+            $inputAttributes['class'] = $this->combineClasses($inputClasses);
 
             if (in_array($value, $selectedOptions, true)) {
                 $selected = true;
@@ -343,14 +343,14 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
             }
 
-            $inputAttributes['class'] = trim(implode(' ', array_unique($inputClasses)));
+            $inputAttributes['class'] = $this->combineClasses($inputClasses);
             $labelClasses             = ['form-check-label'];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
                 $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
             }
 
-            $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
+            $labelAttributes['class'] = $this->combineClasses($labelClasses);
 
             if (array_key_exists('id', $inputAttributes)) {
                 $labelAttributes['for'] = $inputAttributes['id'];
@@ -438,5 +438,13 @@ abstract class AbstractFormMultiCheckbox extends FormInput
         $hiddenElement->setValue($uncheckedValue);
 
         return $this->formHidden->render($hiddenElement);
+    }
+
+    /**
+     * @param array<int|string, string> $classes
+     */
+    private function combineClasses(array $classes): string
+    {
+        return trim(implode(' ', array_unique(array_filter($classes))));
     }
 }
