@@ -137,13 +137,16 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             $templateMarkup = PHP_EOL . $indent . $this->getWhitespace(4) . $this->renderTemplate($element);
         }
 
+        $form     = $element->getOption('form');
         $layout   = $element->getOption('layout');
         $floating = $element->getOption('floating');
 
         foreach ($element->getIterator() as $elementOrFieldset) {
             assert($elementOrFieldset instanceof FieldsetInterface || $elementOrFieldset instanceof ElementInterface);
 
-            $elementOrFieldset->setOption('form', $element->getOption('form'));
+            if (null !== $form && !$elementOrFieldset->getOption('form')) {
+                $elementOrFieldset->setOption('form', $form);
+            }
 
             if (null !== $layout && !$elementOrFieldset->getOption('layout')) {
                 $elementOrFieldset->setOption('layout', $layout);
