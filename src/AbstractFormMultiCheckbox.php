@@ -18,7 +18,6 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
@@ -225,12 +224,8 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $labelPosition = $this->getLabelPosition();
         }
 
-        $globalLabelAttributes = [];
         $closingBracket        = $this->getInlineClosingBracket();
-
-        if ($element instanceof LabelAwareInterface) {
-            $globalLabelAttributes = $element->getLabelAttributes();
-        }
+        $globalLabelAttributes = $element->getLabelAttributes();
 
         if (empty($globalLabelAttributes)) {
             $globalLabelAttributes = $this->labelAttributes;
@@ -371,7 +366,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 );
             }
 
-            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+            if (!$element->getLabelOption('disable_html_escape')) {
                 $label = ($this->escapeHtml)($label);
             }
 
@@ -384,7 +379,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
             if (
                 array_key_exists('id', $inputAttributes)
-                && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
+                && !$element->getLabelOption('always_wrap')
             ) {
                 $labelOpen  = '';
                 $labelClose = '';
@@ -398,7 +393,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
             if (
                 '' !== $label && !array_key_exists('id', $inputAttributes)
-                || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+                || $element->getLabelOption('always_wrap')
             ) {
                 $label = '<span>' . $label . '</span>';
 

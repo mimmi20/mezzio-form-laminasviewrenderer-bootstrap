@@ -2826,7 +2826,7 @@ final class FormRadioTest extends TestCase
             ],
         ];
         $attributes              = ['class' => $class, 'aria-label' => $ariaLabel, 'disabled' => true, 'selected' => true, 'id' => 'zero-id'];
-        $labelAttributes         = ['class' => $labelClass, 'test'];
+        $labelAttributes         = ['class' => $labelClass, 'test', 'data-show' => 'yes', 'data-visible' => true];
         $labelStart              = '<label>';
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
@@ -2882,6 +2882,8 @@ final class FormRadioTest extends TestCase
                         'class' => sprintf('form-check-label %s rst rst-test', $labelClass),
                         'for' => $id,
                         'data-img' => 'sample1',
+                        'data-show' => 'yes',
+                        'data-visible' => true,
                     ],
                 ],
                 [
@@ -2889,6 +2891,8 @@ final class FormRadioTest extends TestCase
                         'class' => sprintf('form-check-label %s rst2', $labelClass),
                         'for' => 'test-id2',
                         'data-vid' => 'sample2',
+                        'data-show' => 'yes',
+                        'data-visible' => true,
                     ],
                 ],
                 [
@@ -2896,6 +2900,8 @@ final class FormRadioTest extends TestCase
                         'class' => sprintf('form-check-label %s', $labelClass),
                         'for' => 'test-id3',
                         'data-img' => 'sample3',
+                        'data-show' => 'yes',
+                        'data-visible' => true,
                     ],
                 ]
             )
