@@ -290,11 +290,11 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $inputClasses = [];
 
             if (array_key_exists('class', $labelAttributes) && is_string($labelAttributes['class'])) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+                $labelClasses = explode(' ', $labelAttributes['class']);
             }
 
             if (array_key_exists('class', $inputAttributes) && is_string($inputAttributes['class'])) {
-                $inputClasses = array_merge($inputClasses, explode(' ', $inputAttributes['class']));
+                $inputClasses = explode(' ', $inputAttributes['class']);
             }
 
             if (array_key_exists('label_attributes', $optionSpec) && is_array($optionSpec['label_attributes'])) {
