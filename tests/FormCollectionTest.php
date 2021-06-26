@@ -296,8 +296,8 @@ final class FormCollectionTest extends TestCase
         $buttonElement->expects(self::never())
             ->method('setOption');
 
-        $expectedButton = $indent . '    ' . '<button></button>';
-        $expectedText   = $indent . '    ' . '<text></text>';
+        $expectedButton = $indent . '    <button></button>';
+        $expectedText   = $indent . '    <text></text>';
 
         $formRow = $this->getMockBuilder(FormRowInterface::class)
             ->disableOriginalConstructor()
@@ -442,8 +442,8 @@ final class FormCollectionTest extends TestCase
         $buttonElement->expects(self::never())
             ->method('setOption');
 
-        $expectedButton = $indent . '    ' . '<button></button>';
-        $expectedText   = $indent . '    ' . '<text></text>';
+        $expectedButton = $indent . '    <button></button>';
+        $expectedText   = $indent . '    <text></text>';
 
         $formRow = $this->getMockBuilder(FormRowInterface::class)
             ->disableOriginalConstructor()
@@ -595,8 +595,8 @@ final class FormCollectionTest extends TestCase
             ->method('setOption')
             ->with('floating', true);
 
-        $expectedButton = $indent . '    ' . '<button></button>';
-        $expectedText   = $indent . '    ' . '<text></text>';
+        $expectedButton = $indent . '    <button></button>';
+        $expectedText   = $indent . '    <text></text>';
 
         $formRow = $this->getMockBuilder(FormRowInterface::class)
             ->disableOriginalConstructor()
@@ -744,8 +744,8 @@ final class FormCollectionTest extends TestCase
             ->method('setOption')
             ->with('floating', true);
 
-        $expectedButton = $indent . '    ' . '<button></button>';
-        $expectedText   = $indent . '    ' . '<text></text>';
+        $expectedButton = $indent . '    <button></button>';
+        $expectedText   = $indent . '    <text></text>';
 
         $formRow = $this->getMockBuilder(FormRowInterface::class)
             ->disableOriginalConstructor()
