@@ -102,14 +102,16 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             )
         );
 
-        if (
-            null !== $form
-            && !$element->hasAttribute('required')
-            && null !== $element->getName()
-            && $form->getInputFilter()->has($element->getName())
-            && $form->getInputFilter()->get($element->getName())->isRequired()
-        ) {
-            $element->setAttribute('required', true);
+        if (null !== $form && !$element->hasAttribute('required')) {
+            $elementName = $element->getName();
+
+            if (
+                null !== $elementName
+                && $form->getInputFilter()->has($elementName)
+                && $form->getInputFilter()->get($elementName)->isRequired()
+            ) {
+                $element->setAttribute('required', true);
+            }
         }
 
         $label = $element->getLabel() ?? '';
