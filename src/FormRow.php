@@ -34,7 +34,6 @@ use Laminas\View\Helper\EscapeHtml;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 
-use Mimmi20\Form\Element\ElementGroup;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
@@ -261,7 +260,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button
+        if (
+            $element instanceof Button
             || $element instanceof Submit
             || $element instanceof Checkbox
             || $element instanceof Fieldset
@@ -343,7 +343,18 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             || $element instanceof MonthSelect
             || $element instanceof Captcha
         ) {
-            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
+            $legendClasses    = [];
+            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', []);
+
+            if (array_key_exists('class', $legendAttributes)) {
+                $legendClasses = array_merge($legendClasses, explode(' ', $legendAttributes['class']));
+
+                unset($legendAttributes['class']);
+            }
+
+            $legendAttributes['class'] = trim(implode(' ', array_unique($legendClasses)));
+
+            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $legendAttributes, $label) . PHP_EOL;
 
             $errorContent = '';
             $helpContent  = '';
@@ -363,7 +374,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button
+        if (
+            $element instanceof Button
             || $element instanceof Submit
             || $element instanceof Checkbox
             || $element instanceof Fieldset
