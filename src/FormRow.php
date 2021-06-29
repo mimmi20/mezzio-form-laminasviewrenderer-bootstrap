@@ -21,6 +21,7 @@ use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Fieldset;
 use Laminas\Form\FormInterface;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
@@ -33,6 +34,7 @@ use Laminas\View\Helper\EscapeHtml;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 
+use Mimmi20\Form\Element\ElementGroup;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
@@ -259,8 +261,12 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
-            // Button element is a special case, because label is always rendered inside it
+        if ($element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Checkbox
+            || $element instanceof Fieldset
+        ) {
+            // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
 
@@ -357,8 +363,12 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
-            // Button element is a special case, because label is always rendered inside it
+        if ($element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Checkbox
+            || $element instanceof Fieldset
+        ) {
+            // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
 
