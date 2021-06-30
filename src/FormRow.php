@@ -356,7 +356,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
             $legendAttributes['class'] = trim(implode(' ', array_unique($legendClasses)));
 
-            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $legendAttributes, $label) . PHP_EOL;
+            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('legend', $legendAttributes, $label) . PHP_EOL;
 
             $errorContent = '';
             $helpContent  = '';
