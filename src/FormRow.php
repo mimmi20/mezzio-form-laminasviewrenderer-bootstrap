@@ -21,6 +21,7 @@ use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
+use Laminas\Form\Fieldset;
 use Laminas\Form\FormInterface;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
@@ -101,14 +102,16 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             )
         );
 
-        if (
-            null !== $form
-            && !$element->hasAttribute('required')
-            && null !== $element->getName()
-            && $form->getInputFilter()->has($element->getName())
-            && $form->getInputFilter()->get($element->getName())->isRequired()
-        ) {
-            $element->setAttribute('required', true);
+        if (null !== $form && !$element->hasAttribute('required')) {
+            $elementName = $element->getName();
+
+            if (
+                null !== $elementName
+                && $form->getInputFilter()->has($elementName)
+                && $form->getInputFilter()->get($elementName)->isRequired()
+            ) {
+                $element->setAttribute('required', true);
+            }
         }
 
         $label = $element->getLabel() ?? '';
@@ -117,8 +120,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $labelPosition = $this->getLabelPosition();
         }
 
+        // hidden elements do not need a <label> -https://github.com/zendframework/zf2/issues/5607
+        $type = $element->getAttribute('type');
+
         // Translate the label
-        if ('' !== $label && null !== $this->translate) {
+        if ('' !== $label && null !== $this->translate && 'hidden' !== $type) {
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
         }
 
@@ -144,9 +150,6 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
             return $this->renderer->render($this->partial, $vars);
         }
-
-        // hidden elements do not need a <label> -https://github.com/zendframework/zf2/issues/5607
-        $type = $element->getAttribute('type');
 
         if ('hidden' === $type) {
             $this->formElement->setIndent($indent);
@@ -259,8 +262,13 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $rowAttributes, PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
-            // Button element is a special case, because label is always rendered inside it
+        if (
+            $element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Checkbox
+            || $element instanceof Fieldset
+        ) {
+            // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
 
@@ -337,7 +345,18 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             || $element instanceof MonthSelect
             || $element instanceof Captcha
         ) {
-            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
+            $legendClasses    = [];
+            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', []);
+
+            if (array_key_exists('class', $legendAttributes)) {
+                $legendClasses = array_merge($legendClasses, explode(' ', $legendAttributes['class']));
+
+                unset($legendAttributes['class']);
+            }
+
+            $legendAttributes['class'] = trim(implode(' ', array_unique($legendClasses)));
+
+            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('legend', $legendAttributes, $label) . PHP_EOL;
 
             $errorContent = '';
             $helpContent  = '';
@@ -357,8 +376,13 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $indent . $this->htmlElement->toHtml('fieldset', $colAttributes, PHP_EOL . $legend . $elementString . PHP_EOL . $indent);
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Checkbox) {
-            // Button element is a special case, because label is always rendered inside it
+        if (
+            $element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Checkbox
+            || $element instanceof Fieldset
+        ) {
+            // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
 
