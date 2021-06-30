@@ -120,8 +120,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $labelPosition = $this->getLabelPosition();
         }
 
+        // hidden elements do not need a <label> -https://github.com/zendframework/zf2/issues/5607
+        $type = $element->getAttribute('type');
+
         // Translate the label
-        if ('' !== $label && null !== $this->translate) {
+        if ('' !== $label && null !== $this->translate && 'hidden' !== $type) {
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
         }
 
@@ -147,9 +150,6 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
             return $this->renderer->render($this->partial, $vars);
         }
-
-        // hidden elements do not need a <label> -https://github.com/zendframework/zf2/issues/5607
-        $type = $element->getAttribute('type');
 
         if ('hidden' === $type) {
             $this->formElement->setIndent($indent);
