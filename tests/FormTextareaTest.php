@@ -16,7 +16,7 @@ use Laminas\Form\Element\File;
 use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\EscapeHtml;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;

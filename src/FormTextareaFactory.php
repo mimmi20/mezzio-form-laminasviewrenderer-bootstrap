@@ -16,8 +16,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
@@ -43,18 +42,8 @@ final class FormTextareaFactory
             )
         );
 
-        $lvhPluginManager = $container->get(LvhPluginManager::class);
-        assert(
-            $lvhPluginManager instanceof PluginManagerInterface,
-            sprintf(
-                '$lvhPluginManager should be an Instance of %s, but was %s',
-                LvhPluginManager::class,
-                is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
-            )
-        );
-
         return new FormTextarea(
-            $lvhPluginManager->get(HtmlElementInterface::class),
+            $container->get(HtmlElementInterface::class),
             $plugin->get(EscapeHtml::class)
         );
     }

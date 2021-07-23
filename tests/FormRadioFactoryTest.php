@@ -23,8 +23,7 @@ use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadioFactory;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -66,21 +65,13 @@ final class FormRadioFactoryTest extends TestCase
             ->withConsecutive([Translate::class], [EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class], [FormHiddenInterface::class])
             ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::once())
-            ->method('get')
-            ->with(HtmlElementInterface::class)
-            ->willReturn($htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $container->expects(self::exactly(2))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [LvhPluginManager::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $lvhPluginManager);
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -113,21 +104,13 @@ final class FormRadioFactoryTest extends TestCase
             ->withConsecutive([EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class], [FormLabelInterface::class], [FormHiddenInterface::class])
             ->willReturnOnConsecutiveCalls($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::once())
-            ->method('get')
-            ->with(HtmlElementInterface::class)
-            ->willReturn($htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $container->expects(self::exactly(2))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [LvhPluginManager::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $lvhPluginManager);
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);

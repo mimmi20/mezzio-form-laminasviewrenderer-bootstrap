@@ -19,8 +19,7 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsFactory;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -58,21 +57,13 @@ final class FormElementErrorsFactoryTest extends TestCase
             ->withConsecutive([Translate::class], [EscapeHtml::class])
             ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::once())
-            ->method('get')
-            ->with(HtmlElementInterface::class)
-            ->willReturn($htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $container->expects(self::exactly(2))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [LvhPluginManager::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $lvhPluginManager);
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -101,21 +92,13 @@ final class FormElementErrorsFactoryTest extends TestCase
             ->with(EscapeHtml::class)
             ->willReturn($escapeHtml);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::once())
-            ->method('get')
-            ->with(HtmlElementInterface::class)
-            ->willReturn($htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $container->expects(self::exactly(2))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [LvhPluginManager::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $lvhPluginManager);
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);

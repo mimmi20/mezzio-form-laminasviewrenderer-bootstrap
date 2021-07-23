@@ -19,8 +19,8 @@ use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
 
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use function array_merge;
 use function array_walk_recursive;
 use function implode;

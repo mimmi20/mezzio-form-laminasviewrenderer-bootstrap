@@ -21,8 +21,7 @@ use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -49,7 +48,7 @@ final class FormCheckboxTest extends AbstractTest
             $this->serviceManager->get(HelperPluginManager::class)->get(EscapeHtmlAttr::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(Doctype::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormLabelInterface::class),
-            $this->serviceManager->get(LvhPluginManager::class)->get(HtmlElementInterface::class),
+            $this->serviceManager->get(HtmlElementInterface::class),
             $this->serviceManager->get(HelperPluginManager::class)->get(FormHiddenInterface::class),
             null
         );
