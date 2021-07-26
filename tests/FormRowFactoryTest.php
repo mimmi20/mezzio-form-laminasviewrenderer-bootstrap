@@ -14,7 +14,6 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\RendererInterface;
@@ -48,7 +47,7 @@ final class FormRowFactoryTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $escapeHtml        = $this->createMock(EscapeHtml::class);
         $htmlElement       = $this->createMock(HtmlElementInterface::class);
-        $renderer   = $this->createMock(RendererInterface::class);
+        $renderer          = $this->createMock(RendererInterface::class);
         $translatePlugin   = $this->createMock(Translate::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
@@ -87,7 +86,7 @@ final class FormRowFactoryTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $escapeHtml        = $this->createMock(EscapeHtml::class);
         $htmlElement       = $this->createMock(HtmlElementInterface::class);
-        $renderer   = $this->createMock(RendererInterface::class);
+        $renderer          = $this->createMock(RendererInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
             ->disableOriginalConstructor()

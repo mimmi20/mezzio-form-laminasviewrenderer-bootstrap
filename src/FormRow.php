@@ -31,9 +31,9 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-
 use Laminas\View\Renderer\RendererInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+
 use function array_key_exists;
 use function array_merge;
 use function array_unique;

@@ -13,12 +13,10 @@ declare(strict_types = 1);
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 
 use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\RendererInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
-use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\LaminasView\LaminasViewRendererFactory;

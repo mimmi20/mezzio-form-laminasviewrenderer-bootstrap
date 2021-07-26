@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
