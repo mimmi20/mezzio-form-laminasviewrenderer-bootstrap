@@ -24,12 +24,12 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Renderer\RendererInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -75,7 +75,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -183,7 +183,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -268,7 +268,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -369,7 +369,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -471,7 +471,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -571,7 +571,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -656,7 +656,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -757,7 +757,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -859,7 +859,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -960,7 +960,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1053,7 +1053,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1162,7 +1162,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1272,7 +1272,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1385,7 +1385,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1485,7 +1485,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1588,7 +1588,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1692,7 +1692,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1801,7 +1801,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1909,7 +1909,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2019,7 +2019,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2129,7 +2129,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2243,7 +2243,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2378,7 +2378,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2518,7 +2518,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2659,7 +2659,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2795,7 +2795,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2935,7 +2935,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -3078,7 +3078,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -3222,7 +3222,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())

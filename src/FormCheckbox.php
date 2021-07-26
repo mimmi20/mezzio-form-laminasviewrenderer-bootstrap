@@ -24,7 +24,7 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 
 use function array_filter;
 use function array_key_exists;

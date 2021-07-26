@@ -27,7 +27,7 @@ use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;

@@ -14,12 +14,10 @@ namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
+use Laminas\View\Renderer\RendererInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
@@ -45,16 +43,6 @@ final class FormRowFactory
             )
         );
 
-        $lvhPluginManager = $container->get(LvhPluginManager::class);
-        assert(
-            $lvhPluginManager instanceof PluginManagerInterface,
-            sprintf(
-                '$lvhPluginManager should be an Instance of %s, but was %s',
-                LvhPluginManager::class,
-                is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
-            )
-        );
-
         $translator = null;
 
         if ($plugin->has(Translate::class)) {
@@ -64,9 +52,9 @@ final class FormRowFactory
         return new FormRow(
             $plugin->get(FormElementInterface::class),
             $plugin->get(FormElementErrorsInterface::class),
-            $lvhPluginManager->get(HtmlElementInterface::class),
+            $container->get(HtmlElementInterface::class),
             $plugin->get(EscapeHtml::class),
-            $lvhPluginManager->get(PartialRendererInterface::class),
+            $container->get(RendererInterface::class),
             $translator
         );
     }

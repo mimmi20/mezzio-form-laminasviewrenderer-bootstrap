@@ -25,7 +25,7 @@ use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 
 use function array_key_exists;
 use function array_merge;

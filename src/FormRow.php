@@ -31,8 +31,8 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Laminas\View\Renderer\RendererInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 
 use function array_key_exists;
 use function array_merge;
@@ -56,7 +56,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
     private FormElementInterface $formElement;
     private FormElementErrorsInterface $formElementErrors;
     private EscapeHtml $escapeHtml;
-    private PartialRendererInterface $renderer;
+    private RendererInterface $renderer;
     private HtmlElementInterface $htmlElement;
     private ?Translate $translate;
 
@@ -65,7 +65,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         FormElementErrorsInterface $formElementErrors,
         HtmlElementInterface $htmlElement,
         EscapeHtml $escapeHtml,
-        PartialRendererInterface $renderer,
+        RendererInterface $renderer,
         ?Translate $translator = null
     ) {
         $this->formElement       = $formElement;

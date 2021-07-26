@@ -16,7 +16,7 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 
 use function array_key_exists;
 use function array_merge;
