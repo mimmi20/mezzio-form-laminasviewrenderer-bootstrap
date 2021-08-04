@@ -19,7 +19,7 @@ use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
-use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Group\ElementGroup;
 use Mimmi20\Form\Element\Links\Links;
 
 return [

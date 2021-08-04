@@ -18,6 +18,7 @@ final class ConfigProvider
      * Return general-purpose laminas-navigation configuration.
      *
      * @return array<string, array<string, array<string, string>>>
+     * @phpstan-return array{view_helpers: array{aliases: array<string, class-string>, factories: array<class-string, class-string>}}
      */
     public function __invoke(): array
     {
@@ -30,6 +31,7 @@ final class ConfigProvider
      * Return application-level dependency configuration.
      *
      * @return array<string, array<string, string>>
+     * @phpstan-return array{aliases: array<string, class-string>, factories: array<class-string, class-string>}
      */
     public function getViewHelperConfig(): array
     {
