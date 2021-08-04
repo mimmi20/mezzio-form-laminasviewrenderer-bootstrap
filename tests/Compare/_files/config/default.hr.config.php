@@ -21,7 +21,7 @@ use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\Validator\NotEmpty;
-use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Group\ElementGroup;
 use Mimmi20\Form\Element\Links\Links;
 
 return [
