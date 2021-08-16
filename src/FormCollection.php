@@ -52,21 +52,6 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
      */
     private bool $shouldWrap = true;
 
-    /**
-     * This is the default label-wrapper
-     */
-    private string $labelWrapper = '<legend>%s</legend>';
-
-    /**
-     * Where shall the template-data be inserted into
-     */
-    private string $templateWrapper = '<template>%s</template>';
-
-    /**
-     * The name of the default view helper that is used to render sub elements.
-     */
-    private string $defaultElementHelper = 'formrow';
-
     public function __construct(FormRowInterface $formRow, EscapeHtml $escapeHtml, HtmlElementInterface $htmlElement, ?Translate $translator = null)
     {
         $this->formRow     = $formRow;
