@@ -21,13 +21,14 @@ use Laminas\Form\Exception\DomainException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-use Laminas\View\Renderer\RendererInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -41,6 +42,8 @@ final class FormRowTest extends TestCase
      * @throws DomainException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderWithWrongFormOption(): void
     {
@@ -72,7 +75,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -113,6 +116,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderHiddenWithoutFormOptionAndLabel(): void
     {
@@ -178,7 +183,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -198,6 +203,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel(): void
     {
@@ -261,7 +268,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -294,6 +301,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel2(): void
     {
@@ -360,7 +369,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -393,6 +402,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel3(): void
     {
@@ -460,7 +471,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -493,6 +504,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderHiddenWithLabelWithoutFormOption(): void
     {
@@ -558,7 +571,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -578,6 +591,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption(): void
     {
@@ -641,7 +656,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -674,6 +689,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption2(): void
     {
@@ -740,7 +757,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -773,6 +790,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption3(): void
     {
@@ -840,7 +859,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -873,6 +892,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderHiddenWithLabelAndTranslatorWithoutFormOption(): void
     {
@@ -939,7 +960,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -966,6 +987,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption(): void
     {
@@ -1030,7 +1053,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1070,6 +1093,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption2(): void
     {
@@ -1137,7 +1162,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1177,6 +1202,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption3(): void
     {
@@ -1245,7 +1272,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
@@ -1285,6 +1312,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel(): void
     {
@@ -1356,7 +1385,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1383,6 +1412,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel4(): void
     {
@@ -1454,7 +1485,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1481,6 +1512,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel5(): void
     {
@@ -1555,7 +1588,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1582,6 +1615,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel6(): void
     {
@@ -1657,7 +1692,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1684,6 +1719,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel7(): void
     {
@@ -1764,7 +1801,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1791,6 +1828,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel8(): void
     {
@@ -1870,7 +1909,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -1897,6 +1936,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel9(): void
     {
@@ -1978,7 +2019,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2005,6 +2046,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel10(): void
     {
@@ -2086,7 +2129,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2113,6 +2156,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel11(): void
     {
@@ -2198,7 +2243,7 @@ final class FormRowTest extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2225,6 +2270,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel12(): void
     {
@@ -2331,7 +2378,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2360,6 +2407,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel13(): void
     {
@@ -2469,7 +2518,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2498,6 +2547,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel14(): void
     {
@@ -2608,7 +2659,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2637,6 +2688,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel15(): void
     {
@@ -2742,7 +2795,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2771,6 +2824,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel16(): void
     {
@@ -2880,7 +2935,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -2909,6 +2964,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel17(): void
     {
@@ -3021,7 +3078,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -3050,6 +3107,8 @@ final class FormRowTest extends TestCase
      * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel18(): void
     {
@@ -3163,7 +3222,7 @@ final class FormRowTest extends TestCase
             ->with($labelTranslated, 0)
             ->willReturn($labelTranslatedEscaped);
 
-        $renderer = $this->getMockBuilder(RendererInterface::class)
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())

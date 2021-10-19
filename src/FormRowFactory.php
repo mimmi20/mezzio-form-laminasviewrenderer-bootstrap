@@ -16,8 +16,8 @@ use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Laminas\View\Renderer\RendererInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
@@ -54,7 +54,7 @@ final class FormRowFactory
             $plugin->get(FormElementErrorsInterface::class),
             $container->get(HtmlElementInterface::class),
             $plugin->get(EscapeHtml::class),
-            $container->get(RendererInterface::class),
+            $container->get(PartialRendererInterface::class),
             $translator
         );
     }

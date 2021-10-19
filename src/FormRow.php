@@ -28,9 +28,11 @@ use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\InvalidArgumentException;
+use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-use Laminas\View\Renderer\RendererInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 
 use function array_key_exists;
 use function array_merge;
@@ -54,7 +56,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
     private FormElementInterface $formElement;
     private FormElementErrorsInterface $formElementErrors;
     private EscapeHtml $escapeHtml;
-    private RendererInterface $renderer;
+    private PartialRendererInterface $renderer;
     private HtmlElementInterface $htmlElement;
     private ?Translate $translate;
 
@@ -63,7 +65,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         FormElementErrorsInterface $formElementErrors,
         HtmlElementInterface $htmlElement,
         EscapeHtml $escapeHtml,
-        RendererInterface $renderer,
+        PartialRendererInterface $renderer,
         ?Translate $translator = null
     ) {
         $this->formElement       = $formElement;
@@ -82,6 +84,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
      * @throws Exception\DomainException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue.NullabilityTypeMissing
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint

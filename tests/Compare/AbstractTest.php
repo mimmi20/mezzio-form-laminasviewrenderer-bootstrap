@@ -15,7 +15,6 @@ namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
 use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager;
-use Laminas\View\Renderer\RendererInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
 use Mezzio\LaminasView\LaminasViewRenderer;
@@ -23,6 +22,7 @@ use Mezzio\LaminasView\LaminasViewRendererFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererFactory;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -67,7 +67,6 @@ abstract class AbstractTest extends TestCase
 
         $sm->setFactory(HelperPluginManager::class, HelperPluginManagerFactory::class);
         $sm->setFactory(HtmlElementInterface::class, HtmlElementFactory::class);
-        $sm->setFactory(RendererInterface::class, PartialRendererFactory::class);
 
         $sm->setFactory(
             'config',
@@ -76,7 +75,7 @@ abstract class AbstractTest extends TestCase
             ]
         );
         $sm->setFactory(LaminasViewRenderer::class, LaminasViewRendererFactory::class);
-        //$sm->setFactory(BaseServerUrlHelper::class, InvokableFactory::class);
+        $sm->setFactory(PartialRendererInterface::class, PartialRendererFactory::class);
 
         $sm->setAllowOverride(false);
     }
