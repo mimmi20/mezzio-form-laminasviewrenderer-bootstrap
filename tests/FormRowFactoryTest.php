@@ -16,12 +16,12 @@ use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Laminas\View\Renderer\RendererInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementInterface;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
 use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -47,7 +47,7 @@ final class FormRowFactoryTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $escapeHtml        = $this->createMock(EscapeHtml::class);
         $htmlElement       = $this->createMock(HtmlElementInterface::class);
-        $renderer          = $this->createMock(RendererInterface::class);
+        $renderer          = $this->createMock(PartialRendererInterface::class);
         $translatePlugin   = $this->createMock(Translate::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
@@ -67,7 +67,7 @@ final class FormRowFactoryTest extends TestCase
             ->getMock();
         $container->expects(self::exactly(3))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class], [RendererInterface::class])
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class], [PartialRendererInterface::class])
             ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement, $renderer);
 
         assert($container instanceof ContainerInterface);
@@ -86,7 +86,7 @@ final class FormRowFactoryTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $escapeHtml        = $this->createMock(EscapeHtml::class);
         $htmlElement       = $this->createMock(HtmlElementInterface::class);
-        $renderer          = $this->createMock(RendererInterface::class);
+        $renderer          = $this->createMock(PartialRendererInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -105,7 +105,7 @@ final class FormRowFactoryTest extends TestCase
             ->getMock();
         $container->expects(self::exactly(3))
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class], [RendererInterface::class])
+            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class], [PartialRendererInterface::class])
             ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement, $renderer);
 
         assert($container instanceof ContainerInterface);
