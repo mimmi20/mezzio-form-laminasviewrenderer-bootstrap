@@ -44,6 +44,7 @@ use function gettype;
 use function implode;
 use function is_array;
 use function is_object;
+use function is_string;
 use function sprintf;
 use function trim;
 
@@ -164,6 +165,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
         if ('' !== $label && (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape'))) {
             $label = ($this->escapeHtml)($label);
+
+            assert(is_string($label));
         }
 
         if ($element->getAttribute('required') && $element->getOption('show-required-mark')) {
@@ -290,7 +293,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         }
 
         if ($element->hasAttribute('id')) {
-            $labelAttributes['for'] = $element->getAttribute('id');
+            $id = $element->getAttribute('id');
+
+            assert(is_string($id));
+
+            $labelAttributes['for'] = $id;
         }
 
         $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('label', $labelAttributes, $label) . PHP_EOL;
@@ -332,7 +339,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         assert(is_array($labelAttributes));
 
         if ($element->hasAttribute('id')) {
-            $labelAttributes['for'] = $element->getAttribute('id');
+            $id = $element->getAttribute('id');
+
+            assert(is_string($id));
+
+            $labelAttributes['for'] = $id;
         }
 
         $indent = $this->getIndent();
@@ -477,6 +488,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         $helpContent = $element->getOption('help_content');
         $attributes  = $this->mergeAttributes($element, 'help_attributes', []);
 
+        assert(is_string($helpContent));
+
         if ($element->hasAttribute('id')) {
             $attributes['id'] = $element->getAttribute('id') . 'Help';
 
@@ -518,6 +531,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
         if (null !== $form) {
             $formAttributes = $form->getOption($optionName) ?? [];
+
+            assert(is_array($formAttributes));
 
             if (array_key_exists('class', $formAttributes)) {
                 $classes = array_merge($classes, explode(' ', $formAttributes['class']));

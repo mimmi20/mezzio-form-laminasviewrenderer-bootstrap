@@ -223,8 +223,9 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      *
      * @param array<int|string, array<string, string>|string> $options
      * @param array<int|string, string>                       $selectedOptions Option values that should be marked as selected
+     * @phpstan-param array<int|string, array{options?: array<mixed>, value?: string, label?: string, selected?: bool, disabled?: bool, disable_html_escape?: bool, attributes?: array<string, string>}|string> $options
      */
-    public function renderOptions(array $options, array $selectedOptions = [], int $level = 0): string
+    public function renderOptions(array $options, array $selectedOptions, int $level): string
     {
         $optionStrings = [];
 
@@ -239,8 +240,9 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      * @param int|string                   $key
      * @param array<string, string>|string $optionSpec
      * @param array<int|string, string>    $selectedOptions
+     * @phpstan-param array{options?: array<mixed>, value?: string, label?: string, selected?: bool, disabled?: bool, disable_html_escape?: bool, attributes?: array<string, string>}|string $optionSpec
      */
-    public function renderOption($key, $optionSpec, array $selectedOptions = [], int $level = 0): string
+    public function renderOption($key, $optionSpec, array $selectedOptions, int $level): string
     {
         $value    = '';
         $label    = '';
@@ -286,12 +288,16 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             )
         );
 
-        if ('' !== $label && null !== $this->translate) {
-            $label = ($this->translate)($label, $this->getTranslatorTextDomain());
-        }
+        if ('' !== $label) {
+            if (null !== $this->translate) {
+                $label = ($this->translate)($label, $this->getTranslatorTextDomain());
+            }
 
-        if ('' !== $label && !isset($optionSpec['disable_html_escape'])) {
-            $label = ($this->escaper)($label);
+            if (!isset($optionSpec['disable_html_escape'])) {
+                $label = ($this->escaper)($label);
+
+                assert(is_string($label));
+            }
         }
 
         $attributes = [
@@ -328,14 +334,18 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      * an optgroup is simply an option that has an additional "options" key
      * with an array following the specification for renderOptions().
      *
-     * @param array<string, int|string> $optgroup
-     * @param array<int|string, string> $selectedOptions
+     * @param array<string, array<mixed>|bool|int|string> $optgroup
+     * @param array<int|string, string>                   $selectedOptions
      */
-    public function renderOptgroup(array $optgroup, array $selectedOptions = [], int $level = 0): string
+    public function renderOptgroup(array $optgroup, array $selectedOptions, int $level): string
     {
         $options = [];
-        if (isset($optgroup['options']) && is_array($optgroup['options'])) {
-            $options = $optgroup['options'];
+        if (array_key_exists('options', $optgroup)) {
+            if (is_array($optgroup['options'])) {
+                /** @phpstan-var array<int|string, array{options?: array<mixed>, value?: string, label?: string, selected?: bool, disabled?: bool, disable_html_escape?: bool, attributes?: array<string, string>}|string> $options */
+                $options = $optgroup['options'];
+            }
+
             unset($optgroup['options']);
         }
 
@@ -367,7 +377,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      * @param mixed               $value
      * @param array<string, bool> $attributes
      *
-     * @return array<int|string, mixed>
+     * @return array<int|string, string>
      *
      * @throws Exception\DomainException
      */
@@ -377,8 +387,12 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
             return [];
         }
 
-        if (!is_array($value)) {
+        if (is_string($value)) {
             return [$value];
+        }
+
+        if (!is_array($value)) {
+            return [];
         }
 
         if (!array_key_exists('multiple', $attributes) || !$attributes['multiple']) {
