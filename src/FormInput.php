@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,10 +10,10 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\View\Helper\FormInput as BaseFormInput;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
@@ -24,39 +24,39 @@ use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
+use function is_scalar;
 use function sprintf;
 use function trim;
 
+/** @SuppressWarnings(PHPMD.NumberOfChildren) */
 abstract class FormInput extends BaseFormInput implements FormInputInterface
 {
     use FormTrait;
 
-    protected EscapeHtml $escapeHtml;
-    protected EscapeHtmlAttr $escapeHtmlAttr;
-    protected Doctype $doctype;
-
-    public function __construct(EscapeHtml $escapeHtml, EscapeHtmlAttr $escapeHtmlAttr, Doctype $doctype)
-    {
-        $this->escapeHtml     = $escapeHtml;
-        $this->escapeHtmlAttr = $escapeHtmlAttr;
-        $this->doctype        = $doctype;
+    /** @throws void */
+    public function __construct(
+        protected EscapeHtml $escapeHtml,
+        protected EscapeHtmlAttr $escapeHtmlAttr,
+        protected Doctype $doctype,
+    ) {
+        // nothing to do
     }
 
     /**
      * Render a form <input> element from the provided $element
      *
-     * @throws Exception\DomainException
+     * @throws DomainException
      */
     public function render(ElementInterface $element): string
     {
         $name = $element->getName();
 
-        if (null === $name || '' === $name) {
-            throw new Exception\DomainException(
+        if ($name === null || $name === '') {
+            throw new DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
-                    __METHOD__
-                )
+                    __METHOD__,
+                ),
             );
         }
 
@@ -66,19 +66,15 @@ abstract class FormInput extends BaseFormInput implements FormInputInterface
         $type               = $this->getType($element);
         $attributes['type'] = $type;
 
-        if ('password' === $type) {
-            $attributes['value'] = '';
-        } else {
-            $attributes['value'] = $element->getValue();
-        }
+        $attributes['value'] = $type === 'password' ? '' : $element->getValue();
 
         if (isset($attributes['readonly']) && $element->getOption('plain')) {
             $classes = ['form-control-plaintext'];
         } else {
             $classes = ['form-control'];
 
-            if (array_key_exists('class', $attributes)) {
-                $classes = array_merge($classes, explode(' ', $attributes['class']));
+            if (array_key_exists('class', $attributes) && is_scalar($attributes['class'])) {
+                $classes = array_merge($classes, explode(' ', (string) $attributes['class']));
             }
         }
 
@@ -87,7 +83,7 @@ abstract class FormInput extends BaseFormInput implements FormInputInterface
         $markup = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
-            $this->getInlineClosingBracket()
+            $this->getInlineClosingBracket(),
         );
 
         $indent = $this->getIndent();
@@ -99,6 +95,8 @@ abstract class FormInput extends BaseFormInput implements FormInputInterface
      * Get the closing bracket for an inline tag
      *
      * Closes as either "/>" for XHTML doctypes or ">" otherwise.
+     *
+     * @throws void
      */
     public function getInlineClosingBracket(): string
     {

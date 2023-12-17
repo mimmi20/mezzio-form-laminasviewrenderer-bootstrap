@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,17 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use IntlDateFormatter;
 use Laminas\Form\Element\MonthSelect as MonthSelectElement;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\ExtensionNotLoadedException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -39,9 +40,7 @@ final class FormMonthSelectTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -49,9 +48,7 @@ final class FormMonthSelectTest extends TestCase
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
 
@@ -59,9 +56,9 @@ final class FormMonthSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render',
-                MonthSelectElement::class
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render',
+                MonthSelectElement::class,
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -75,9 +72,7 @@ final class FormMonthSelectTest extends TestCase
      */
     public function testRenderWithoutName(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -85,9 +80,7 @@ final class FormMonthSelectTest extends TestCase
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -108,8 +101,8 @@ final class FormMonthSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -123,9 +116,7 @@ final class FormMonthSelectTest extends TestCase
      */
     public function testInvokeWithoutName1(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -133,9 +124,7 @@ final class FormMonthSelectTest extends TestCase
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -160,8 +149,8 @@ final class FormMonthSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthSelect::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -171,13 +160,11 @@ final class FormMonthSelectTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testInvokeWithoutName2(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -185,9 +172,7 @@ final class FormMonthSelectTest extends TestCase
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -209,7 +194,7 @@ final class FormMonthSelectTest extends TestCase
         try {
             $helper($element, IntlDateFormatter::FULL, $locale);
             self::fail('expecting throwing an exception');
-        } catch (DomainException $e) {
+        } catch (DomainException) {
             self::assertSame(IntlDateFormatter::LONG, $helper->getDateType());
             self::assertSame($locale, $helper->getLocale());
         }
@@ -219,24 +204,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender1(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
         $indent                  = '';
 
         $excpected = PHP_EOL . $renderedMonth . PHP_EOL . ' ' . PHP_EOL . $renderedYear . PHP_EOL;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -289,7 +271,7 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -297,57 +279,46 @@ final class FormMonthSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -377,24 +348,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender2(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
         $indent                  = '';
 
         $excpected = PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -447,7 +415,7 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -455,57 +423,46 @@ final class FormMonthSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -535,24 +492,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender3(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
         $indent                  = '';
 
         $excpected = PHP_EOL . $renderedMonth . PHP_EOL . ' ' . PHP_EOL . $renderedYear . PHP_EOL;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -605,61 +559,50 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -689,24 +632,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender4(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
         $indent                  = '';
 
         $excpected = PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -759,61 +699,50 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -843,24 +772,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender5(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $indent                  = '    ';
         $renderedMonth           = $indent . '<select name="month"></select>';
         $renderedYear            = $indent . '<select name="year"></select>';
 
         $excpected = $indent . PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL . $indent;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -913,61 +839,50 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -999,24 +914,21 @@ final class FormMonthSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRender6(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $indent                  = '    ';
         $renderedMonth           = $indent . '<select name="month"></select>';
         $renderedYear            = $indent . '<select name="year"></select>';
 
         $excpected = $indent . PHP_EOL . $renderedMonth . PHP_EOL . $indent . ' ' . PHP_EOL . $renderedYear . PHP_EOL . $indent;
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1069,7 +981,7 @@ final class FormMonthSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -1077,57 +989,46 @@ final class FormMonthSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years       = [];
+
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$monthElement], [$yearElement])
-            ->willReturnOnConsecutiveCalls($renderedMonth, $renderedYear);
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($matcher, $monthElement, $yearElement, $renderedMonth, $renderedYear): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($monthElement, $element),
+                        default => self::assertSame($yearElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedMonth,
+                        default => $renderedYear,
+                    };
+                },
+            );
 
         $helper = new FormMonthSelect($selectHelper);
 
-        $element = $this->getMockBuilder(MonthSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(MonthSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1157,14 +1058,11 @@ final class FormMonthSelectTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent1(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -1178,14 +1076,11 @@ final class FormMonthSelectTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent2(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())

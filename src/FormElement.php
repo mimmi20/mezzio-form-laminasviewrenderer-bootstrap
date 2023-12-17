@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element;
 use Laminas\Form\ElementInterface;
@@ -18,9 +18,10 @@ use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
-use Mimmi20\Form\Element\Links\Links;
-use Mimmi20\Form\Element\Paragraph\Paragraph;
+use Mimmi20\Form\Links\Element\Links;
+use Mimmi20\Form\Paragraph\Element\Paragraph;
 
 use function assert;
 use function is_object;
@@ -85,11 +86,16 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      */
     private string $defaultHelper = FormElementInterface::DEFAULT_HELPER;
 
-    private HelperPluginManager $helperPluginManager;
-
-    public function __construct(HelperPluginManager $helperPluginManager)
-    {
-        $this->helperPluginManager = $helperPluginManager;
+    /**
+     * @phpstan-param HelperPluginManager<HelperInterface> $helperPluginManager
+     *
+     * @throws void
+     */
+    public function __construct(
+        /** @phpstan-param HelperPluginManager<HelperInterface> $helperPluginManager */
+        private readonly HelperPluginManager $helperPluginManager,
+    ) {
+        // nothing to do
     }
 
     /**
@@ -102,8 +108,10 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function __invoke(?ElementInterface $element = null)
+    public function __invoke(ElementInterface | null $element = null)
     {
         if (!$element) {
             return $this;
@@ -126,13 +134,13 @@ final class FormElement extends AbstractHelper implements FormElementInterface
     {
         $renderedInstance = $this->renderInstance($element);
 
-        if (null !== $renderedInstance) {
+        if ($renderedInstance !== null) {
             return $renderedInstance;
         }
 
         $renderedType = $this->renderType($element);
 
-        if (null !== $renderedType) {
+        if ($renderedType !== null) {
             return $renderedType;
         }
 
@@ -141,6 +149,8 @@ final class FormElement extends AbstractHelper implements FormElementInterface
 
     /**
      * Set default helper name
+     *
+     * @throws void
      */
     public function setDefaultHelper(string $name): self
     {
@@ -151,6 +161,8 @@ final class FormElement extends AbstractHelper implements FormElementInterface
 
     /**
      * Set default helper name
+     *
+     * @throws void
      */
     public function getDefaultHelper(): string
     {
@@ -159,6 +171,8 @@ final class FormElement extends AbstractHelper implements FormElementInterface
 
     /**
      * Add form element type to plugin map
+     *
+     * @throws void
      */
     public function addType(string $type, string $plugin): self
     {
@@ -169,6 +183,8 @@ final class FormElement extends AbstractHelper implements FormElementInterface
 
     /**
      * Add instance class to plugin map
+     *
+     * @throws void
      */
     public function addClass(string $class, string $plugin): self
     {
@@ -208,7 +224,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
      */
-    private function renderInstance(ElementInterface $element): ?string
+    private function renderInstance(ElementInterface $element): string | null
     {
         foreach ($this->classMap as $class => $pluginName) {
             if ($element instanceof $class) {
@@ -226,7 +242,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
      */
-    private function renderType(ElementInterface $element): ?string
+    private function renderType(ElementInterface $element): string | null
     {
         $type = $element->getAttribute('type');
 

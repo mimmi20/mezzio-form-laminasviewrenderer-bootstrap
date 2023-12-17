@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,11 +10,11 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use DateTime;
 use IntlDateFormatter;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\ExtensionNotLoadedException;
 use Locale;
 
 use function extension_loaded;
@@ -41,24 +41,22 @@ trait FormMonthSelectTrait
     /**
      * Pattern to use for Date rendering
      */
-    private ?string $pattern = null;
+    private string | null $pattern = null;
 
     /**
      * Locale to use
      */
-    private ?string $locale = null;
+    private string | null $locale = null;
 
-    /**
-     * @throws Exception\ExtensionNotLoadedException if ext/intl is not present
-     */
+    /** @throws ExtensionNotLoadedException if ext/intl is not present */
     public function __construct(FormSelectInterface $selectHelper)
     {
         if (!extension_loaded('intl')) {
-            throw new Exception\ExtensionNotLoadedException(
+            throw new ExtensionNotLoadedException(
                 sprintf(
                     '%s component requires the intl PHP extension',
-                    __NAMESPACE__
-                )
+                    __NAMESPACE__,
+                ),
             );
         }
 
@@ -70,11 +68,17 @@ trait FormMonthSelectTrait
 
     /**
      * Retrieve pattern to use for Date rendering
+     *
+     * @throws void
      */
     public function getPattern(): string
     {
-        if (null === $this->pattern) {
-            $intl          = new IntlDateFormatter($this->getLocale(), $this->dateType, IntlDateFormatter::NONE);
+        if ($this->pattern === null) {
+            $intl          = new IntlDateFormatter(
+                $this->getLocale(),
+                $this->dateType,
+                IntlDateFormatter::NONE,
+            );
             $this->pattern = $intl->getPattern();
         }
 
@@ -83,11 +87,13 @@ trait FormMonthSelectTrait
 
     /**
      * Set date formatter
+     *
+     * @throws void
      */
     public function setDateType(int $dateType): self
     {
         // The FULL format uses values that are not used
-        if (IntlDateFormatter::FULL === $dateType) {
+        if ($dateType === IntlDateFormatter::FULL) {
             $dateType = IntlDateFormatter::LONG;
         }
 
@@ -98,6 +104,8 @@ trait FormMonthSelectTrait
 
     /**
      * Get date formatter
+     *
+     * @throws void
      */
     public function getDateType(): int
     {
@@ -106,6 +114,8 @@ trait FormMonthSelectTrait
 
     /**
      * Set locale
+     *
+     * @throws void
      */
     public function setLocale(string $locale): self
     {
@@ -116,10 +126,12 @@ trait FormMonthSelectTrait
 
     /**
      * Get locale
+     *
+     * @throws void
      */
     public function getLocale(): string
     {
-        if (null === $this->locale) {
+        if ($this->locale === null) {
             $this->locale = Locale::getDefault();
         }
 
@@ -130,31 +142,34 @@ trait FormMonthSelectTrait
      * Parse the pattern
      *
      * @return array<int|string, string>
+     *
+     * @throws void
      */
     private function parsePattern(bool $renderDelimiters = true): array
     {
         $pattern    = $this->getPattern();
         $pregResult = preg_split(
-            "/([ -,.\\/]*(?:'[a-zA-Z]+')*[ -,.\\/]+)/",
-            $pattern,
+            '/([ -,.\\/]*(?:\'[a-zA-Z]+\')*[ -,.\\/]+)/',
+            (string) $pattern,
             -1,
-            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
+            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY,
         );
 
-        if (false === $pregResult) {
+        if ($pregResult === false) {
             return [];
         }
 
         $result = [];
+
         foreach ($pregResult as $value) {
-            if (false === mb_stripos($value, "'") && false !== mb_stripos($value, 'd')) {
+            if (mb_stripos($value, '\'') === false && mb_stripos($value, 'd') !== false) {
                 $result['day'] = $value;
-            } elseif (false === mb_stripos($value, "'") && false !== mb_stripos($value, 'm')) {
+            } elseif (mb_stripos($value, '\'') === false && mb_stripos($value, 'm') !== false) {
                 $result['month'] = $value;
-            } elseif (false === mb_stripos($value, "'") && false !== mb_stripos($value, 'y')) {
+            } elseif (mb_stripos($value, '\'') === false && mb_stripos($value, 'y') !== false) {
                 $result['year'] = $value;
             } elseif ($renderDelimiters) {
-                $result[] = str_replace("'", '', $value);
+                $result[] = str_replace('\'', '', $value);
             }
         }
 
@@ -167,24 +182,41 @@ trait FormMonthSelectTrait
      * @param string $pattern Pattern to use for months
      *
      * @return array<int|string, array<string, string>>
+     *
+     * @throws void
      */
     private function getMonthsOptions(string $pattern): array
     {
-        $keyFormatter   = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'MM');
-        $valueFormatter = new IntlDateFormatter($this->getLocale(), IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, $pattern);
+        $keyFormatter   = new IntlDateFormatter(
+            $this->getLocale(),
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            null,
+            null,
+            'MM',
+        );
+        $valueFormatter = new IntlDateFormatter(
+            $this->getLocale(),
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            null,
+            null,
+            $pattern,
+        );
         $date           = new DateTime('1970-01-01');
 
         $result = [];
+
         for ($month = 1; 12 >= $month; ++$month) {
             $key = $keyFormatter->format($date->getTimestamp());
 
-            if (false === $key) {
+            if ($key === false) {
                 continue;
             }
 
             $value = $valueFormatter->format($date->getTimestamp());
 
-            if (false === $value) {
+            if ($value === false) {
                 continue;
             }
 
@@ -202,10 +234,13 @@ trait FormMonthSelectTrait
      * read date for users, so we only use four digits years
      *
      * @return array<int|string, array<string, string>>
+     *
+     * @throws void
      */
     private function getYearsOptions(int $minYear, int $maxYear): array
     {
         $result = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $result[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }

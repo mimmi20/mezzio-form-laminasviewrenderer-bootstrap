@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,17 +10,17 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Text;
-use Laminas\Form\Exception\DomainException;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
+use Laminas\View\Helper\Escaper\AbstractHelper;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function sprintf;
@@ -31,28 +31,21 @@ final class FormElementErrorsTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testRenderWithoutMessages(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn([]);
@@ -68,7 +61,6 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testRenderWithMessages(): void
@@ -79,27 +71,49 @@ final class FormElementErrorsTest extends TestCase
         $listMessage      = sprintf('<ul>%s</ul>', $listEntryMessage);
         $divMessage       = sprintf('<div>%s</div>', $listMessage);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($message)
             ->willReturn($messageEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $messageEscaped], ['ul', [], '        ' . $listEntryMessage . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $messageEscaped, $listEntryMessage, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        3 => self::assertSame('div', $element),
+                        2 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        3 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($messageEscaped, $content),
+                        2 => self::assertSame(
+                            '        ' . $listEntryMessage . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage,
+                        2 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message, 'x2' => '']);
@@ -119,28 +133,21 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testRenderWithEmptyMessages(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['', '']);
@@ -156,7 +163,6 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testRenderWithMessagesAndTranslator(): void
@@ -173,35 +179,86 @@ final class FormElementErrorsTest extends TestCase
         $divMessage                = sprintf('<div>%s</div>', $listMessage);
         $textDomain                = 'test-domain';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher    = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1Translated], [$message2Translated])
-            ->willReturnOnConsecutiveCalls($message1TranslatedEscaped, $message2TranslatedEscaped);
+            ->willReturnCallback(
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $message1Translated, $message2Translated, $message1TranslatedEscaped, $message2TranslatedEscaped): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1Translated, $value),
+                        default => self::assertSame($message2Translated, $value),
+                    };
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1TranslatedEscaped,
+                        default => $message2TranslatedEscaped,
+                    };
+                },
+            );
+
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $message1TranslatedEscaped], ['li', [], $message2TranslatedEscaped], ['ul', [], '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2TranslatedEscaped, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame('div', $element),
+                        3 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1TranslatedEscaped, $content),
+                        2 => self::assertSame($message2TranslatedEscaped, $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage1,
+                        2 => $listEntryMessage2,
+                        3 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1, $textDomain], [$message2, $textDomain])
-            ->willReturn($message1Translated, $message2Translated);
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1, $message),
+                        default => self::assertSame($message2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1Translated,
+                        default => $message2Translated,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message1, 'x2' => '', 'x3' => [$message2, '']]);
@@ -223,7 +280,6 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testRenderWithMessagesAndTranslatorWithoutEscape(): void
@@ -239,35 +295,72 @@ final class FormElementErrorsTest extends TestCase
         $divMessage                = sprintf('<div>%s</div>', $listMessage);
         $textDomain                = 'test-domain';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($message1Translated)
             ->willReturn($message1TranslatedEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $message1TranslatedEscaped], ['li', [], $message2Translated], ['ul', [], '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame('div', $element),
+                        3 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1TranslatedEscaped, $content),
+                        2 => self::assertSame($message2Translated, $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage1,
+                        2 => $listEntryMessage2,
+                        3 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1, $textDomain], [$message2, $textDomain])
-            ->willReturn($message1Translated, $message2Translated);
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1, $message),
+                        default => self::assertSame($message2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1Translated,
+                        default => $message2Translated,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message1, 'x2' => '', 'x3' => [$message2, '']]);
@@ -289,7 +382,6 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testInvokeWithMessagesAndTranslatorWithoutEscape1(): void
@@ -305,35 +397,72 @@ final class FormElementErrorsTest extends TestCase
         $divMessage                = sprintf('<div>%s</div>', $listMessage);
         $textDomain                = 'test-domain';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($message1Translated)
             ->willReturn($message1TranslatedEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $message1TranslatedEscaped], ['li', [], $message2Translated], ['ul', [], '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame('div', $element),
+                        3 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1TranslatedEscaped, $content),
+                        2 => self::assertSame($message2Translated, $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage1,
+                        2 => $listEntryMessage2,
+                        3 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1, $textDomain], [$message2, $textDomain])
-            ->willReturn($message1Translated, $message2Translated);
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1, $message),
+                        default => self::assertSame($message2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1Translated,
+                        default => $message2Translated,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message1, 'x2' => '', 'x3' => [$message2, '']]);
@@ -374,35 +503,72 @@ final class FormElementErrorsTest extends TestCase
         $divMessage                = sprintf('<div>%s</div>', $listMessage);
         $textDomain                = 'test-domain';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($message1Translated)
             ->willReturn($message1TranslatedEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $message1TranslatedEscaped], ['li', [], $message2Translated], ['ul', [], '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame('div', $element),
+                        3 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1TranslatedEscaped, $content),
+                        2 => self::assertSame($message2Translated, $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage1,
+                        2 => $listEntryMessage2,
+                        3 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1, $textDomain], [$message2, $textDomain])
-            ->willReturn($message1Translated, $message2Translated);
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1, $message),
+                        default => self::assertSame($message2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1Translated,
+                        default => $message2Translated,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message1, 'x2' => '', 'x3' => [$message2, '']]);
@@ -422,23 +588,16 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame($divMessage, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testSetGetAttributes(): void
     {
         $attributes = ['class' => 'xyz', 'data-message' => 'void'];
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -467,35 +626,76 @@ final class FormElementErrorsTest extends TestCase
         $textDomain                = 'test-domain';
         $attributes                = ['class' => 'xyz', 'data-message' => 'void'];
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($message1Translated)
             ->willReturn($message1TranslatedEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['li', [], $message1TranslatedEscaped], ['li', [], $message2Translated], ['ul', $attributes, '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    '], ['div', ['class' => 'invalid-feedback', 'id' => 'test-idFeedback'], '    ' . $listMessage])
-            ->willReturnOnConsecutiveCalls($listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage);
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $attributes, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame('div', $element),
+                        3 => self::assertSame('ul', $element),
+                        default => self::assertSame('li', $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    match ($matcher->numberOfInvocations()) {
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback', 'id' => 'test-idFeedback'],
+                            $attribs,
+                        ),
+                        3 => self::assertSame($attributes, $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1TranslatedEscaped, $content),
+                        2 => self::assertSame($message2Translated, $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame('    ' . $listMessage, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $listEntryMessage1,
+                        2 => $listEntryMessage2,
+                        3 => $listMessage,
+                        default => $divMessage,
+                    };
+                },
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$message1, $textDomain], [$message2, $textDomain])
-            ->willReturn($message1Translated, $message2Translated);
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($message1, $message),
+                        default => self::assertSame($message2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $message1Translated,
+                        default => $message2Translated,
+                    };
+                },
+            );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::once())
             ->method('getMessages')
             ->willReturn(['x1' => $message1, 'x2' => '', 'x3' => [$message2, '']]);
@@ -518,21 +718,14 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame($divMessage, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testSetGetInden1(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -542,21 +735,14 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testSetGetInden2(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 

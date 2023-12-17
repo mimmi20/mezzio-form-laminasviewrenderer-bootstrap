@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,26 +10,22 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 use function assert;
-use function get_class;
-use function gettype;
-use function is_object;
+use function get_debug_type;
 use function sprintf;
 
 final class FormCollectionFactory
 {
-    /**
-     * @throws ContainerExceptionInterface
-     */
+    /** @throws ContainerExceptionInterface */
     public function __invoke(ContainerInterface $container): FormCollection
     {
         $plugin = $container->get(HelperPluginManager::class);
@@ -38,8 +34,8 @@ final class FormCollectionFactory
             sprintf(
                 '$plugin should be an Instance of %s, but was %s',
                 HelperPluginManager::class,
-                is_object($plugin) ? get_class($plugin) : gettype($plugin)
-            )
+                get_debug_type($plugin),
+            ),
         );
 
         $translator = null;
@@ -55,7 +51,16 @@ final class FormCollectionFactory
         $htmlElement = $container->get(HtmlElementInterface::class);
 
         assert($row instanceof FormRowInterface);
-        assert($escapeHtml instanceof EscapeHtml);
+
+        assert(
+            $escapeHtml instanceof EscapeHtml,
+            sprintf(
+                '$escapeHtml should be an Instance of %s, but was %s',
+                EscapeHtml::class,
+                get_debug_type($escapeHtml),
+            ),
+        );
+
         assert($htmlElement instanceof HtmlElementInterface);
 
         return new FormCollection($row, $escapeHtml, $htmlElement, $translator);

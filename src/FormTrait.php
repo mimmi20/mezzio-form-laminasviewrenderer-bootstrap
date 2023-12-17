@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use function is_int;
 use function str_repeat;
@@ -23,9 +23,9 @@ trait FormTrait
      * Set the indentation string for using in {@link render()}, optionally a
      * number of spaces to indent with
      *
-     * @param int|string $indent
+     * @throws void
      */
-    public function setIndent($indent): self
+    public function setIndent(int | string $indent): self
     {
         $this->indent = $this->getWhitespace($indent);
 
@@ -34,6 +34,8 @@ trait FormTrait
 
     /**
      * Returns indentation
+     *
+     * @throws void
      */
     public function getIndent(): string
     {
@@ -45,14 +47,14 @@ trait FormTrait
     /**
      * Retrieve whitespace representation of $indent
      *
-     * @param int|string $indent
+     * @throws void
      */
-    protected function getWhitespace($indent): string
+    protected function getWhitespace(int | string $indent): string
     {
         if (is_int($indent)) {
             $indent = str_repeat(' ', $indent);
         }
 
-        return (string) $indent;
+        return $indent;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,16 +10,16 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\File;
 use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function sprintf;
@@ -29,26 +29,21 @@ final class FormTextareaTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithoutName(): void
     {
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormTextarea($htmlElement, $escapeHtml);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -57,8 +52,8 @@ final class FormTextareaTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -77,21 +72,17 @@ final class FormTextareaTest extends TestCase
         $escapedValue = 'uvwxyz';
         $expected     = '<textarea class="form-control abc" name="name">uvwxyz</textarea>';
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value)
@@ -99,9 +90,7 @@ final class FormTextareaTest extends TestCase
 
         $helper = new FormTextarea($htmlElement, $escapeHtml);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -127,21 +116,17 @@ final class FormTextareaTest extends TestCase
         $escapedValue = 'uvwxyz';
         $expected     = '<textarea class="form-control abc" name="name">uvwxyz</textarea>';
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value)
@@ -149,9 +134,7 @@ final class FormTextareaTest extends TestCase
 
         $helper = new FormTextarea($htmlElement, $escapeHtml);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -171,6 +154,7 @@ final class FormTextareaTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws DomainException
      * @throws InvalidArgumentException
      */
     public function testInvoke2(): void
@@ -180,21 +164,17 @@ final class FormTextareaTest extends TestCase
         $escapedValue = 'uvwxyz';
         $expected     = '<textarea class="form-control abc" name="name">uvwxyz</textarea>';
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value)
@@ -202,9 +182,7 @@ final class FormTextareaTest extends TestCase
 
         $helper = new FormTextarea($htmlElement, $escapeHtml);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -218,21 +196,14 @@ final class FormTextareaTest extends TestCase
         self::assertSame($expected, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testSetGetIndent1(): void
     {
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
@@ -242,21 +213,14 @@ final class FormTextareaTest extends TestCase
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testSetGetIndent2(): void
     {
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 

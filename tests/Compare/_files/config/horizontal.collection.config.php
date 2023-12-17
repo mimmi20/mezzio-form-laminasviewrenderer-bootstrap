@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use Laminas\Form\Form;
 return [
     'type' => Form::class,
     'options' => [
-        'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'layout' => \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
         'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
         'field-required-mark' => '',
     ],
@@ -38,7 +38,7 @@ return [
         [
             'spec' => [
                 'type' => Collection::class,
-                //'name' => 'data1',
+                // 'name' => 'data1',
                 'options' => [
                     'label' => 'Was möchten Sie versichern?',
                     'label_options' => ['always_wrap' => true],

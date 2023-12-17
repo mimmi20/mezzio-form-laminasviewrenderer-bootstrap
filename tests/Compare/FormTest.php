@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,36 +10,36 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare;
 
 use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\Factory;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function trim;
 
-final class FormTest extends AbstractTest
+final class FormTest extends AbstractTestCase
 {
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testVerticalForm(): void
     {
@@ -63,15 +63,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testVerticalWithFloatingLabelsForm(): void
     {
@@ -95,15 +95,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHorizontalForm(): void
     {
@@ -127,15 +127,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHorizontalFormWithCollection(): void
     {
@@ -159,19 +159,21 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHorizontalFormWithElementGroup(): void
     {
-        $form = (new Factory())->createForm(require '_files/config/horizontal.element-group.config.php');
+        $form = (new Factory())->createForm(
+            require '_files/config/horizontal.element-group.config.php',
+        );
 
         $expected = $this->getExpected('form/horizontal.element-group.html');
 
@@ -191,15 +193,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testInlineForm(): void
     {
@@ -223,15 +225,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHrForm(): void
     {
@@ -255,15 +257,15 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws InvalidServiceException
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
      * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testPhvForm(): void
     {

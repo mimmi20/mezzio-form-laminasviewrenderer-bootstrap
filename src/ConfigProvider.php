@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
+
+use Mimmi20\Form\Links\View\Helper\FormLinks;
+use Mimmi20\Form\Links\View\Helper\FormLinksFactory;
+use Mimmi20\Form\Paragraph\View\Helper\FormParagraph;
+use Mimmi20\Form\Paragraph\View\Helper\FormParagraphFactory;
 
 final class ConfigProvider
 {
@@ -19,6 +24,8 @@ final class ConfigProvider
      *
      * @return array<string, array<string, array<string, string>>>
      * @phpstan-return array{view_helpers: array{aliases: array<string, class-string>, factories: array<class-string, class-string>}}
+     *
+     * @throws void
      */
     public function __invoke(): array
     {
@@ -32,6 +39,8 @@ final class ConfigProvider
      *
      * @return array<string, array<string, string>>
      * @phpstan-return array{aliases: array<string, class-string>, factories: array<class-string, class-string>}
+     *
+     * @throws void
      */
     public function getViewHelperConfig(): array
     {

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,10 +10,10 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
 
 use function array_key_exists;
 use function is_array;
@@ -42,17 +42,18 @@ final class FormFile extends FormInput
     /**
      * Render a form <input> element from the provided $element
      *
-     * @throws Exception\DomainException
+     * @throws DomainException
      */
     public function render(ElementInterface $element): string
     {
         $name = $element->getName();
-        if (null === $name || '' === $name) {
-            throw new Exception\DomainException(
+
+        if ($name === null || $name === '') {
+            throw new DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
-                    __METHOD__
-                )
+                    __METHOD__,
+                ),
             );
         }
 
@@ -60,11 +61,13 @@ final class FormFile extends FormInput
 
         $attributes['type'] = $this->getType($element);
         $attributes['name'] = $name;
+
         if (array_key_exists('multiple', $attributes) && $attributes['multiple']) {
             $attributes['name'] .= '[]';
         }
 
         $value = $element->getValue();
+
         if (is_array($value) && isset($value['name']) && !is_array($value['name'])) {
             $attributes['value'] = $value['name'];
         } elseif (is_string($value)) {
@@ -75,7 +78,7 @@ final class FormFile extends FormInput
         $markup = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
-            $this->getInlineClosingBracket()
+            $this->getInlineClosingBracket(),
         );
 
         return $indent . $markup;
@@ -83,6 +86,8 @@ final class FormFile extends FormInput
 
     /**
      * Determine input type to use
+     *
+     * @throws void
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */

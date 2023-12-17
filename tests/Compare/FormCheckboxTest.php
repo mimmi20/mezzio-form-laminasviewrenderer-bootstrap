@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,33 +10,37 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare;
 
 use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\Factory;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
+use function get_debug_type;
+use function sprintf;
 use function trim;
 
-final class FormCheckboxTest extends AbstractTest
+final class FormCheckboxTest extends AbstractTestCase
 {
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws ContainerExceptionInterface
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRender(): void
     {
@@ -55,14 +59,43 @@ final class FormCheckboxTest extends AbstractTest
         $htmlElement    = $this->serviceManager->get(HtmlElementInterface::class);
         $hidden         = $plugin->get(FormHiddenInterface::class);
 
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($docType instanceof Doctype);
+        assert(
+            $escapeHtml instanceof EscapeHtml,
+            sprintf(
+                '$escapeHtml should be an Instance of %s, but was %s',
+                EscapeHtml::class,
+                get_debug_type($escapeHtml),
+            ),
+        );
+        assert(
+            $escapeHtmlAttr instanceof EscapeHtmlAttr,
+            sprintf(
+                '$escapeHtmlAttr should be an Instance of %s, but was %s',
+                EscapeHtmlAttr::class,
+                get_debug_type($escapeHtmlAttr),
+            ),
+        );
+        assert(
+            $docType instanceof Doctype,
+            sprintf(
+                '$docType should be an Instance of %s, but was %s',
+                Doctype::class,
+                get_debug_type($docType),
+            ),
+        );
         assert($label instanceof FormLabelInterface);
         assert($htmlElement instanceof HtmlElementInterface);
         assert($hidden instanceof FormHiddenInterface);
 
-        $helper = new FormCheckbox($escapeHtml, $escapeHtmlAttr, $docType, $label, $htmlElement, $hidden, null);
+        $helper = new FormCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $docType,
+            $label,
+            $htmlElement,
+            $hidden,
+            null,
+        );
 
         self::assertSame($expected, trim($helper->render($form->get('gridCheck1'))));
     }
