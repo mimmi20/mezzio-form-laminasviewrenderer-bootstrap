@@ -10,17 +10,17 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Laminas\View\Helper\HelperInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -35,26 +35,37 @@ final class FormFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocation(): void
     {
         $formCollection = $this->createMock(FormCollectionInterface::class);
         $formRow        = $this->createMock(FormRowInterface::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('has');
-        $helperPluginManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $helperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([FormCollectionInterface::class], [FormRowInterface::class])
-            ->willReturnOnConsecutiveCalls($formCollection, $formRow);
+            ->willReturnCallback(
+                function(string $name, ?array $options = null) use ($matcher, $formCollection, $formRow): FormCollectionInterface|FormRowInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(FormCollectionInterface::class, $name),
+                        default => self::assertSame(FormRowInterface::class, $name),
+                    };
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $formCollection,
+                        default => $formRow,
+                    };
+                }
+            );
+
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)

@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Exception;
 use Laminas\Form\FieldsetInterface;
@@ -51,12 +51,16 @@ final class Form extends BaseForm
     /**
      * Render a form from the provided $form
      *
+     * @param FormInterface<TFilteredValues> $form
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
      * @throws Exception\DomainException
      * @throws RuntimeException
      * @throws InvalidArgumentException
      * @throws Exception\InvalidArgumentException
+     *
+     * @template TFilteredValues of object
      */
     public function render(FormInterface $form): string
     {

@@ -10,12 +10,13 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Collection;
 use Laminas\Form\Element\Text;
-use Laminas\Form\Exception\DomainException;
+use Laminas\Form\ElementInterface;
+use Laminas\View\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\Form;
@@ -25,8 +26,9 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\Stdlib\PriorityList;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
+use Laminas\View\Helper\Escaper\AbstractHelper;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -49,31 +51,23 @@ final class FormCollectionTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::never())
             ->method('setIndent');
         $formRow->expects(self::never())
             ->method('render');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
         $element->expects(self::never())
@@ -91,7 +85,7 @@ final class FormCollectionTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection::render',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollection::render',
                 FieldsetInterface::class
             )
         );
@@ -102,27 +96,21 @@ final class FormCollectionTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent1(): void
     {
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::never())
             ->method('setIndent');
         $formRow->expects(self::never())
             ->method('render');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -134,27 +122,21 @@ final class FormCollectionTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent2(): void
     {
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::never())
             ->method('setIndent');
         $formRow->expects(self::never())
             ->method('render');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -166,27 +148,21 @@ final class FormCollectionTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetShouldWrap(): void
     {
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::never())
             ->method('setIndent');
         $formRow->expects(self::never())
             ->method('render');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -209,7 +185,7 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithFormWithoutOptionsAndElements(): void
     {
@@ -227,53 +203,98 @@ final class FormCollectionTest extends TestCase
         $expectedLegend   = '<legend></legend>';
         $expectedFieldset = '<fieldset></fieldset>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::never())
             ->method('setIndent');
         $formRow->expects(self::never())
             ->method('render');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($label, 0)
             ->willReturn($labelEscaped);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(2))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(2);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $labelEscaped)], ['fieldset', [], PHP_EOL . '    ' . $expectedLegend . PHP_EOL])
-            ->willReturnOnConsecutiveCalls($expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $labelEscaped, $expectedLegend, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $labelEscaped), $content),
+                        default => self::assertSame(PHP_EOL . '    ' . $expectedLegend . PHP_EOL, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
         $list = new PriorityList();
 
-        $element = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Form::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): ?array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -295,7 +316,7 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithFormAndElementsWithoutOptions(): void
     {
@@ -319,17 +340,13 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $textElement = $this->createMock(Text::class);
         $textElement->expects(self::never())
             ->method('getOption');
         $textElement->expects(self::never())
             ->method('setOption');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buttonElement = $this->createMock(Button::class);
         $buttonElement->expects(self::never())
             ->method('getOption');
         $buttonElement->expects(self::never())
@@ -338,44 +355,110 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$innerLabel, 0], [$label, 0])
-            ->willReturnOnConsecutiveCalls($innerLabelEscaped, $labelEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $innerLabel, $label, $innerLabelEscaped, $labelEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabel, $value),
+                        default => self::assertSame($label, $value),
+                    };
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelEscaped,
+                        default => $labelEscaped,
+                    };
+                }
+            );
+
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabelEscaped)], ['fieldset', [], PHP_EOL . '        ' . $expectedInnerLegend . PHP_EOL . '    '], ['legend', ['class' => ''], sprintf('<span>%s</span>', $labelEscaped)], ['fieldset', [], PHP_EOL . '    ' . $expectedLegend . PHP_EOL . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $innerLabelEscaped, $expectedInnerLegend, $labelEscaped, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabelEscaped), $content),
+                        2 => self::assertSame(PHP_EOL . '        ' . $expectedInnerLegend . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(sprintf('<span>%s</span>', $labelEscaped), $content),
+                        default => self::assertSame(PHP_EOL . '    ' . $expectedLegend . PHP_EOL . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(4))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(4);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, []);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout, $floating): mixed
+                {
+                    match($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::never())
             ->method('setOption');
         $collectionElement->expects(self::once())
@@ -406,25 +489,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Form::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|null
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -446,7 +559,7 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsWithoutOptions(): void
     {
@@ -470,17 +583,13 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $textElement = $this->createMock(Text::class);
         $textElement->expects(self::never())
             ->method('getOption');
         $textElement->expects(self::never())
             ->method('setOption');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buttonElement = $this->createMock(Button::class);
         $buttonElement->expects(self::never())
             ->method('getOption');
         $buttonElement->expects(self::never())
@@ -489,44 +598,110 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$innerLabel, 0], [$label, 0])
-            ->willReturnOnConsecutiveCalls($innerLabelEscaped, $labelEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $innerLabel, $label, $innerLabelEscaped, $labelEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabel, $value),
+                        default => self::assertSame($label, $value),
+                    };
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelEscaped,
+                        default => $labelEscaped,
+                    };
+                }
+            );
+
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabelEscaped)], ['fieldset', [], PHP_EOL . '        ' . $expectedInnerLegend . PHP_EOL . '    '], ['legend', ['class' => ''], sprintf('<span>%s</span>', $labelEscaped)], ['fieldset', [], PHP_EOL . '    ' . $expectedLegend . PHP_EOL . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $innerLabelEscaped, $expectedInnerLegend, $labelEscaped, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabelEscaped), $content),
+                        2 => self::assertSame(PHP_EOL . '        ' . $expectedInnerLegend . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(sprintf('<span>%s</span>', $labelEscaped), $content),
+                        default => self::assertSame(PHP_EOL . '    ' . $expectedLegend . PHP_EOL . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(4))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(4);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, []);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout, $floating): mixed
+                {
+                    match($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::never())
             ->method('setOption');
         $collectionElement->expects(self::once())
@@ -557,25 +732,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|null
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -602,12 +807,12 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithFormAndElementsAndOptions(): void
     {
         $form            = 'test-form';
-        $layout          = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout          = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating        = true;
         $attributes      = [];
         $labelAttributes = [];
@@ -624,24 +829,46 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -649,42 +876,93 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabel)], ['fieldset', [], PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    '], ['legend', ['class' => ''], $label], ['fieldset', [], PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function (string $element, array $attribs, string $content) use ($matcher, $innerLabel, $indent, $expectedInnerLegend, $label, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabel), $content),
+                        2 => self::assertSame(PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    ', $content),
+                        3 => self::assertSame($label, $content),
+                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(6))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(6);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating, []);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        5 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        5 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -716,25 +994,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Form::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -756,12 +1064,12 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptions(): void
     {
         $form            = 'test-form';
-        $layout          = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout          = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating        = true;
         $attributes      = [];
         $labelAttributes = [];
@@ -778,24 +1086,46 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -803,42 +1133,93 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabel)], ['fieldset', [], PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    '], ['legend', ['class' => ''], $label], ['fieldset', [], PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function (string $element, array $attribs, string $content) use ($matcher, $innerLabel, $indent, $expectedInnerLegend, $label, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabel), $content),
+                        2 => self::assertSame(PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    ', $content),
+                        3 => self::assertSame($label, $content),
+                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(6))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(6);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating, []);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        5 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        5 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -870,25 +1251,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -915,12 +1326,12 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator(): void
     {
         $form            = 'test-form';
-        $layout          = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout          = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating        = true;
         $attributes      = [];
         $labelAttributes = [];
@@ -940,24 +1351,46 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -965,50 +1398,116 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$innerLabel, $textDomain, null], [$label, $textDomain, null])
-            ->willReturnOnConsecutiveCalls($innerLabelTranslated, $labelTranslated);
+            ->willReturnCallback(
+                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $innerLabel, $label, $textDomain, $innerLabelTranslated, $labelTranslated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabel, $message),
+                        default => self::assertSame($label, $message),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelTranslated,
+                        default => $labelTranslated,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabelTranslated)], ['fieldset', [], PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    '], ['legend', ['class' => ''], $labelTranslated], ['fieldset', [], PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function (string $element, array $attribs, string $content) use ($matcher, $innerLabelTranslated, $labelTranslated, $indent, $expectedInnerLegend, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabelTranslated), $content),
+                        2 => self::assertSame(PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    ', $content),
+                        3 => self::assertSame($labelTranslated, $content),
+                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, $translator);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(6))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(6);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating, []);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        5 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        5 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1040,25 +1539,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -1086,12 +1615,12 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator2(): void
     {
         $form                   = 'test-form';
-        $layout                 = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout                 = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating               = true;
         $attributes             = [];
         $labelAttributes        = [];
@@ -1113,24 +1642,46 @@ final class FormCollectionTest extends TestCase
         $expectedInnerLegend   = '<legend>inside</legend>';
         $expectedInnerFieldset = '<fieldset>inside</fieldset>';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1138,52 +1689,133 @@ final class FormCollectionTest extends TestCase
         $expectedButton = $indent . '    <button></button>';
         $expectedText   = $indent . '    <text></text>';
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$innerLabel, $textDomain, null], [$label, $textDomain, null])
-            ->willReturnOnConsecutiveCalls($innerLabelTranslated, $labelTranslated);
+            ->willReturnCallback(
+                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $innerLabel, $label, $textDomain, $innerLabelTranslated, $labelTranslated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabel, $message),
+                        default => self::assertSame($label, $message),
+                    };
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+                    self::assertSame($textDomain, $textDomainParam);
+
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelTranslated,
+                        default => $labelTranslated,
+                    };
+                }
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$innerLabelTranslated, 0], [$labelTranslated, 0])
-            ->willReturnOnConsecutiveCalls($innerLabelTranslatedEscaped, $labelTranslatedEscaped);
+            ->willReturnCallback(
+                function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $innerLabelTranslated, $labelTranslated, $innerLabelTranslatedEscaped, $labelTranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabelTranslated, $value),
+                        default => self::assertSame($labelTranslated, $value),
+                    };
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(4))
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelTranslatedEscaped,
+                        default => $labelTranslatedEscaped,
+                    };
+                }
+            );
+
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(4);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(['legend', ['class' => ''], sprintf('<span>%s</span>', $innerLabelTranslatedEscaped)], ['fieldset', [], PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    '], ['legend', ['class' => ''], $labelTranslatedEscaped], ['fieldset', [], PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent])
-            ->willReturnOnConsecutiveCalls($expectedInnerLegend, $expectedInnerFieldset, $expectedLegend, $expectedFieldset);
+            ->willReturnCallback(
+                function (string $element, array $attribs, string $content) use ($matcher, $innerLabelTranslatedEscaped, $labelTranslatedEscaped, $indent, $expectedInnerLegend, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('legend', $element),
+                        default => self::assertSame('fieldset', $element),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame(['class' => ''], $attribs),
+                        default => self::assertSame([], $attribs),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(sprintf('<span>%s</span>', $innerLabelTranslatedEscaped), $content),
+                        2 => self::assertSame(PHP_EOL . $indent . '        ' . $expectedInnerLegend . PHP_EOL . $indent . '    ', $content),
+                        3 => self::assertSame($labelTranslatedEscaped, $content),
+                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent, $content),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        default => $expectedFieldset,
+                    };
+                }
+            );
 
         $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, $translator);
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(6))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(6);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating, []);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        5 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        5 => $floating,
+                        default => [],
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1215,25 +1847,55 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'], ['label_attributes'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false, $labelAttributes);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool|array|string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        4, 5, 6 => false,
+                        default => $labelAttributes,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
         $element->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
-        $element->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $disableEscape, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasAttribute')
             ->with('id')
@@ -1261,34 +1923,56 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator3(): void
     {
         $form       = 'test-form';
-        $layout     = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout     = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating   = true;
         $indent     = '<!-- -->  ';
         $textDomain = 'test-domain';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1297,32 +1981,39 @@ final class FormCollectionTest extends TestCase
         $expectedText   = $indent . '    <text></text>';
         $expected       = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -1330,13 +2021,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1362,15 +2066,30 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -1403,34 +2122,56 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator4(): void
     {
         $form       = 'test-form';
-        $layout     = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout     = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating   = true;
         $indent     = '<!-- -->  ';
         $textDomain = 'test-domain';
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1439,32 +2180,39 @@ final class FormCollectionTest extends TestCase
         $expectedText   = $indent . '    <text></text>';
         $expected       = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
@@ -1472,13 +2220,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1504,15 +2265,30 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        3 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        3 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -1546,43 +2322,63 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator5(): void
     {
         $form               = 'test-form';
-        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout             = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating           = true;
         $indent             = '<!-- -->  ';
         $textDomain         = 'test-domain';
         $templateAttributes = ['class' => 'template-class'];
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
-        $templateElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $templateElement = $this->createMock(Text::class);
         $templateElement->expects(self::never())
             ->method('getOption');
         $templateElement->expects(self::never())
             ->method('setOption');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1594,32 +2390,41 @@ final class FormCollectionTest extends TestCase
 
         $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(3))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(3))
+        $matcher = self::exactly(3);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$templateElement], [$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedTemplate, $expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $templateElement, $buttonElement, $textElement, $expectedTemplate, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($templateElement, $element),
+                        2 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedTemplate,
+                        2 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('template', ['class' => 'template-class'], $expectedTemplate . PHP_EOL . $indent)
@@ -1629,13 +2434,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1661,15 +2479,32 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('template_attributes', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $templateAttributes,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -1703,37 +2538,61 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator6(): void
     {
         $form               = 'test-form';
-        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout             = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating           = true;
         $indent             = '<!-- -->  ';
         $textDomain         = 'test-domain';
         $templateAttributes = ['class' => 'template-class'];
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
         $templateList = new PriorityList();
 
-        $templateElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $templateElement->expects(self::exactly(3))
+        $templateElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(3);
+        $templateElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $templateElement->expects(self::never())
             ->method('setOption');
         $templateElement->expects(self::never())
@@ -1753,13 +2612,24 @@ final class FormCollectionTest extends TestCase
         $templateElement->expects(self::never())
             ->method('getTemplateElement');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1770,32 +2640,39 @@ final class FormCollectionTest extends TestCase
 
         $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('template', ['class' => 'template-class'], PHP_EOL . $indent)
@@ -1805,13 +2682,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1837,15 +2727,32 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('template_attributes', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $templateAttributes,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -1879,37 +2786,61 @@ final class FormCollectionTest extends TestCase
      * @throws ServiceNotFoundException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      * @throws RuntimeException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator7(): void
     {
         $form               = 'test-form';
-        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout             = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating           = true;
         $indent             = '<!-- -->  ';
         $textDomain         = 'test-domain';
         $templateAttributes = ['class' => 'template-class'];
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
         $templateList = new PriorityList();
 
-        $templateElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $templateElement->expects(self::exactly(3))
+        $templateElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(3);
+        $templateElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $templateElement->expects(self::never())
             ->method('setOption');
         $templateElement->expects(self::never())
@@ -1929,13 +2860,24 @@ final class FormCollectionTest extends TestCase
         $templateElement->expects(self::never())
             ->method('getTemplateElement');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -1946,32 +2888,39 @@ final class FormCollectionTest extends TestCase
 
         $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('template', ['class' => 'template-class'], PHP_EOL . $indent)
@@ -1981,13 +2930,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -2013,15 +2975,32 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('template_attributes', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $templateAttributes,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -2053,37 +3032,66 @@ final class FormCollectionTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testRenderWithCollectionAndElementsAndOptionsAndTranslator8(): void
     {
         $form               = 'test-form';
-        $layout             = \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
+        $layout             = \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL;
         $floating           = true;
         $indent             = '<!-- -->  ';
         $textDomain         = 'test-domain';
         $templateAttributes = ['class' => 'template-class'];
 
-        $textElement = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $textElement->expects(self::exactly(2))
+        $textElement = $this->createMock(Text::class);
+        $matcher = self::exactly(2);
+        $textElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $textElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
 
         $templateList = new PriorityList();
 
-        $templateElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $templateElement->expects(self::exactly(3))
+        $templateElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(3);
+        $templateElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        2 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        2 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $templateElement->expects(self::never())
             ->method('setOption');
         $templateElement->expects(self::never())
@@ -2103,13 +3111,24 @@ final class FormCollectionTest extends TestCase
         $templateElement->expects(self::never())
             ->method('getTemplateElement');
 
-        $buttonElement = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buttonElement->expects(self::exactly(2))
+        $buttonElement = $this->createMock(Button::class);
+        $matcher = self::exactly(2);
+        $buttonElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'])
-            ->willReturnOnConsecutiveCalls($form, $layout);
+            ->willReturnCallback(
+                function(string $option) use ($matcher, $form, $layout): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('form', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $form,
+                        default => $layout,
+                    };
+                }
+            );
         $buttonElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -2120,32 +3139,39 @@ final class FormCollectionTest extends TestCase
 
         $expected = PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . $indent . '    ' . $renderedTemplate . PHP_EOL;
 
-        $formRow = $this->getMockBuilder(FormRowInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formRow = $this->createMock(FormRowInterface::class);
         $formRow->expects(self::exactly(2))
             ->method('setIndent')
             ->with($indent . '    ');
-        $formRow->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
             ->method('render')
-            ->withConsecutive([$buttonElement], [$textElement])
-            ->willReturnOnConsecutiveCalls($expectedButton, $expectedText);
+            ->willReturnCallback(
+                function (ElementInterface $element, ?string $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('template', ['class' => 'template-class'], PHP_EOL . $indent)
@@ -2155,13 +3181,26 @@ final class FormCollectionTest extends TestCase
 
         $innerList = new PriorityList();
 
-        $collectionElement = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionElement->expects(self::exactly(5))
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher = self::exactly(5);
+        $collectionElement->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['form'], ['layout'], ['form'], ['layout'], ['floating'])
-            ->willReturnOnConsecutiveCalls($form, $layout, $form, $layout, $floating);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating): string|bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 3 => self::assertSame('form', $option),
+                        2, 4 => self::assertSame('layout', $option),
+                        default => self::assertSame('floating', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 3 => $form,
+                        2, 4 => $layout,
+                        default => $floating,
+                    };
+                }
+            );
         $collectionElement->expects(self::once())
             ->method('setOption')
             ->with('floating', true);
@@ -2187,15 +3226,32 @@ final class FormCollectionTest extends TestCase
         $list->insert('y', $buttonElement);
         $list->insert('z', $collectionElement);
 
-        $element = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Collection::class);
         $element->expects(self::never())
             ->method('getName');
-        $element->expects(self::exactly(7))
+        $matcher = self::exactly(7);
+        $element->expects($matcher)
             ->method('getOption')
-            ->withConsecutive(['template_attributes'], ['form'], ['layout'], ['floating'], ['show-required-mark'], ['show-required-mark'], ['show-required-mark'])
-            ->willReturnOnConsecutiveCalls($templateAttributes, $form, $layout, $floating, false, false, false);
+            ->willReturnCallback(
+                function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string|bool|array
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('template_attributes', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        default => self::assertSame('show-required-mark', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $templateAttributes,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        default => false,
+                    };
+                }
+            );
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())

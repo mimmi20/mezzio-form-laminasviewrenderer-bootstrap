@@ -10,14 +10,14 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mimmi20\Form\Element\Links\LinksInterface as LinksElement;
+use Mimmi20\Form\Links\Element\LinksInterface as LinksElement;
 
 use function array_key_exists;
 use function array_merge;
@@ -71,7 +71,7 @@ final class FormLinks extends AbstractHelper implements FormIndentInterface, For
      *
      * @return FormLinks|string
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -85,12 +85,12 @@ final class FormLinks extends AbstractHelper implements FormIndentInterface, For
     /**
      * Render a form <select> element from the provided $element
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof LinksElement) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,

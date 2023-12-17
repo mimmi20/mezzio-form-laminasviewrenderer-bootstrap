@@ -10,9 +10,9 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;

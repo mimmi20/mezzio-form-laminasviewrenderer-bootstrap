@@ -10,26 +10,25 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare;
 
-use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\DomainException;
 use Laminas\Form\Factory;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function trim;
 
-final class FormButtonTest extends AbstractTest
+final class FormButtonTest extends AbstractTestCase
 {
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException

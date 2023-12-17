@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
@@ -45,14 +45,14 @@ final class FormImage extends FormInput
     /**
      * Render a form <input> element from the provided $element
      *
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function render(ElementInterface $element): string
     {
         $src = $element->getAttribute('src');
 
         if (empty($src)) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned src; none discovered',
                     __METHOD__

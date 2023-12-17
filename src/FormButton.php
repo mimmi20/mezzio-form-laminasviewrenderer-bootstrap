@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
@@ -99,8 +99,8 @@ final class FormButton extends FormInput
      * Render a form <button> element from the provided $element,
      * using content from $buttonContent or the element's "label" attribute
      *
-     * @throws Exception\DomainException
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element, ?string $buttonContent = null): string
     {
@@ -110,7 +110,7 @@ final class FormButton extends FormInput
             $buttonContent = $element->getLabel();
 
             if (null === $buttonContent) {
-                throw new Exception\DomainException(
+                throw new \Laminas\View\Exception\DomainException(
                     sprintf(
                         '%s expects either button content as the second argument, or that the element provided has a label value; neither found',
                         __METHOD__
@@ -140,8 +140,8 @@ final class FormButton extends FormInput
      *
      * @param array<string, bool|string>|ElementInterface|null $attributesOrElement
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function openTag($attributesOrElement = null): string
     {
@@ -156,7 +156,7 @@ final class FormButton extends FormInput
         }
 
         if (!$attributesOrElement instanceof ElementInterface) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s expects null, an array or a \Laminas\Form\ElementInterface instance; received "%s"',
                     __METHOD__,
@@ -168,7 +168,7 @@ final class FormButton extends FormInput
         $element = $attributesOrElement;
         $name    = $element->getName();
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
                     __METHOD__

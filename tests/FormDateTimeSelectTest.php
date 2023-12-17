@@ -10,17 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use IntlDateFormatter;
 use Laminas\Form\Element\DateTimeSelect as DateTimeSelectElement;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
-use Laminas\Form\Exception\DomainException;
+use Laminas\Form\ElementInterface;
+use Laminas\View\Exception\DomainException;
 use Laminas\Form\Exception\ExtensionNotLoadedException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -39,9 +40,7 @@ final class FormDateTimeSelectTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -49,9 +48,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
 
@@ -59,7 +56,7 @@ final class FormDateTimeSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render',
                 DateTimeSelectElement::class
             )
         );
@@ -75,9 +72,7 @@ final class FormDateTimeSelectTest extends TestCase
      */
     public function testRenderWithoutName(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -85,9 +80,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -118,7 +111,7 @@ final class FormDateTimeSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render'
             )
         );
         $this->expectExceptionCode(0);
@@ -133,9 +126,7 @@ final class FormDateTimeSelectTest extends TestCase
      */
     public function testInvokeWithoutName1(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -143,9 +134,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -176,7 +165,7 @@ final class FormDateTimeSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect::render'
             )
         );
         $this->expectExceptionCode(0);
@@ -191,13 +180,11 @@ final class FormDateTimeSelectTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeWithoutName2(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -205,9 +192,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -229,15 +214,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender1(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -247,9 +232,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . '. ' . PHP_EOL . $renderedMonth . PHP_EOL . ' ' . PHP_EOL . $renderedYear . PHP_EOL . ' um ' . PHP_EOL . $renderedHour . PHP_EOL . ':' . PHP_EOL . $renderedMinute . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -293,9 +276,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -356,44 +337,21 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -430,9 +388,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -505,22 +461,37 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -564,15 +535,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender2(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -582,9 +553,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL . $renderedHour . PHP_EOL . $renderedMinute . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -628,9 +597,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -691,44 +658,21 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -765,9 +709,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -840,22 +782,37 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -899,15 +856,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender3(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -917,9 +874,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . '. ' . PHP_EOL . $renderedMonth . PHP_EOL . ' ' . PHP_EOL . $renderedYear . PHP_EOL . ' um ' . PHP_EOL . $renderedHour . PHP_EOL . ':' . PHP_EOL . $renderedMinute . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -961,9 +916,7 @@ final class FormDateTimeSelectTest extends TestCase
         $dayElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1022,42 +975,19 @@ final class FormDateTimeSelectTest extends TestCase
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1092,9 +1022,7 @@ final class FormDateTimeSelectTest extends TestCase
         $hourElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1165,22 +1093,37 @@ final class FormDateTimeSelectTest extends TestCase
         $minuteElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1224,15 +1167,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender4(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -1242,9 +1185,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL . $renderedHour . PHP_EOL . $renderedMinute . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1286,9 +1227,7 @@ final class FormDateTimeSelectTest extends TestCase
         $dayElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1347,42 +1286,19 @@ final class FormDateTimeSelectTest extends TestCase
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1417,9 +1333,7 @@ final class FormDateTimeSelectTest extends TestCase
         $hourElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1490,22 +1404,37 @@ final class FormDateTimeSelectTest extends TestCase
         $minuteElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1549,15 +1478,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender5(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = false;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $indent                  = '    ';
         $renderedDay             = $indent . '<select name="day"></select>';
         $renderedMonth           = $indent . '<select name="month"></select>';
@@ -1567,9 +1496,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = $indent . PHP_EOL . $renderedDay . PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL . $renderedHour . PHP_EOL . $renderedMinute . PHP_EOL . $indent;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1611,9 +1538,7 @@ final class FormDateTimeSelectTest extends TestCase
         $dayElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1672,42 +1597,19 @@ final class FormDateTimeSelectTest extends TestCase
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1742,9 +1644,7 @@ final class FormDateTimeSelectTest extends TestCase
         $hourElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1815,22 +1715,37 @@ final class FormDateTimeSelectTest extends TestCase
         $minuteElement->expects(self::never())
             ->method('setEmptyOption');
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1876,15 +1791,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRender6(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $indent                  = '    ';
         $renderedDay             = $indent . '<select name="day"></select>';
         $renderedMonth           = $indent . '<select name="month"></select>';
@@ -1894,9 +1809,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = $indent . PHP_EOL . $renderedDay . PHP_EOL . $indent . '. ' . PHP_EOL . $renderedMonth . PHP_EOL . $indent . ' ' . PHP_EOL . $renderedYear . PHP_EOL . $indent . ' um ' . PHP_EOL . $renderedHour . PHP_EOL . $indent . ':' . PHP_EOL . $renderedMinute . PHP_EOL . $indent;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -1940,9 +1853,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2003,44 +1914,21 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2077,9 +1965,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2152,22 +2038,37 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(5))
+        $matcher = self::exactly(5);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -2213,15 +2114,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithSeconds1(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = true;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -2232,9 +2133,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . '. ' . PHP_EOL . $renderedMonth . PHP_EOL . ' ' . PHP_EOL . $renderedYear . PHP_EOL . ' um ' . PHP_EOL . $renderedHour . PHP_EOL . ':' . PHP_EOL . $renderedMinute . PHP_EOL . ':' . PHP_EOL . $renderedSecond . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2278,9 +2177,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2341,44 +2238,21 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2415,9 +2289,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2490,9 +2362,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $secondElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $secondElement = $this->createMock(Select::class);
         $secondElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2565,22 +2435,39 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement], [$secondElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute, $renderedSecond);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $secondElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute, $renderedSecond): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        6 => self::assertSame($secondElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        6 => $renderedSecond,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -2625,15 +2512,15 @@ final class FormDateTimeSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithSeconds2(): void
     {
         $name                    = 'test-name';
         $renderDelimiters        = false;
         $shouldCreateEmptyOption = true;
-        $minYear                 = date('Y') - 2;
-        $maxYear                 = date('Y') + 2;
+        $minYear                 = (int) date('Y') - 2;
+        $maxYear                 = (int) date('Y') + 2;
         $renderedDay             = '<select name="day"></select>';
         $renderedMonth           = '<select name="month"></select>';
         $renderedYear            = '<select name="year"></select>';
@@ -2644,9 +2531,7 @@ final class FormDateTimeSelectTest extends TestCase
 
         $excpected = PHP_EOL . $renderedDay . PHP_EOL . $renderedMonth . PHP_EOL . $renderedYear . PHP_EOL . $renderedHour . PHP_EOL . $renderedMinute . PHP_EOL . $renderedSecond . PHP_EOL;
 
-        $dayElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dayElement = $this->createMock(Select::class);
         $dayElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2690,9 +2575,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $monthElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $monthElement = $this->createMock(Select::class);
         $monthElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2753,44 +2636,21 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $yearElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $yearElement = $this->createMock(Select::class);
+        $years = [];
+        for ($i = $maxYear; $i >= $minYear; --$i) {
+            $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
+        }
         $yearElement->expects(self::once())
             ->method('setValueOptions')
-            ->with(
-                [
-                    2023 => [
-                        'value' => '2023',
-                        'label' => '2023',
-                    ],
-                    2022 => [
-                        'value' => '2022',
-                        'label' => '2022',
-                    ],
-                    2021 => [
-                        'value' => '2021',
-                        'label' => '2021',
-                    ],
-                    2020 => [
-                        'value' => '2020',
-                        'label' => '2020',
-                    ],
-                    2019 => [
-                        'value' => '2019',
-                        'label' => '2019',
-                    ],
-                ]
-            )
+            ->with($years)
             ->willReturnSelf();
         $yearElement->expects(self::once())
             ->method('setEmptyOption')
             ->with('')
             ->willReturnSelf();
 
-        $hourElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hourElement = $this->createMock(Select::class);
         $hourElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2827,9 +2687,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $minuteElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minuteElement = $this->createMock(Select::class);
         $minuteElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2902,9 +2760,7 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $secondElement = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $secondElement = $this->createMock(Select::class);
         $secondElement->expects(self::once())
             ->method('setValueOptions')
             ->with(
@@ -2977,22 +2833,39 @@ final class FormDateTimeSelectTest extends TestCase
             ->with('')
             ->willReturnSelf();
 
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::once())
             ->method('setIndent')
             ->with($indent);
-        $selectHelper->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $selectHelper->expects($matcher)
             ->method('render')
-            ->withConsecutive([$dayElement], [$monthElement], [$yearElement], [$hourElement], [$minuteElement], [$secondElement])
-            ->willReturnOnConsecutiveCalls($renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute, $renderedSecond);
+            ->willReturnCallback(
+                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $hourElement, $minuteElement, $secondElement, $renderedDay, $renderedMonth, $renderedYear, $renderedHour, $renderedMinute, $renderedSecond): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($dayElement, $element),
+                        2 => self::assertSame($monthElement, $element),
+                        3 => self::assertSame($yearElement, $element),
+                        4 => self::assertSame($hourElement, $element),
+                        6 => self::assertSame($secondElement, $element),
+                        default => self::assertSame($minuteElement, $element),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $renderedDay,
+                        2 => $renderedMonth,
+                        3 => $renderedYear,
+                        4 => $renderedHour,
+                        6 => $renderedSecond,
+                        default => $renderedMinute,
+                    };
+                }
+            );
 
         $helper = new FormDateTimeSelect($selectHelper);
 
-        $element = $this->getMockBuilder(DateTimeSelectElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(DateTimeSelectElement::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -3036,13 +2909,11 @@ final class FormDateTimeSelectTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderSetGetTimeType(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -3058,14 +2929,12 @@ final class FormDateTimeSelectTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent1(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())
@@ -3079,14 +2948,12 @@ final class FormDateTimeSelectTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent2(): void
     {
-        $selectHelper = $this->getMockBuilder(FormSelectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectHelper = $this->createMock(FormSelectInterface::class);
         $selectHelper->expects(self::never())
             ->method('setIndent');
         $selectHelper->expects(self::never())

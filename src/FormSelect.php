@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select as SelectElement;
@@ -115,8 +115,8 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      *
      * @return self|string
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -130,13 +130,13 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
     /**
      * Render a form <select> element from the provided $element
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof SelectElement) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,
@@ -147,7 +147,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
 
         $name = $element->getName();
         if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
                     __METHOD__
@@ -379,7 +379,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
      *
      * @return array<int|string, string>
      *
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\DomainException
      */
     private function validateMultiValue($value, array $attributes): array
     {
@@ -396,7 +396,7 @@ final class FormSelect extends AbstractHelper implements FormSelectInterface
         }
 
         if (!array_key_exists('multiple', $attributes) || !$attributes['multiple']) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s does not allow specifying multiple selected values when the element does not have a multiple attribute set to a boolean true',
                     self::class

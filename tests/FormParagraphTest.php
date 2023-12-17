@@ -10,14 +10,14 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormParagraph;
-use Mimmi20\Form\Element\Paragraph\ParagraphInterface as ParagraphElement;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormParagraph;
+use Mimmi20\Form\Paragraph\Element\ParagraphInterface as ParagraphElement;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -32,17 +32,13 @@ final class FormParagraphTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormParagraph($escapeHtml, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
         $element->expects(self::never())
@@ -62,7 +58,7 @@ final class FormParagraphTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormParagraph::render',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormParagraph::render',
                 ParagraphElement::class
             )
         );
@@ -74,7 +70,7 @@ final class FormParagraphTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderEmptyString(): void
     {
@@ -83,17 +79,13 @@ final class FormParagraphTest extends TestCase
         $attributes = ['class' => $class, 'aria-label' => $ariaLabel];
         $expected   = sprintf('<p aria-label="%s" class="%s"></p>', $ariaLabel, $class);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormParagraph($escapeHtml, null);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -111,7 +103,7 @@ final class FormParagraphTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderText(): void
     {
@@ -122,9 +114,7 @@ final class FormParagraphTest extends TestCase
         $attributes  = ['class' => $class, 'aria-label' => $ariaLabel];
         $expected    = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($text)
@@ -132,9 +122,7 @@ final class FormParagraphTest extends TestCase
 
         $helper = new FormParagraph($escapeHtml, null);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -152,7 +140,7 @@ final class FormParagraphTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderTextWithIndent(): void
     {
@@ -165,9 +153,7 @@ final class FormParagraphTest extends TestCase
 
         $expected = $indent . sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($text)
@@ -175,9 +161,7 @@ final class FormParagraphTest extends TestCase
 
         $helper = new FormParagraph($escapeHtml, null);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -197,7 +181,7 @@ final class FormParagraphTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderTextWithTranslator(): void
     {
@@ -211,17 +195,13 @@ final class FormParagraphTest extends TestCase
 
         $expected = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textTranlatedEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($textTranlated)
             ->willReturn($textTranlatedEscaped);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($text, $textDomain)
@@ -229,9 +209,7 @@ final class FormParagraphTest extends TestCase
 
         $helper = new FormParagraph($escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -251,7 +229,7 @@ final class FormParagraphTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testInvokeTextWithTranslator1(): void
     {
@@ -265,17 +243,13 @@ final class FormParagraphTest extends TestCase
 
         $expected = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textTranlatedEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($textTranlated)
             ->willReturn($textTranlatedEscaped);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($text, $textDomain)
@@ -283,9 +257,7 @@ final class FormParagraphTest extends TestCase
 
         $helper = new FormParagraph($escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -308,7 +280,7 @@ final class FormParagraphTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeTextWithTranslator2(): void
     {
@@ -322,17 +294,13 @@ final class FormParagraphTest extends TestCase
 
         $expected = sprintf('<p aria-label="%s" class="%s">%s</p>', $ariaLabel, $class, $textTranlatedEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($textTranlated)
             ->willReturn($textTranlatedEscaped);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($text, $textDomain)
@@ -340,9 +308,7 @@ final class FormParagraphTest extends TestCase
 
         $helper = new FormParagraph($escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(ParagraphElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(ParagraphElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -361,13 +327,11 @@ final class FormParagraphTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent1(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
@@ -379,13 +343,11 @@ final class FormParagraphTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent2(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 

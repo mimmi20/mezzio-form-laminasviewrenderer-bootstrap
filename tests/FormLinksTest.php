@@ -10,14 +10,15 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Text;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLinks;
-use Mimmi20\Form\Element\Links\LinksInterface as LinksElement;
+use Laminas\View\Helper\Escaper\AbstractHelper;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLinks;
+use Mimmi20\Form\Links\Element\LinksInterface as LinksElement;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -34,17 +35,13 @@ final class FormLinksTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
         $element->expects(self::never())
@@ -64,7 +61,7 @@ final class FormLinksTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormLinks::render',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLinks::render',
                 LinksElement::class
             )
         );
@@ -76,23 +73,19 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderEmptyLinkList(): void
     {
         $expected = '';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::never())
             ->method('getAttributes');
         $element->expects(self::never())
@@ -112,7 +105,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderSingleLink(): void
     {
@@ -126,9 +119,7 @@ final class FormLinksTest extends TestCase
 
         $expected = sprintf('<a aria-label="%s" href="&#x23;" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass, $labelEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($label)
@@ -136,9 +127,7 @@ final class FormLinksTest extends TestCase
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -167,7 +156,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderDoubleLink(): void
     {
@@ -186,19 +175,30 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2Escaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1], [$label2])
-            ->willReturnOnConsecutiveCalls($label1Escaped, $label2Escaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $label1, $label2, $label1Escaped, $label2Escaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1, $value),
+                        default => self::assertSame($label2, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1Escaped,
+                        default => $label2Escaped,
+                    };
+                }
+            );
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -232,7 +232,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderDoubleLinkWithIndent(): void
     {
@@ -252,19 +252,30 @@ final class FormLinksTest extends TestCase
             $indent . $seperator . PHP_EOL .
             $indent . sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2Escaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1], [$label2])
-            ->willReturnOnConsecutiveCalls($label1Escaped, $label2Escaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $label1, $label2, $label1Escaped, $label2Escaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1, $value),
+                        default => self::assertSame($label2, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1Escaped,
+                        default => $label2Escaped,
+                    };
+                }
+            );
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -300,7 +311,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderDoubleLinkWithoutLabel(): void
     {
@@ -318,9 +329,7 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2Escaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($label2)
@@ -328,9 +337,7 @@ final class FormLinksTest extends TestCase
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -364,7 +371,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderDoubleLinkWithTranslator(): void
     {
@@ -386,27 +393,52 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2TranlatedEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1Tranlated], [$label2Tranlated])
-            ->willReturnOnConsecutiveCalls($label1TranlatedEscaped, $label2TranlatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $label1Tranlated, $label2Tranlated, $label1TranlatedEscaped, $label2TranlatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1Tranlated, $value),
+                        default => self::assertSame($label2Tranlated, $value),
+                    };
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(2))
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1TranlatedEscaped,
+                        default => $label2TranlatedEscaped,
+                    };
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(2);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1, $textDomain], [$label2, $textDomain])
-            ->willReturnOnConsecutiveCalls($label1Tranlated, $label2Tranlated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $label1, $label2, $textDomain, $label1Tranlated, $label2Tranlated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1, $message),
+                        default => self::assertSame($label2, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1Tranlated,
+                        default => $label2Tranlated,
+                    };
+                }
+            );
 
         $helper = new FormLinks($escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -442,7 +474,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderDoubleLinkWithTranslatorButWithoutLabel(): void
     {
@@ -462,17 +494,13 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2TranlatedEscaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($label2Tranlated)
             ->willReturn($label2TranlatedEscaped);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($label2, $textDomain)
@@ -480,9 +508,7 @@ final class FormLinksTest extends TestCase
 
         $helper = new FormLinks($escapeHtml, $translator);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -518,7 +544,7 @@ final class FormLinksTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testInvokeDoubleLink1(): void
     {
@@ -537,19 +563,30 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2Escaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1], [$label2])
-            ->willReturnOnConsecutiveCalls($label1Escaped, $label2Escaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $label1, $label2, $label1Escaped, $label2Escaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1, $value),
+                        default => self::assertSame($label2, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1Escaped,
+                        default => $label2Escaped,
+                    };
+                }
+            );
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -586,7 +623,7 @@ final class FormLinksTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeDoubleLink2(): void
     {
@@ -605,19 +642,30 @@ final class FormLinksTest extends TestCase
             $seperator . PHP_EOL .
             sprintf('<a aria-label="%s" href="&#x23;2" class="%s&#x20;%s">%s</a>', $ariaLabel, $class, $linkClass2, $label2Escaped);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(2))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(2);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$label1], [$label2])
-            ->willReturnOnConsecutiveCalls($label1Escaped, $label2Escaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $label1, $label2, $label1Escaped, $label2Escaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($label1, $value),
+                        default => self::assertSame($label2, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $label1Escaped,
+                        default => $label2Escaped,
+                    };
+                }
+            );
 
         $helper = new FormLinks($escapeHtml, null);
 
-        $element = $this->getMockBuilder(LinksElement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(LinksElement::class);
         $element->expects(self::exactly(2))
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -650,13 +698,11 @@ final class FormLinksTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent1(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
@@ -668,13 +714,11 @@ final class FormLinksTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent2(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 

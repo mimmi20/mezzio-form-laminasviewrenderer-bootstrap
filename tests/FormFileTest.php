@@ -10,17 +10,16 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\File;
-use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function sprintf;
 
@@ -32,29 +31,21 @@ final class FormFileTest extends TestCase
      */
     public function testRenderWithoutName(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -63,7 +54,7 @@ final class FormFileTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile::render'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile::render'
             )
         );
         $this->expectExceptionCode(0);
@@ -74,36 +65,27 @@ final class FormFileTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws InvalidArgumentException
      */
     public function testRenderWithName1(): void
     {
         $name     = 'name';
         $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -120,36 +102,27 @@ final class FormFileTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws InvalidArgumentException
      */
     public function testRenderWithName2(): void
     {
         $name     = 'name';
         $expected = '<input class="abc" type="file" name="name">';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -166,36 +139,27 @@ final class FormFileTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws InvalidArgumentException
      */
     public function testRenderWithName3(): void
     {
         $name     = 'name';
         $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -212,36 +176,27 @@ final class FormFileTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws InvalidArgumentException
      */
     public function testRenderWithName4(): void
     {
         $name     = 'name';
         $expected = '<input class="abc" multiple="multiple" type="file" name="name&#x5B;&#x5D;">';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
         $helper = new FormFile($escapeHtml, $escapeHtmlAttr, $doctype);
 
-        $element = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(File::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -257,25 +212,18 @@ final class FormFileTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testSetGetIndent1(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -287,25 +235,18 @@ final class FormFileTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testSetGetIndent2(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 

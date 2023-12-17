@@ -10,28 +10,27 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare;
 
-use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\DomainException;
 use Laminas\Form\Factory;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRowInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function trim;
 
-final class FormTest extends AbstractTest
+final class FormTest extends AbstractTestCase
 {
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -63,7 +62,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -95,7 +94,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -127,7 +126,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -159,7 +158,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -191,7 +190,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -223,7 +222,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -255,7 +254,7 @@ final class FormTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException

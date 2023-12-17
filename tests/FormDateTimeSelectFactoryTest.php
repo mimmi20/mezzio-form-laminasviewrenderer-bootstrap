@@ -10,16 +10,15 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelectFactory;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelect;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeSelectFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormSelectInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -34,15 +33,14 @@ final class FormDateTimeSelectFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Laminas\Form\Exception\ExtensionNotLoadedException
      */
     public function testInvocation(): void
     {
         $selectHelper = $this->createMock(FormSelectInterface::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('has');
         $helperPluginManager->expects(self::once())
@@ -50,9 +48,7 @@ final class FormDateTimeSelectFactoryTest extends TestCase
             ->with(FormSelectInterface::class)
             ->willReturn($selectHelper);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)

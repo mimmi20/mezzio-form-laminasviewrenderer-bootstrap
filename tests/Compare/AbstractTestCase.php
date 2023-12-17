@@ -10,12 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare;
 
 use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\LaminasView\LaminasViewRendererFactory;
@@ -25,7 +25,6 @@ use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererFactory;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function file_get_contents;
 use function sprintf;
@@ -36,7 +35,7 @@ use const PHP_EOL;
 /**
  * Base class for navigation view helper tests
  */
-abstract class AbstractTest extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
     protected ServiceManager $serviceManager;
 
@@ -44,11 +43,6 @@ abstract class AbstractTest extends TestCase
      * Path to files needed for test
      */
     protected string $files;
-
-    /**
-     * Class name for view helper to test
-     */
-    protected string $helperName;
 
     /**
      * Prepares the environment before running a test
@@ -84,7 +78,7 @@ abstract class AbstractTest extends TestCase
      * Returns the contens of the expected $file
      *
      * @throws Exception
-     * @throws InvalidArgumentException
+     *
      */
     protected function getExpected(string $file): string
     {

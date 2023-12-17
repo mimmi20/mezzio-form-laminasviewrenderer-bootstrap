@@ -10,15 +10,14 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementFactory;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -33,21 +32,17 @@ final class FormElementFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocation(): void
     {
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('has');
         $helperPluginManager->expects(self::never())
             ->method('get');
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)

@@ -10,10 +10,9 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\View\Helper\EscapeHtml;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
@@ -73,7 +72,8 @@ final class FormTextarea extends AbstractHelper
      *
      * @return FormTextarea|string
      *
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function __invoke(ElementInterface $element = null)
     {
@@ -87,14 +87,15 @@ final class FormTextarea extends AbstractHelper
     /**
      * Render a form <textarea> element from the provided $element
      *
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element): string
     {
         $name = $element->getName();
 
-        if (empty($name) && 0 !== $name) {
-            throw new Exception\DomainException(
+        if (empty($name)) {
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
                     __METHOD__
@@ -108,7 +109,7 @@ final class FormTextarea extends AbstractHelper
 
         $classes = ['form-control'];
 
-        if (array_key_exists('class', $attributes)) {
+        if (array_key_exists('class', $attributes) && is_string($attributes['class'])) {
             $classes = array_merge($classes, explode(' ', $attributes['class']));
         }
 

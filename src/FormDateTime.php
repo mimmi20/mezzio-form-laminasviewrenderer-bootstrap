@@ -10,12 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 
 /**
- * @deprecated use {@see \Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeLocal} instead
+ * @deprecated use {@see \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeLocal} instead
  */
 final class FormDateTime extends FormInput
 {

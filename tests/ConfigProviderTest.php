@@ -10,13 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\ConfigProvider;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class ConfigProviderTest extends TestCase
 {
@@ -29,7 +28,6 @@ final class ConfigProviderTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testProviderDefinesExpectedFactoryServices(): void
     {
@@ -49,7 +47,6 @@ final class ConfigProviderTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testInvocationReturnsArrayWithDependencies(): void
     {

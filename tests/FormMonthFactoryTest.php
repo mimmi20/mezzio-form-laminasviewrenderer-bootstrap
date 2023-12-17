@@ -10,18 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
+use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonth;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonth;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMonthFactory;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -36,7 +36,7 @@ final class FormMonthFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocation(): void
     {
@@ -44,19 +44,32 @@ final class FormMonthFactoryTest extends TestCase
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $doctype        = $this->createMock(Doctype::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('has');
-        $helperPluginManager->expects(self::exactly(3))
+        $matcher = self::exactly(3);
+        $helperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([EscapeHtml::class], [EscapeHtmlAttr::class], [Doctype::class])
-            ->willReturnOnConsecutiveCalls($escapeHtml, $escapeHtmlAttr, $doctype);
+            ->willReturnCallback(
+                function(string $name, ?array $options = null) use ($matcher, $escapeHtml, $escapeHtmlAttr, $doctype): HelperInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(EscapeHtml::class, $name),
+                        2 => self::assertSame(EscapeHtmlAttr::class, $name),
+                        default => self::assertSame(Doctype::class, $name),
+                    };
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $escapeHtml,
+                        2 => $escapeHtmlAttr,
+                        default => $doctype,
+                    };
+                }
+            );
+
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)

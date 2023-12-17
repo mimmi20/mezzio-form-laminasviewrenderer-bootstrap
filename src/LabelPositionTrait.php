@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
@@ -31,7 +31,7 @@ trait LabelPositionTrait
     /**
      * Set value for labelPosition
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function setLabelPosition(string $labelPosition): self
     {
@@ -40,7 +40,7 @@ trait LabelPositionTrait
         assert(is_string($labelPosition));
 
         if (!in_array($labelPosition, [BaseFormRow::LABEL_APPEND, BaseFormRow::LABEL_PREPEND], true)) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s expects either %s::LABEL_APPEND or %s::LABEL_PREPEND; received "%s"',
                     __METHOD__,

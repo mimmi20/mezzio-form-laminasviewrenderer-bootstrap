@@ -22,7 +22,7 @@ use Laminas\Form\Form;
 return [
     'type' => Form::class,
     'options' => [
-        'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'layout' => \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
         'row_attributes' => ['class' => 'mb-3'],
         'col_attributes' => ['class' => 'col-sm-10'],
         'label_col_attributes' => ['class' => 'col-sm-2'],

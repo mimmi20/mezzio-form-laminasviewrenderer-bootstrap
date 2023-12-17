@@ -23,7 +23,7 @@ use Laminas\Form\Form;
 return [
     'type' => Form::class,
     'options' => [
-        'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_VERTICAL,
+        'layout' => \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_VERTICAL,
     ],
     'attributes' => ['class' => 'g-3'],
     'elements' => [

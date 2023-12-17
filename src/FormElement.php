@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element;
 use Laminas\Form\ElementInterface;
@@ -19,8 +19,8 @@ use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
-use Mimmi20\Form\Element\Links\Links;
-use Mimmi20\Form\Element\Paragraph\Paragraph;
+use Mimmi20\Form\Links\Element\Links;
+use Mimmi20\Form\Paragraph\Element\Paragraph;
 
 use function assert;
 use function is_object;

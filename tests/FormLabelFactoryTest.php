@@ -10,17 +10,17 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Laminas\View\Helper\HelperInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelFactory;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -35,28 +35,39 @@ final class FormLabelFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocationWithTranslator(): void
     {
         $translatePlugin = $this->createMock(Translate::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
             ->willReturn(true);
-        $helperPluginManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $helperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([Translate::class], [EscapeHtml::class])
-            ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml);
+            ->willReturnCallback(
+                function(string $name, ?array $options = null) use ($matcher, $translatePlugin, $escapeHtml): HelperInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Translate::class, $name),
+                        default => self::assertSame(EscapeHtml::class, $name),
+                    };
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $translatePlugin,
+                        default => $escapeHtml,
+                    };
+                }
+            );
+
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)
@@ -70,15 +81,13 @@ final class FormLabelFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocationWithoutTranslator(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
@@ -88,9 +97,7 @@ final class FormLabelFactoryTest extends TestCase
             ->with(EscapeHtml::class)
             ->willReturn($escapeHtml);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(HelperPluginManager::class)

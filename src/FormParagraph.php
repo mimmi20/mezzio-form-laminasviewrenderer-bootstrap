@@ -10,14 +10,14 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
-use Mimmi20\Form\Element\Paragraph\ParagraphInterface as ParagraphElement;
+use Mimmi20\Form\Paragraph\Element\ParagraphInterface as ParagraphElement;
 
 use function array_key_exists;
 use function array_merge;
@@ -51,7 +51,7 @@ final class FormParagraph extends AbstractHelper implements FormIndentInterface,
      *
      * @return FormParagraph|string
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null)
     {
@@ -65,12 +65,12 @@ final class FormParagraph extends AbstractHelper implements FormIndentInterface,
     /**
      * Render a form <select> element from the provided $element
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof ParagraphElement) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,

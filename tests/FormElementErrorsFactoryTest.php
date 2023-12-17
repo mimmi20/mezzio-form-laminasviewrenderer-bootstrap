@@ -10,18 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Laminas\View\Helper\HelperInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsFactory;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -36,7 +36,7 @@ final class FormElementErrorsFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocationWithTranslator(): void
     {
@@ -44,25 +44,49 @@ final class FormElementErrorsFactoryTest extends TestCase
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $translatePlugin = $this->createMock(Translate::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
             ->willReturn(true);
-        $helperPluginManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $helperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([Translate::class], [EscapeHtml::class])
-            ->willReturnOnConsecutiveCalls($translatePlugin, $escapeHtml);
+            ->willReturnCallback(
+                function(string $name, ?array $options = null) use ($matcher, $translatePlugin, $escapeHtml): HelperInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Translate::class, $name),
+                        default => self::assertSame(EscapeHtml::class, $name),
+                    };
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $container->expects(self::exactly(2))
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $translatePlugin,
+                        default => $escapeHtml,
+                    };
+                }
+            );
+
+        $container = $this->createMock(ContainerInterface::class);
+        $matcher = self::exactly(2);
+        $container->expects($matcher)
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
+            ->willReturnCallback(
+                function(string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(HelperPluginManager::class, $id),
+                        default => self::assertSame(HtmlElementInterface::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $helperPluginManager,
+                        default => $htmlElement,
+                    };
+                }
+            );
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -72,16 +96,14 @@ final class FormElementErrorsFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function testInvocationWithoutTranslator(): void
     {
         $escapeHtml  = $this->createMock(EscapeHtml::class);
         $htmlElement = $this->createMock(HtmlElementInterface::class);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
@@ -91,13 +113,24 @@ final class FormElementErrorsFactoryTest extends TestCase
             ->with(EscapeHtml::class)
             ->willReturn($escapeHtml);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $container->expects(self::exactly(2))
+        $container = $this->createMock(ContainerInterface::class);
+        $matcher = self::exactly(2);
+        $container->expects($matcher)
             ->method('get')
-            ->withConsecutive([HelperPluginManager::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $htmlElement);
+            ->willReturnCallback(
+                function(string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(HelperPluginManager::class, $id),
+                        default => self::assertSame(HtmlElementInterface::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $helperPluginManager,
+                        default => $htmlElement,
+                    };
+                }
+            );
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);

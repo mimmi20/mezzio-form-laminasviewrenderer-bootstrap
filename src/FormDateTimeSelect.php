@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use DateTime;
 use IntlDateFormatter;
@@ -100,13 +100,13 @@ final class FormDateTimeSelect extends AbstractHelper implements FormIndentInter
     /**
      * Render a date element that is composed of six selects
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof DateTimeSelectElement) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,
@@ -117,7 +117,7 @@ final class FormDateTimeSelect extends AbstractHelper implements FormIndentInter
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
                     __METHOD__

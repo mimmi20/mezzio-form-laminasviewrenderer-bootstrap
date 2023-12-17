@@ -10,14 +10,11 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use IntlDateFormatter;
 use Laminas\Form\Element\MonthSelect as MonthSelectElement;
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
-use Laminas\Form\Exception\DomainException;
-use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\AbstractHelper;
 
 use function implode;
@@ -38,8 +35,8 @@ final class FormMonthSelect extends AbstractHelper implements FormIndentInterfac
      *
      * @return self|string
      *
-     * @throws DomainException
-     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null, int $dateType = IntlDateFormatter::LONG, ?string $locale = null)
     {
@@ -59,13 +56,13 @@ final class FormMonthSelect extends AbstractHelper implements FormIndentInterfac
     /**
      * Render a month element that is composed of two selects
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof MonthSelectElement) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,
@@ -76,7 +73,7 @@ final class FormMonthSelect extends AbstractHelper implements FormIndentInterfac
 
         $name = $element->getName();
         if (null === $name || '' === $name) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
                     __METHOD__

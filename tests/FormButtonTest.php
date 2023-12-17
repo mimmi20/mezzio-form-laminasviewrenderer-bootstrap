@@ -10,27 +10,25 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Button;
-use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\DomainException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton;
-use MezzioTest\BootstrapForm\LaminasView\View\Helper\Compare\AbstractTest;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton;
+use Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper\Compare\AbstractTestCase;
 use PHPUnit\Framework\Exception;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function gettype;
 use function sprintf;
 
-final class FormButtonTest extends AbstractTest
+final class FormButtonTest extends AbstractTestCase
 {
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -39,21 +37,15 @@ final class FormButtonTest extends AbstractTest
     {
         $expected = '<button>';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -63,7 +55,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -74,21 +65,15 @@ final class FormButtonTest extends AbstractTest
         $attributes = ['type' => $type];
         $expected   = sprintf('<button type="%s">', $type);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -106,21 +91,15 @@ final class FormButtonTest extends AbstractTest
     {
         $value = 1;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -130,7 +109,7 @@ final class FormButtonTest extends AbstractTest
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects null, an array or a \Laminas\Form\ElementInterface instance; received "%s"',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::openTag',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::openTag',
                 gettype($value)
             )
         );
@@ -145,9 +124,7 @@ final class FormButtonTest extends AbstractTest
      */
     public function testRenderOpenTagWithElementWithoutName(): void
     {
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -162,21 +139,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -186,7 +157,7 @@ final class FormButtonTest extends AbstractTest
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::openTag'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::openTag'
             )
         );
         $this->expectExceptionCode(0);
@@ -194,7 +165,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -206,9 +176,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button type="%s" name="%s">', $type, $name);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -227,21 +195,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -251,7 +213,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -264,9 +225,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button type="%s" name="%s" value="%s">', $type, $name, $value);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -285,21 +244,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -309,7 +262,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -322,9 +274,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button name="%s" type="%s" value="%s">', $name, $type, $value);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -343,21 +293,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -367,7 +311,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -380,9 +323,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button name="%s" type="%s" value="%s">', $name, $type, $value);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -401,21 +342,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -434,9 +369,7 @@ final class FormButtonTest extends AbstractTest
         $name  = 'test-button';
         $value = 'test-value';
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -456,21 +389,15 @@ final class FormButtonTest extends AbstractTest
         $element->expects(self::never())
             ->method('getLabelOption');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -480,7 +407,7 @@ final class FormButtonTest extends AbstractTest
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects either button content as the second argument, or that the element provided has a label value; neither found',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::render'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormButton::render'
             )
         );
         $this->expectExceptionCode(0);
@@ -488,7 +415,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -505,9 +431,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button type="%s" name="%s" value="%s">%s</button>', $type, $name, $value, $escapedTranlatedLabel);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -529,31 +453,23 @@ final class FormButtonTest extends AbstractTest
             ->with('disable_html_escape')
             ->willReturn(false);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($label, $textDomain)
             ->willReturn($tranlatedLabel);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($tranlatedLabel)
             ->willReturn($escapedTranlatedLabel);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -565,8 +481,9 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeWithTranslator1(): void
     {
@@ -580,9 +497,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button type="%s" name="%s" value="%s">%s</button>', $type, $name, $value, $escapedTranlatedLabel);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -604,31 +519,23 @@ final class FormButtonTest extends AbstractTest
             ->with('disable_html_escape')
             ->willReturn(false);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($label, $textDomain)
             ->willReturn($tranlatedLabel);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($tranlatedLabel)
             ->willReturn($escapedTranlatedLabel);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -640,7 +547,6 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws DomainException
@@ -657,9 +563,7 @@ final class FormButtonTest extends AbstractTest
 
         $expected = sprintf('<button type="%s" name="%s" value="%s">%s</button>', $type, $name, $value, $escapedTranlatedLabel);
 
-        $element = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Button::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -681,31 +585,23 @@ final class FormButtonTest extends AbstractTest
             ->with('disable_html_escape')
             ->willReturn(false);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($label, $textDomain)
             ->willReturn($tranlatedLabel);
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($tranlatedLabel)
             ->willReturn($escapedTranlatedLabel);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -721,32 +617,23 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      */
     public function testSetGetIndent1(): void
     {
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 
@@ -757,32 +644,23 @@ final class FormButtonTest extends AbstractTest
     }
 
     /**
-     * @throws InvalidArgumentException
      * @throws Exception
      */
     public function testSetGetIndent2(): void
     {
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
 

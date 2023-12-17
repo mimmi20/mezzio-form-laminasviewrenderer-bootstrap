@@ -20,12 +20,12 @@ use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Mimmi20\Form\Element\Group\ElementGroup;
-use Mimmi20\Form\Element\Links\Links;
+use Mimmi20\Form\Links\Element\Links;
 
 return [
     'type' => Form::class,
     'options' => [
-        'layout' => \Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
+        'layout' => \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_HORIZONTAL,
         'form-required-mark' => '<div class="mt-2 text-info-required">* Pflichtfeld</div>',
         'field-required-mark' => '<span class="text-info-required">*</span>',
         'col_attributes' => ['class' => 'col-sm'],

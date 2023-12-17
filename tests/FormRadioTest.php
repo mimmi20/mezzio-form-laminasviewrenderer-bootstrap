@@ -10,23 +10,25 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Text;
-use Laminas\Form\Exception\DomainException;
+use Laminas\Form\ElementInterface;
+use Laminas\View\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
+use Laminas\View\Helper\Escaper\AbstractHelper;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
@@ -41,47 +43,35 @@ final class FormRadioTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetLabelAttributes(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -97,47 +87,35 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetSeperator(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -159,43 +137,31 @@ final class FormRadioTest extends TestCase
     {
         $labelPosition = 'abc';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -205,7 +171,7 @@ final class FormRadioTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects either %s::LABEL_APPEND or %s::LABEL_PREPEND; received "%s"',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\LabelPositionTrait::setLabelPosition',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\LabelPositionTrait::setLabelPosition',
                 BaseFormRow::class,
                 BaseFormRow::class,
                 $labelPosition
@@ -219,49 +185,37 @@ final class FormRadioTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetLabelPosition(): void
     {
         $labelPosition = BaseFormRow::LABEL_PREPEND;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -276,47 +230,35 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetUseHiddenElement(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -331,49 +273,37 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetUncheckedValue(): void
     {
         $uncheckedValue = '0';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -393,51 +323,37 @@ final class FormRadioTest extends TestCase
      */
     public function testRenderWithWrongElement(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Text::class);
         $element->expects(self::never())
             ->method('getName');
         $element->expects(self::never())
@@ -457,7 +373,7 @@ final class FormRadioTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element is of type %s',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\AbstractFormMultiCheckbox::render',
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\AbstractFormMultiCheckbox::render',
                 MultiCheckboxElement::class
             )
         );
@@ -473,51 +389,37 @@ final class FormRadioTest extends TestCase
      */
     public function testRenderWithoutName(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn(null);
@@ -544,7 +446,7 @@ final class FormRadioTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio::getName'
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRadio::getName'
             )
         );
         $this->expectExceptionCode(0);
@@ -556,7 +458,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithoutId(): void
     {
@@ -581,32 +483,24 @@ final class FormRadioTest extends TestCase
             '    ';
         $expected        = '<div></div>';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value2)
             ->willReturn($value2Escaped);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(false);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -619,25 +513,19 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -678,7 +566,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithIdAndNoWarp(): void
     {
@@ -703,32 +591,24 @@ final class FormRadioTest extends TestCase
             '    ';
         $wrap            = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value2)
             ->willReturn($value2Escaped);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(false);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -742,25 +622,19 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -783,10 +657,25 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_VERTICAL);
-        $element->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['label_position'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls(BaseFormRow::LABEL_APPEND, false, $wrap, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('label_position', $key),
+                        2 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => BaseFormRow::LABEL_APPEND,
+                        2 => false,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -801,7 +690,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderPrependWithoutId(): void
     {
@@ -826,32 +715,24 @@ final class FormRadioTest extends TestCase
             '    ';
         $expected        = '<div></div>';
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value2)
             ->willReturn($value2Escaped);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(false);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -864,25 +745,19 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -925,7 +800,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderPrependWithIdAndNoWarp(): void
     {
@@ -950,32 +825,24 @@ final class FormRadioTest extends TestCase
             '    ';
         $wrap            = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value2)
             ->willReturn($value2Escaped);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(false);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -989,25 +856,19 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1030,10 +891,25 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_VERTICAL);
-        $element->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['label_position'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls(BaseFormRow::LABEL_PREPEND, false, $wrap, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('label_position', $key),
+                        2 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => BaseFormRow::LABEL_PREPEND,
+                        2 => false,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1050,7 +926,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderWithIdAndNoWarpWithoutEscape(): void
     {
@@ -1074,30 +950,22 @@ final class FormRadioTest extends TestCase
             '    ';
         $wrap            = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(false);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -1111,25 +979,19 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1152,10 +1014,25 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_VERTICAL);
-        $element->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['label_position'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls(BaseFormRow::LABEL_APPEND, true, $wrap, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('label_position', $key),
+                        2 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => BaseFormRow::LABEL_APPEND,
+                        2 => true,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1172,7 +1049,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderXhtmlWithTranslator(): void
     {
@@ -1199,32 +1076,24 @@ final class FormRadioTest extends TestCase
             '    ';
         $wrap                    = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::once())
             ->method('__invoke')
             ->with($value2Translated)
             ->willReturn($value2TranslatedEscaped);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::once())
             ->method('openTag')
             ->with(
@@ -1238,33 +1107,25 @@ final class FormRadioTest extends TestCase
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
             ->with('div', ['class' => ['form-check']], $renderedField)
             ->willReturn($expected);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::once())
             ->method('__invoke')
             ->with($value2, $textDomain)
             ->willReturn($value2Translated);
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1287,10 +1148,25 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_VERTICAL);
-        $element->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['label_position'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls(BaseFormRow::LABEL_APPEND, false, $wrap, $wrap);
+            ->willReturnCallback(
+                function(string $key) use ($matcher, $wrap): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('label_position', $key),
+                        2 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => BaseFormRow::LABEL_APPEND,
+                        2 => false,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1308,7 +1184,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderMultiOption(): void
     {
@@ -1385,90 +1261,129 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check']], $renderedField1],
-                ['div', ['class' => ['form-check']], $renderedField2],
-                ['div', ['class' => ['form-check']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
@@ -1491,10 +1406,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_VERTICAL);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1512,7 +1440,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderMultiOptionInlineWithHiddenField1(): void
     {
@@ -1590,82 +1518,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -1673,9 +1642,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -1698,10 +1665,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1721,7 +1701,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderMultiOptionInlineWithHiddenField2(): void
     {
@@ -1799,82 +1779,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -1882,9 +1903,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -1907,10 +1926,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -1929,7 +1961,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testRenderMultiOptionInlineWithHiddenField3(): void
     {
@@ -2007,82 +2039,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -2090,9 +2163,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -2115,10 +2186,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -2138,7 +2222,7 @@ final class FormRadioTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testInvokeMultiOptionInlineWithHiddenField1(): void
     {
@@ -2216,82 +2300,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -2299,9 +2424,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -2324,10 +2447,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -2351,7 +2487,7 @@ final class FormRadioTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function testInvokeMultiOptionInlineWithHiddenField2(): void
     {
@@ -2429,82 +2565,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -2512,9 +2689,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -2537,10 +2712,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -2558,7 +2746,8 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField3(): void
     {
@@ -2637,82 +2826,123 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst', $labelClass),
-                        'for' => $id,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst3', $labelClass),
-                        'for' => 'test-id3',
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst', $labelClass),
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst3', $labelClass),
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -2720,9 +2950,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -2745,10 +2973,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -2769,7 +3010,8 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField4(): void
     {
@@ -2848,91 +3090,132 @@ final class FormRadioTest extends TestCase
         $wrap                    = false;
         $disableEscape           = false;
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escapeHtml->expects(self::exactly(3))
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher = self::exactly(3);
+        $escapeHtml->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2Translated], [$value3Translated], [$name4Translated])
-            ->willReturnOnConsecutiveCalls($value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped);
+            ->willReturnCallback(
+                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2Translated, $value),
+                        2 => self::assertSame($value3Translated, $value),
+                        default => self::assertSame($name4Translated, $value),
+                    };
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2TranslatedEscaped,
+                        2 => $value3TranslatedEscaped,
+                        default => $name4TranslatedEscaped,
+                    };
+                }
+            );
+
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::once())
             ->method('isXhtml')
             ->willReturn(true);
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formLabel->expects(self::exactly(3))
+        $formLabel = $this->createMock(FormLabelInterface::class);
+        $matcher = self::exactly(3);
+        $formLabel->expects($matcher)
             ->method('openTag')
-            ->withConsecutive(
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst rst-test', $labelClass),
-                        'for' => $id,
-                        'data-img' => 'sample1',
-                        'data-show' => 'yes',
-                        'data-visible' => true,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s rst2', $labelClass),
-                        'for' => 'test-id2',
-                        'data-vid' => 'sample2',
-                        'data-show' => 'yes',
-                        'data-visible' => true,
-                    ],
-                ],
-                [
-                    [
-                        'class' => sprintf('form-check-label %s', $labelClass),
-                        'for' => 'test-id3',
-                        'data-img' => 'sample3',
-                        'data-show' => 'yes',
-                        'data-visible' => true,
-                    ],
-                ]
-            )
-            ->willReturn($labelStart);
+            ->willReturnCallback(
+                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst rst-test', $labelClass),
+                                'data-show' => 'yes',
+                                'data-visible' => true,
+                                'data-img' => 'sample1',
+                                'for' => $id,
+                            ],
+                            $attributesOrElement,
+                        ),
+                        2 => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s rst2', $labelClass),
+                                'data-show' => 'yes',
+                                'data-visible' => true,
+                                'data-vid' => 'sample2',
+                                'for' => 'test-id2',
+                            ],
+                            $attributesOrElement,
+                        ),
+                        default => self::assertSame(
+                            [
+                                'class' => sprintf('form-check-label %s', $labelClass),
+                                'data-show' => 'yes',
+                                'data-visible' => true,
+                                'data-img' => 'sample3',
+                                'for' => 'test-id3',
+                            ],
+                            $attributesOrElement,
+                        ),
+                    };
+
+                    return $labelStart;
+                }
+            );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $htmlElement->expects(self::exactly(3))
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher = self::exactly(3);
+        $htmlElement->expects($matcher)
             ->method('toHtml')
-            ->withConsecutive(
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField1],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField2],
-                ['div', ['class' => ['form-check', 'form-check-inline']], $renderedField3]
-            )
-            ->willReturn($expected);
+            ->willReturnCallback(
+                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
+                {
+                    self::assertSame('div', $element);
+                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->expects(self::exactly(3))
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($renderedField1, $content),
+                        2 => self::assertSame($renderedField2, $content),
+                        default => self::assertSame($renderedField3, $content),
+                    };
+
+                    return $expected;
+                }
+            );
+
+        $translator = $this->createMock(Translate::class);
+        $matcher = self::exactly(3);
+        $translator->expects($matcher)
             ->method('__invoke')
-            ->withConsecutive([$value2, $textDomain], [$value3, $textDomain], [$name4, $textDomain])
-            ->willReturnOnConsecutiveCalls($value2Translated, $value3Translated, $name4Translated);
+            ->willReturnCallback(
+                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($value2, $message),
+                        2 => self::assertSame($value3, $message),
+                        default => self::assertSame($name4, $message),
+                    };
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $value2Translated,
+                        2 => $value3Translated,
+                        default => $name4Translated,
+                    };
+                }
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
@@ -2940,9 +3223,7 @@ final class FormRadioTest extends TestCase
 
         $helper = new FormRadio($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
 
-        $element = $this->getMockBuilder(Radio::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
@@ -2965,10 +3246,23 @@ final class FormRadioTest extends TestCase
             ->method('getOption')
             ->with('layout')
             ->willReturn(Form::LAYOUT_INLINE);
-        $element->expects(self::exactly(9))
+        $matcher = self::exactly(9);
+        $element->expects($matcher)
             ->method('getLabelOption')
-            ->withConsecutive(['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'], ['disable_html_escape'], ['always_wrap'], ['always_wrap'])
-            ->willReturnOnConsecutiveCalls($disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap, $disableEscape, $wrap, $wrap);
+            ->willReturnCallback(
+                function (string $key) use ($matcher, $disableEscape, $wrap): bool
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1, 4, 7 => $disableEscape,
+                        default => $wrap,
+                    };
+                }
+            );
         $element->expects(self::once())
             ->method('hasLabelOption')
             ->with('label_position')
@@ -2989,47 +3283,35 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent1(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
@@ -3041,47 +3323,35 @@ final class FormRadioTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      */
     public function testSetGetIndent2(): void
     {
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $doctype = $this->getMockBuilder(Doctype::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $doctype = $this->createMock(Doctype::class);
         $doctype->expects(self::never())
             ->method('__invoke');
         $doctype->expects(self::never())
             ->method('isXhtml');
 
-        $formLabel = $this->getMockBuilder(FormLabelInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formLabel = $this->createMock(FormLabelInterface::class);
         $formLabel->expects(self::never())
             ->method('openTag');
         $formLabel->expects(self::never())
             ->method('closeTag');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $formHidden = $this->getMockBuilder(FormHiddenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 

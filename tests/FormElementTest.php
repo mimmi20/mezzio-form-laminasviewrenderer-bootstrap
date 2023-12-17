@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element;
 use Laminas\Form\Element\Button;
@@ -46,14 +46,13 @@ use Laminas\Form\ElementInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\View\HelperPluginManager;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
-use Mezzio\BootstrapForm\LaminasView\View\Helper\FormInputInterface;
-use Mimmi20\Form\Element\Links\Links;
-use Mimmi20\Form\Element\Paragraph\Paragraph;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElement;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormInputInterface;
+use Mimmi20\Form\Links\Element\Links;
+use Mimmi20\Form\Paragraph\Element\Paragraph;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -61,13 +60,10 @@ final class FormElementTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testSetGetInden1(): void
     {
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('get');
 
@@ -79,13 +75,10 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testSetGetInden2(): void
     {
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('get');
 
@@ -97,15 +90,12 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testSetGetDefaultHelper(): void
     {
         $defaultHelper = 'xyz';
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('get');
 
@@ -117,13 +107,10 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testAddType(): void
     {
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('get');
 
@@ -134,13 +121,10 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testAddClass(): void
     {
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::never())
             ->method('get');
 
@@ -154,7 +138,7 @@ final class FormElementTest extends TestCase
      *
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
-    public function providerRender(): array
+    public static function providerRender(): array
     {
         return [
             [
@@ -354,8 +338,8 @@ final class FormElementTest extends TestCase
     }
 
     /**
+     * @param class-string<mixed> $class
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
      * @throws \Laminas\Form\Exception\InvalidArgumentException
@@ -364,9 +348,7 @@ final class FormElementTest extends TestCase
      */
     public function testRender(ElementInterface $element, string $helperType, string $class, string $rendered): void
     {
-        $subHelper = $this->getMockBuilder($class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subHelper = $this->createMock($class);
         $subHelper->expects(self::once())
             ->method('setIndent')
             ->with('');
@@ -375,9 +357,7 @@ final class FormElementTest extends TestCase
             ->with($element)
             ->willReturn($rendered);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('get')
             ->with($helperType)
@@ -390,7 +370,6 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
@@ -401,9 +380,7 @@ final class FormElementTest extends TestCase
         $helperType = 'formText';
         $rendered   = '<text>';
 
-        $subHelper = $this->getMockBuilder(FormInputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subHelper = $this->createMock(FormInputInterface::class);
         $subHelper->expects(self::once())
             ->method('setIndent')
             ->with('');
@@ -412,9 +389,7 @@ final class FormElementTest extends TestCase
             ->with($element)
             ->willReturn($rendered);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('get')
             ->with($helperType)
@@ -431,8 +406,9 @@ final class FormElementTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws \Laminas\ServiceManager\Exception\ServiceNotFoundException
+     * @throws \Laminas\ServiceManager\Exception\InvalidServiceException
      */
     public function testInvoke2(): void
     {
@@ -440,9 +416,7 @@ final class FormElementTest extends TestCase
         $helperType = 'formText';
         $rendered   = '<text>';
 
-        $subHelper = $this->getMockBuilder(FormInputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subHelper = $this->createMock(FormInputInterface::class);
         $subHelper->expects(self::once())
             ->method('setIndent')
             ->with('');
@@ -451,9 +425,7 @@ final class FormElementTest extends TestCase
             ->with($element)
             ->willReturn($rendered);
 
-        $helperPluginManager = $this->getMockBuilder(HelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $helperPluginManager->expects(self::once())
             ->method('get')
             ->with($helperType)

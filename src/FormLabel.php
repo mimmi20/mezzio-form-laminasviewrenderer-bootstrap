@@ -10,11 +10,9 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\BootstrapForm\LaminasView\View\Helper;
+namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
-use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
@@ -57,8 +55,8 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
      *
      * @return FormLabel|string
      *
-     * @throws Exception\DomainException
-     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function __invoke(?ElementInterface $element = null, ?string $labelContent = null, ?string $position = null)
     {
@@ -72,7 +70,7 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
             $label = $element->getLabel();
 
             if (null === $labelContent && empty($label)) {
-                throw new Exception\DomainException(
+                throw new \Laminas\View\Exception\DomainException(
                     sprintf(
                         '%s expects either label content as the second argument, or that the element provided has a label attribute; neither found',
                         __METHOD__
@@ -122,8 +120,8 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
      *
      * @param array<string, bool|string>|ElementInterface|null $attributesOrElement
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\DomainException
      */
     public function openTag($attributesOrElement = null): string
     {
@@ -138,7 +136,7 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
         }
 
         if (!$attributesOrElement instanceof ElementInterface) {
-            throw new Exception\InvalidArgumentException(
+            throw new \Laminas\View\Exception\InvalidArgumentException(
                 sprintf(
                     '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
                     __METHOD__,
@@ -149,7 +147,7 @@ final class FormLabel extends AbstractHelper implements FormLabelInterface
 
         $id = $this->getId($attributesOrElement);
         if (null === $id) {
-            throw new Exception\DomainException(
+            throw new \Laminas\View\Exception\DomainException(
                 sprintf(
                     '%s expects the Element provided to have either a name or an id present; neither found',
                     __METHOD__
