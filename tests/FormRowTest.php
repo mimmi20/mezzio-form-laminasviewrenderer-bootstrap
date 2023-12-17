@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,20 +17,25 @@ use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Text;
 use Laminas\Form\ElementInterface;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\FormInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrorsInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+
+use function get_debug_type;
+use function sprintf;
 
 use const PHP_EOL;
 
@@ -41,11 +46,14 @@ final class FormRowTest extends TestCase
      * @throws DomainException
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderWithWrongFormOption(): void
     {
+        $form = true;
+
         $formElement = $this->createMock(FormElementInterface::class);
         $formElement->expects(self::never())
             ->method('setIndent');
@@ -76,11 +84,14 @@ final class FormRowTest extends TestCase
         $element->expects(self::once())
             ->method('getOption')
             ->with('form')
-            ->willReturn(true);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+            ->willReturn($form);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::never())
@@ -92,7 +103,13 @@ final class FormRowTest extends TestCase
 
         $this->expectException(AssertionError::class);
         $this->expectExceptionCode(1);
-        $this->expectExceptionMessage('$form should be an Instance of Laminas\Form\FormInterface or null, but was boolean');
+        $this->expectExceptionMessage(
+            sprintf(
+                '$form should be an Instance of %s or null, but was %s',
+                FormInterface::class,
+                get_debug_type($form),
+            ),
+        );
 
         $helper->render($element);
     }
@@ -100,11 +117,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderHiddenWithoutFormOptionAndLabel(): void
     {
@@ -120,10 +137,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -175,11 +195,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel(): void
     {
@@ -196,10 +216,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -245,7 +268,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -261,11 +284,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel2(): void
     {
@@ -282,12 +305,22 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(false);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return false;
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', 'is-invalid');
@@ -334,7 +367,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -350,11 +383,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithoutFormOptionAndLabel3(): void
     {
@@ -372,12 +405,25 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(true);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', $class . ' is-invalid');
@@ -385,8 +431,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $class): string
-                {
+                static function (string $key) use ($matcher, $type, $class): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('class', $key),
@@ -396,7 +441,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $class,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -437,7 +482,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -453,11 +498,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderHiddenWithLabelWithoutFormOption(): void
     {
@@ -473,10 +518,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -528,11 +576,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption(): void
     {
@@ -549,10 +597,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -598,7 +649,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -614,11 +665,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption2(): void
     {
@@ -635,12 +686,22 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(false);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return false;
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', 'is-invalid');
@@ -687,7 +748,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -703,11 +764,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelWithoutFormOption3(): void
     {
@@ -725,12 +786,25 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(true);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', $class . ' is-invalid');
@@ -738,8 +812,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $class): string
-                {
+                static function (string $key) use ($matcher, $type, $class): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('class', $key),
@@ -749,7 +822,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $class,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -790,7 +863,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -806,11 +879,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderHiddenWithLabelAndTranslatorWithoutFormOption(): void
     {
@@ -827,10 +900,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -875,7 +951,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -887,11 +970,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption(): void
     {
@@ -909,10 +992,13 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $element->expects(self::once())
@@ -958,7 +1044,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -966,7 +1052,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -979,11 +1072,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption2(): void
     {
@@ -1001,12 +1094,22 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(false);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return false;
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', 'is-invalid');
@@ -1053,7 +1156,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -1061,7 +1164,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1074,11 +1184,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderPartialWithLabelAndTranslatorWithoutFormOption3(): void
     {
@@ -1097,12 +1207,25 @@ final class FormRowTest extends TestCase
             ->method('getOption')
             ->with('form')
             ->willReturn(null);
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(true);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', $class . ' is-invalid');
@@ -1110,8 +1233,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $class): string
-                {
+                static function (string $key) use ($matcher, $type, $class): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('class', $key),
@@ -1121,7 +1243,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $class,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1162,7 +1284,7 @@ final class FormRowTest extends TestCase
                     'labelPosition' => \Laminas\Form\View\Helper\FormRow::LABEL_PREPEND,
                     'renderErrors' => $renderErrors,
                     'indent' => $indent,
-                ]
+                ],
             )
             ->willReturn($expected);
 
@@ -1170,7 +1292,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1183,11 +1312,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel(): void
     {
@@ -1209,8 +1338,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1224,20 +1352,22 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $matcher = self::exactly(2);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $required): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $required): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('required', $key),
@@ -1247,7 +1377,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1287,7 +1417,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1299,11 +1436,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel4(): void
     {
@@ -1325,8 +1462,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1340,20 +1476,22 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $element->expects(self::never())
-            ->method('hasAttribute');
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('required')
+            ->willReturn(false);
         $element->expects(self::never())
             ->method('setAttribute');
         $matcher = self::exactly(2);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $required): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $required): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('required', $key),
@@ -1363,7 +1501,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1403,7 +1541,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1415,11 +1560,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel5(): void
     {
@@ -1441,8 +1586,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1456,14 +1600,24 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(false);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return false;
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', 'is-invalid');
@@ -1471,8 +1625,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $type, $required): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $required): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         default => self::assertSame('required', $key),
@@ -1482,7 +1635,7 @@ final class FormRowTest extends TestCase
                         1 => $type,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1522,7 +1675,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1534,11 +1694,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel6(): void
     {
@@ -1561,8 +1721,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1576,14 +1735,27 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
         $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('hasAttribute')
-            ->with('class')
-            ->willReturn(true);
+            ->willReturnCallback(
+                static function (string $key) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('required', $key),
+                        default => self::assertSame('class', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('setAttribute')
             ->with('class', $class . ' is-invalid');
@@ -1591,8 +1763,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -1604,7 +1775,7 @@ final class FormRowTest extends TestCase
                         2 => $class,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1644,7 +1815,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1656,11 +1834,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel7(): void
     {
@@ -1685,8 +1863,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1700,34 +1877,34 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(3);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        3 => false,
+                        1, 4 => false,
                         default => true,
                     };
-                }
+                },
             );
         $matcher = self::exactly(2);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -1737,14 +1914,13 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($class . ' is-invalid', $value),
                         default => self::assertSame($id . 'Feedback', $value),
                     };
-                }
+                },
             );
         $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -1758,7 +1934,7 @@ final class FormRowTest extends TestCase
                         4 => $id,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1801,7 +1977,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1813,11 +1996,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel8(): void
     {
@@ -1841,8 +2024,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1856,26 +2038,27 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(2);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
                         default => self::assertSame('id', $key),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => true,
+                        2 => true,
                         default => false,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('setAttribute')
@@ -1884,8 +2067,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -1897,7 +2079,7 @@ final class FormRowTest extends TestCase
                         2 => $class,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -1940,7 +2122,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -1952,11 +2141,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel9(): void
     {
@@ -1982,8 +2171,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool|null
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -1997,31 +2185,34 @@ final class FormRowTest extends TestCase
                         3 => $layout,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(3);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(2);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2031,14 +2222,13 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($class . ' is-invalid', $value),
                         default => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
                     };
-                }
+                },
             );
         $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2054,7 +2244,7 @@ final class FormRowTest extends TestCase
                         4 => $aria,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -2097,7 +2287,14 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -2109,11 +2306,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel10(): void
     {
@@ -2140,8 +2337,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 7 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -2157,31 +2353,34 @@ final class FormRowTest extends TestCase
                         6 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(3);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(2);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2191,14 +2390,13 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($class . ' is-invalid', $value),
                         default => self::assertSame($aria . ' ' . $id . 'Help', $value),
                     };
-                }
+                },
             );
         $matcher = self::exactly(6);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2214,7 +2412,7 @@ final class FormRowTest extends TestCase
                         5 => $aria,
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -2256,23 +2454,33 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($expected . PHP_EOL . $indent . '    ' . $expectedHelp, $helper->render($element));
+        self::assertSame(
+            $expected . PHP_EOL . $indent . '    ' . $expectedHelp,
+            $helper->render($element),
+        );
     }
 
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel11(): void
     {
@@ -2300,8 +2508,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 7 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -2317,31 +2524,34 @@ final class FormRowTest extends TestCase
                         6 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(5);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(6);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2, 4 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3, 5 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2350,16 +2560,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2376,7 +2588,7 @@ final class FormRowTest extends TestCase
                         7 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -2421,23 +2633,33 @@ final class FormRowTest extends TestCase
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp, $helper->render($element));
+        self::assertSame(
+            $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp,
+            $helper->render($element),
+        );
     }
 
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel12(): void
     {
@@ -2474,8 +2696,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -2499,31 +2720,34 @@ final class FormRowTest extends TestCase
                         14 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(5);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(6);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2, 4 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3, 5 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2532,16 +2756,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2558,7 +2784,7 @@ final class FormRowTest extends TestCase
                         7 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -2586,12 +2812,11 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $labelAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $labelAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('legend', $element),
                         4 => self::assertSame('fieldset', $element),
@@ -2599,7 +2824,10 @@ final class FormRowTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($labelColAttributes + $labelAttributes + ['class' => 'col-form-label'], $attribs),
+                        1 => self::assertSame(
+                            $labelColAttributes + $labelAttributes + ['class' => 'col-form-label'],
+                            $attribs,
+                        ),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
                         3 => self::assertSame($colAttributes, $attribs),
                         default => self::assertSame($rowAttributes + ['class' => 'row'], $attribs),
@@ -2608,8 +2836,14 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($labelTranslatedEscaped, $content),
                         2 => self::assertSame($helpContent, $content),
-                        3 => self::assertSame(PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent . '    ', $content),
-                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent, $content),
+                        3 => self::assertSame(
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -2618,7 +2852,7 @@ final class FormRowTest extends TestCase
                         3 => $expectedCol,
                         default => $expectedRow,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -2637,7 +2871,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -2649,11 +2890,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel13(): void
     {
@@ -2685,12 +2926,11 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Radio::class);
-        $matcher = self::exactly(13);
+        $matcher = self::exactly(14);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $legendAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $legendAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 9, 13 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -2699,6 +2939,7 @@ final class FormRowTest extends TestCase
                         6 => self::assertSame('label_attributes', $option),
                         8 => self::assertSame('legend_attributes', $option),
                         12 => self::assertSame('help_attributes', $option),
+                        14 => self::assertSame('floating', $option),
                         default => self::assertSame('help_content', $option),
                     };
 
@@ -2710,33 +2951,37 @@ final class FormRowTest extends TestCase
                         6 => $labelAttributes,
                         8 => $legendAttributes,
                         12 => $helpAttributes,
+                        14 => false,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(6);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('aria-describedby', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        5, 7 => self::assertSame('aria-describedby', $key),
                         default => self::assertSame('id', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2745,16 +2990,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2771,7 +3018,7 @@ final class FormRowTest extends TestCase
                         8 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -2805,12 +3052,11 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('legend', $element),
                         3 => self::assertSame('fieldset', $element),
@@ -2826,7 +3072,10 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($labelTranslatedEscaped, $content),
                         2 => self::assertSame($helpContent, $content),
-                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent, $content),
+                        default => self::assertSame(
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -2834,7 +3083,7 @@ final class FormRowTest extends TestCase
                         2 => $expectedHelp,
                         default => $expectedCol,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -2853,7 +3102,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -2865,11 +3121,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel14(): void
     {
@@ -2906,8 +3162,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -2931,31 +3186,34 @@ final class FormRowTest extends TestCase
                         14 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(5);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(6);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        2, 4 => self::assertSame('id', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        3, 5 => self::assertSame('id', $key),
                         default => self::assertSame('aria-describedby', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -2964,16 +3222,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -2990,7 +3250,7 @@ final class FormRowTest extends TestCase
                         7 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -3024,12 +3284,11 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $rowAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedRow, $expectedHelp, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $rowAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedRow, $expectedHelp, $indent): string {
                     self::assertSame('div', $element);
 
                     match ($matcher->numberOfInvocations()) {
@@ -3040,8 +3299,14 @@ final class FormRowTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($helpContent, $content),
-                        2 => self::assertSame(PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ', $content),
-                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent, $content),
+                        2 => self::assertSame(
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -3049,7 +3314,7 @@ final class FormRowTest extends TestCase
                         2 => $expectedCol,
                         default => $expectedRow,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3068,7 +3333,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -3080,11 +3352,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel15(): void
     {
@@ -3118,8 +3390,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 11 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -3139,31 +3410,34 @@ final class FormRowTest extends TestCase
                         10 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(6);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('aria-describedby', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        5, 7 => self::assertSame('aria-describedby', $key),
                         default => self::assertSame('id', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -3172,16 +3446,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -3198,7 +3474,7 @@ final class FormRowTest extends TestCase
                         8 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -3232,12 +3508,11 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $indent): string {
                     self::assertSame('div', $element);
 
                     match ($matcher->numberOfInvocations()) {
@@ -3247,14 +3522,17 @@ final class FormRowTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($helpContent, $content),
-                        default => self::assertSame(PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent, $content),
+                        default => self::assertSame(
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => $expectedHelp,
                         default => $expectedCol,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3273,7 +3551,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -3285,11 +3570,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel16(): void
     {
@@ -3321,12 +3606,11 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Radio::class);
-        $matcher = self::exactly(13);
+        $matcher = self::exactly(14);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $legendAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $legendAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 9, 13 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -3335,6 +3619,7 @@ final class FormRowTest extends TestCase
                         6 => self::assertSame('label_attributes', $option),
                         8 => self::assertSame('legend_attributes', $option),
                         12 => self::assertSame('help_attributes', $option),
+                        14 => self::assertSame('floating', $option),
                         default => self::assertSame('help_content', $option),
                     };
 
@@ -3346,33 +3631,37 @@ final class FormRowTest extends TestCase
                         6 => $labelAttributes,
                         8 => $legendAttributes,
                         12 => $helpAttributes,
+                        14 => false,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(6);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('aria-describedby', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        5, 7 => self::assertSame('aria-describedby', $key),
                         default => self::assertSame('id', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -3381,16 +3670,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -3407,7 +3698,7 @@ final class FormRowTest extends TestCase
                         8 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -3441,12 +3732,11 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('legend', $element),
                         3 => self::assertSame('fieldset', $element),
@@ -3462,7 +3752,10 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($labelTranslatedEscaped, $content),
                         2 => self::assertSame($helpContent, $content),
-                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent, $content),
+                        default => self::assertSame(
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -3470,7 +3763,7 @@ final class FormRowTest extends TestCase
                         2 => $expectedHelp,
                         default => $expectedCol,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3489,7 +3782,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -3501,11 +3801,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel17(): void
     {
@@ -3542,8 +3842,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $floating): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $floating): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 12 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -3565,31 +3864,34 @@ final class FormRowTest extends TestCase
                         11 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(6);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('aria-describedby', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        5, 7 => self::assertSame('aria-describedby', $key),
                         default => self::assertSame('id', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -3598,16 +3900,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -3624,7 +3928,7 @@ final class FormRowTest extends TestCase
                         8 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -3640,8 +3944,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $labelPosition): string|bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $labelPosition): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('label_position', $key),
@@ -3651,7 +3954,7 @@ final class FormRowTest extends TestCase
                         1 => $disableEscape,
                          default => $labelPosition,
                     };
-                }
+                },
             );
 
         $formElement = $this->createMock(FormElementInterface::class);
@@ -3673,19 +3976,21 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $indent): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label', $element),
                         default => self::assertSame('div', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($labelAttributes + ['class' => 'form-label', 'for' => $id], $attribs),
+                        1 => self::assertSame(
+                            $labelAttributes + ['class' => 'form-label', 'for' => $id],
+                            $attribs,
+                        ),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
                         default => self::assertSame($colAttributes, $attribs),
                     };
@@ -3693,7 +3998,10 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($labelTranslatedEscaped, $content),
                         2 => self::assertSame($helpContent, $content),
-                        default => self::assertSame(PHP_EOL . $expected . PHP_EOL . $indent . '    ' . $expectedLegend . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent, $content),
+                        default => self::assertSame(
+                            PHP_EOL . $expected . PHP_EOL . $indent . '    ' . $expectedLegend . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -3701,7 +4009,7 @@ final class FormRowTest extends TestCase
                         2 => $expectedHelp,
                         default => $expectedCol,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3720,7 +4028,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);
@@ -3732,11 +4047,11 @@ final class FormRowTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderTextWithoutFormOptionAndLabel18(): void
     {
@@ -3774,8 +4089,7 @@ final class FormRowTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool|null|array|string
-                {
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
                     match ($matcher->numberOfInvocations()) {
                         1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
                         2 => self::assertSame('show-required-mark', $option),
@@ -3799,31 +4113,34 @@ final class FormRowTest extends TestCase
                         14 => $helpAttributes,
                         default => $helpContent,
                     };
-                }
+                },
             );
-        $element->expects(self::never())
-            ->method('getName');
-        $matcher = self::exactly(6);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn('x');
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('hasAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('aria-describedby', $key),
+                        1 => self::assertSame('required', $key),
+                        2 => self::assertSame('class', $key),
+                        5, 7 => self::assertSame('aria-describedby', $key),
                         default => self::assertSame('id', $key),
                     };
 
-                    return true;
-                }
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
             );
         $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('setAttribute')
             ->willReturnCallback(
-                function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void
-                {
+                static function (string $key, mixed $value) use ($matcher, $class, $id, $aria): void {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('class', $key),
                         default => self::assertSame('aria-describedby', $key),
@@ -3832,16 +4149,18 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($class . ' is-invalid', $value),
                         2 => self::assertSame($aria . ' ' . $id . 'Feedback', $value),
-                        default => self::assertSame($aria . ' ' . $id . 'Feedback ' . $id . 'Help', $value),
+                        default => self::assertSame(
+                            $aria . ' ' . $id . 'Feedback ' . $id . 'Help',
+                            $value,
+                        ),
                     };
-                }
+                },
             );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string|bool
-                {
+                static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('type', $key),
                         2 => self::assertSame('class', $key),
@@ -3858,7 +4177,7 @@ final class FormRowTest extends TestCase
                         8 => $aria . ' ' . $id . 'Feedback',
                         default => $required,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabel')
@@ -3892,20 +4211,21 @@ final class FormRowTest extends TestCase
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $labelColAttributes, $rowAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $expectedRow, $indent): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $labelColAttributes, $rowAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $expectedRow, $indent): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label', $element),
                         default => self::assertSame('div', $element),
                     };
 
-
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($labelColAttributes + $labelAttributes + ['class' => 'col-form-label', 'for' => $id], $attribs),
+                        1 => self::assertSame(
+                            $labelColAttributes + $labelAttributes + ['class' => 'col-form-label', 'for' => $id],
+                            $attribs,
+                        ),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
                         3 => self::assertSame($colAttributes, $attribs),
                         default => self::assertSame($rowAttributes + ['class' => 'row'], $attribs),
@@ -3914,8 +4234,14 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($labelTranslatedEscaped, $content),
                         2 => self::assertSame($helpContent, $content),
-                        3 => self::assertSame(PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ', $content),
-                        default => self::assertSame(PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent, $content),
+                        3 => self::assertSame(
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            $content,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent,
+                            $content,
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -3924,7 +4250,7 @@ final class FormRowTest extends TestCase
                         3 => $expectedCol,
                         default => $expectedRow,
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3943,7 +4269,14 @@ final class FormRowTest extends TestCase
             ->with($label, $textDomain, null)
             ->willReturn($labelTranslated);
 
-        $helper = new FormRow($formElement, $formElementErrors, $htmlElement, $escapeHtml, $renderer, $translator);
+        $helper = new FormRow(
+            $formElement,
+            $formElementErrors,
+            $htmlElement,
+            $escapeHtml,
+            $renderer,
+            $translator,
+        );
 
         $helper->setIndent($indent);
         $helper->setRenderErrors($renderErrors);

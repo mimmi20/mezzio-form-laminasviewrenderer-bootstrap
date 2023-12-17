@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,19 +17,20 @@ use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Text;
 use Laminas\Form\ElementInterface;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\Helper\Escaper\AbstractHelper;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -41,10 +42,7 @@ use const PHP_EOL;
 
 final class FormMultiCheckboxTest extends TestCase
 {
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetLabelAttributes(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -73,7 +71,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertSame([], $helper->getLabelAttributes());
 
@@ -83,10 +89,7 @@ final class FormMultiCheckboxTest extends TestCase
         self::assertSame($labelAttributes, $helper->getLabelAttributes());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetSeperator(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -115,7 +118,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertSame('', $helper->getSeparator());
 
@@ -159,7 +170,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -168,8 +187,8 @@ final class FormMultiCheckboxTest extends TestCase
                 'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\LabelPositionTrait::setLabelPosition',
                 BaseFormRow::class,
                 BaseFormRow::class,
-                $labelPosition
-            )
+                $labelPosition,
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -179,7 +198,6 @@ final class FormMultiCheckboxTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     *
      */
     public function testSetGetLabelPosition(): void
     {
@@ -211,17 +229,22 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $helper->setLabelPosition($labelPosition);
 
         self::assertSame($labelPosition, $helper->getLabelPosition());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetUseHiddenElement(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -252,7 +275,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertFalse($helper->getUseHiddenElement());
 
@@ -261,10 +292,7 @@ final class FormMultiCheckboxTest extends TestCase
         self::assertTrue($helper->getUseHiddenElement());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetUncheckedValue(): void
     {
         $uncheckedValue = '0';
@@ -297,7 +325,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertSame('', $helper->getUncheckedValue());
 
@@ -310,6 +346,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderWithWrongElement(): void
     {
@@ -339,7 +378,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Text::class);
         $element->expects(self::never())
@@ -360,8 +407,8 @@ final class FormMultiCheckboxTest extends TestCase
             sprintf(
                 '%s requires that the element is of type %s',
                 'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\AbstractFormMultiCheckbox::render',
-                MultiCheckboxElement::class
-            )
+                MultiCheckboxElement::class,
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -372,6 +419,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderWithoutName(): void
     {
@@ -403,7 +453,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -432,8 +490,8 @@ final class FormMultiCheckboxTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox::getName'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormMultiCheckbox::getName',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -444,7 +502,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderWithoutId(): void
     {
@@ -461,12 +521,18 @@ final class FormMultiCheckboxTest extends TestCase
         $labelAttributes = ['class' => $labelClass];
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
-        $renderedField   = PHP_EOL .
-            '    ' . $labelStart . PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">', $class, $ariaLabel, $name, $value3) . PHP_EOL .
-            '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL .
-            '    ' . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField   = PHP_EOL
+            . '    ' . $labelStart . PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">',
+                $class,
+                $ariaLabel,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
+            . '    ' . $labelEnd . PHP_EOL
+            . '    ';
         $expected        = '<div></div>';
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -492,7 +558,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->with(
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -509,7 +575,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -552,7 +626,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderWithIdAndNoWarp(): void
     {
@@ -571,10 +647,17 @@ final class FormMultiCheckboxTest extends TestCase
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
         $expected        = '<div></div>';
-        $renderedField   = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2Escaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField   = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2Escaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap            = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -601,7 +684,7 @@ final class FormMultiCheckboxTest extends TestCase
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
                     'for' => $id,
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -618,7 +701,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -647,8 +738,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $wrap): mixed
-                {
+                static function (string $key) use ($matcher, $wrap): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label_position', $key),
                         2 => self::assertSame('disable_html_escape', $key),
@@ -660,7 +750,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => false,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -676,7 +766,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderPrependWithoutId(): void
     {
@@ -693,12 +785,18 @@ final class FormMultiCheckboxTest extends TestCase
         $labelAttributes = ['class' => $labelClass];
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
-        $renderedField   = PHP_EOL .
-            '    ' . $labelStart . PHP_EOL .
-            '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">', $class, $ariaLabel, $name, $value3) . PHP_EOL .
-            '    ' . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField   = PHP_EOL
+            . '    ' . $labelStart . PHP_EOL
+            . '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">',
+                $class,
+                $ariaLabel,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '    ' . $labelEnd . PHP_EOL
+            . '    ';
         $expected        = '<div></div>';
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -724,7 +822,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->with(
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -741,7 +839,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -786,7 +892,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderPrependWithIdAndNoWarp(): void
     {
@@ -805,10 +913,17 @@ final class FormMultiCheckboxTest extends TestCase
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
         $expected        = '<div></div>';
-        $renderedField   = PHP_EOL .
-            '        ' . $labelStart . $value2Escaped . $labelEnd . PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '    ';
+        $renderedField   = PHP_EOL
+            . '        ' . $labelStart . $value2Escaped . $labelEnd . PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '    ';
         $wrap            = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -835,7 +950,7 @@ final class FormMultiCheckboxTest extends TestCase
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
                     'for' => $id,
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -852,7 +967,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -881,8 +1004,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $wrap): mixed
-                {
+                static function (string $key) use ($matcher, $wrap): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label_position', $key),
                         2 => self::assertSame('disable_html_escape', $key),
@@ -894,7 +1016,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => false,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -912,7 +1034,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderWithIdAndNoWarpWithoutEscape(): void
     {
@@ -930,10 +1054,17 @@ final class FormMultiCheckboxTest extends TestCase
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
         $expected        = '<div></div>';
-        $renderedField   = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2 . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField   = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s">',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2 . $labelEnd . PHP_EOL
+            . '    ';
         $wrap            = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -958,7 +1089,7 @@ final class FormMultiCheckboxTest extends TestCase
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
                     'for' => $id,
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -975,7 +1106,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -1004,8 +1143,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $wrap): mixed
-                {
+                static function (string $key) use ($matcher, $wrap): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label_position', $key),
                         2 => self::assertSame('disable_html_escape', $key),
@@ -1017,7 +1155,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => true,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -1035,7 +1173,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderXhtmlWithTranslator(): void
     {
@@ -1056,10 +1196,17 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $textDomain              = 'test-domain';
-        $renderedField           = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField           = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -1086,7 +1233,7 @@ final class FormMultiCheckboxTest extends TestCase
                 [
                     'class' => sprintf('form-check-label %s', $labelClass),
                     'for' => $id,
-                ]
+                ],
             )
             ->willReturn($labelStart);
         $formLabel->expects(self::once())
@@ -1109,7 +1256,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -1138,8 +1293,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher, $wrap): mixed
-                {
+                static function (string $key) use ($matcher, $wrap): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('label_position', $key),
                         2 => self::assertSame('disable_html_escape', $key),
@@ -1151,7 +1305,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => false,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -1170,7 +1324,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderMultiOption(): void
     {
@@ -1232,28 +1388,46 @@ final class FormMultiCheckboxTest extends TestCase
         $expected                = '<div></div>';
         $expectedSummary         = '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $id,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -1267,7 +1441,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -1282,12 +1456,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -1313,19 +1486,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check']], $attribs);
 
@@ -1336,16 +1508,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -1360,14 +1531,22 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::once())
@@ -1396,8 +1575,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -1407,7 +1585,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -1426,7 +1604,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderMultiOptionInlineWithHiddenField1(): void
     {
@@ -1487,30 +1667,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $id,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -1524,7 +1726,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -1539,12 +1741,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -1570,19 +1771,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -1593,16 +1793,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -1617,16 +1816,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -1641,7 +1850,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -1655,8 +1864,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -1666,7 +1874,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -1687,7 +1895,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderMultiOptionInlineWithHiddenField2(): void
     {
@@ -1748,30 +1958,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>', $class, $ariaLabel, $name, $id, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" id="%s" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $id,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -1785,7 +2017,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -1800,12 +2032,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -1831,19 +2062,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -1854,16 +2084,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -1878,16 +2107,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -1902,7 +2141,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -1916,8 +2155,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -1927,7 +2165,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -1947,7 +2185,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testRenderMultiOptionInlineWithHiddenField3(): void
     {
@@ -2008,30 +2248,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -2045,7 +2307,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -2060,12 +2322,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -2091,19 +2352,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -2114,16 +2374,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -2138,16 +2397,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -2162,7 +2431,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -2176,8 +2445,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -2187,7 +2455,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -2208,7 +2476,9 @@ final class FormMultiCheckboxTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField1(): void
     {
@@ -2269,30 +2539,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -2306,7 +2598,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -2321,12 +2613,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -2352,19 +2643,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -2375,16 +2665,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -2399,16 +2688,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -2423,7 +2722,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -2437,8 +2736,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -2448,7 +2746,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -2473,7 +2771,9 @@ final class FormMultiCheckboxTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField2(): void
     {
@@ -2534,30 +2834,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
+        $expectedSummary         = '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>' . PHP_EOL . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField2          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
-        $renderedField3          = PHP_EOL .
-            '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            '    ';
+        $renderedField1          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField2          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
+        $renderedField3          = PHP_EOL
+            . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -2571,7 +2893,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -2586,12 +2908,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -2617,19 +2938,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -2640,16 +2960,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -2664,16 +2983,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -2688,7 +3017,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -2702,8 +3031,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -2713,7 +3041,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -2732,8 +3060,10 @@ final class FormMultiCheckboxTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField3(): void
     {
@@ -2795,30 +3125,52 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $class, $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            $indent . '    ';
-        $renderedField2          = PHP_EOL .
-            $indent . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value1) . PHP_EOL .
-            $indent . '    ';
-        $renderedField3          = PHP_EOL .
-            $indent . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $class, $ariaLabel, $name, $value4) . PHP_EOL .
-            $indent . '    ';
+        $renderedField1          = PHP_EOL
+            . $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $class,
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . $indent . '    ';
+        $renderedField2          = PHP_EOL
+            . $indent . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . $indent . '    ';
+        $renderedField3          = PHP_EOL
+            . $indent . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;%s&#x20;efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $class,
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . $indent . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -2832,7 +3184,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -2847,12 +3199,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -2878,19 +3229,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -2901,16 +3251,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -2925,16 +3274,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -2949,7 +3308,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -2963,8 +3322,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -2974,7 +3332,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -2996,8 +3354,10 @@ final class FormMultiCheckboxTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField4(): void
     {
@@ -3059,30 +3419,49 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            $indent . '    ';
-        $renderedField2          = PHP_EOL .
-            $indent . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg2&#x20;test-efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $ariaLabel, $name, $value1) . PHP_EOL .
-            $indent . '    ';
-        $renderedField3          = PHP_EOL .
-            $indent . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg3&#x20;test-efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $ariaLabel, $name, $value4) . PHP_EOL .
-            $indent . '    ';
+        $renderedField1          = PHP_EOL
+            . $indent . '        ' . $labelStart . $value2TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . $indent . '    ';
+        $renderedField2          = PHP_EOL
+            . $indent . '        ' . $labelStart . $value3TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg2&#x20;test-efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . $indent . '    ';
+        $renderedField3          = PHP_EOL
+            . $indent . '        ' . $labelStart . $name4TranslatedEscaped . $labelEnd . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg3&#x20;test-efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . $indent . '    ';
         $wrap                    = false;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -3096,7 +3475,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -3111,12 +3490,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -3151,19 +3529,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -3174,16 +3551,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -3198,16 +3574,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -3222,7 +3608,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -3236,8 +3622,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -3247,7 +3632,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -3269,8 +3654,10 @@ final class FormMultiCheckboxTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeMultiOptionInlineWithHiddenField45(): void
     {
@@ -3332,36 +3719,55 @@ final class FormMultiCheckboxTest extends TestCase
         $labelEnd                = '</label>';
         $expected                = '<div></div>';
         $uncheckedValue          = '0';
-        $expectedSummary         = $indent . '    ' . sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
+        $expectedSummary         = $indent . '    ' . sprintf(
+            '<input type="hidden" name="%s" value="%s"/>',
+            $name,
+            $uncheckedValue,
+        ) . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>' . PHP_EOL . $indent . '    <div></div>';
         $textDomain              = 'test-domain';
-        $renderedField1          = PHP_EOL .
-            $indent . '    ' . $labelStart . PHP_EOL .
-            $indent . '        <span>' . $value2TranslatedEscaped . '</span>' . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>', $ariaLabel, $id, $name, $value3) . PHP_EOL .
-            $indent . '    ' . $labelEnd . PHP_EOL .
-            $indent . '    ';
-        $renderedField2          = PHP_EOL .
-            $indent . '    ' . $labelStart . PHP_EOL .
-            $indent . '        <span>' . $value3TranslatedEscaped . '</span>' . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg2&#x20;test-efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>', $ariaLabel, $name, $value1) . PHP_EOL .
-            $indent . '    ' . $labelEnd . PHP_EOL .
-            $indent . '    ';
-        $renderedField3          = PHP_EOL .
-            $indent . '    ' . $labelStart . PHP_EOL .
-            $indent . '        <span>' . $name4TranslatedEscaped . '</span>' . PHP_EOL .
-            $indent . '        ' . sprintf('<input class="form-check-input&#x20;test-class&#x20;efg3&#x20;test-efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>', $ariaLabel, $name, $value4) . PHP_EOL .
-            $indent . '    ' . $labelEnd . PHP_EOL .
-            $indent . '    ';
+        $renderedField1          = PHP_EOL
+            . $indent . '    ' . $labelStart . PHP_EOL
+            . $indent . '        <span>' . $value2TranslatedEscaped . '</span>' . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg" aria-label="%s" id="%s" name="%s&#x5B;&#x5D;" type="checkbox" value="%s"/>',
+                $ariaLabel,
+                $id,
+                $name,
+                $value3,
+            ) . PHP_EOL
+            . $indent . '    ' . $labelEnd . PHP_EOL
+            . $indent . '    ';
+        $renderedField2          = PHP_EOL
+            . $indent . '    ' . $labelStart . PHP_EOL
+            . $indent . '        <span>' . $value3TranslatedEscaped . '</span>' . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg2&#x20;test-efg2" aria-label="%s" disabled="disabled" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="true" id="test-id2" value="%s" checked="checked"/>',
+                $ariaLabel,
+                $name,
+                $value1,
+            ) . PHP_EOL
+            . $indent . '    ' . $labelEnd . PHP_EOL
+            . $indent . '    ';
+        $renderedField3          = PHP_EOL
+            . $indent . '    ' . $labelStart . PHP_EOL
+            . $indent . '        <span>' . $name4TranslatedEscaped . '</span>' . PHP_EOL
+            . $indent . '        ' . sprintf(
+                '<input class="form-check-input&#x20;test-class&#x20;efg3&#x20;test-efg3" aria-label="%s" name="%s&#x5B;&#x5D;" type="checkbox" aria-disabled="false" id="test-id3" value="%s" checked="checked"/>',
+                $ariaLabel,
+                $name,
+                $value4,
+            ) . PHP_EOL
+            . $indent . '    ' . $labelEnd . PHP_EOL
+            . $indent . '    ';
         $wrap                    = true;
         $disableEscape           = false;
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $value2Translated, $value3Translated, $name4Translated, $value2TranslatedEscaped, $value3TranslatedEscaped, $name4TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2Translated, $value),
                         2 => self::assertSame($value3Translated, $value),
@@ -3375,7 +3781,7 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3TranslatedEscaped,
                         default => $name4TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
@@ -3390,12 +3796,11 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturn(true);
 
         $formLabel = $this->createMock(FormLabelInterface::class);
-        $matcher = self::exactly(3);
+        $matcher   = self::exactly(3);
         $formLabel->expects($matcher)
             ->method('openTag')
             ->willReturnCallback(
-                function(array|ElementInterface|null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string
-                {
+                static function (array | ElementInterface | null $attributesOrElement = null) use ($matcher, $labelClass, $id, $labelStart): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
                             [
@@ -3430,19 +3835,18 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $labelStart;
-                }
+                },
             );
         $formLabel->expects(self::exactly(3))
             ->method('closeTag')
             ->willReturn($labelEnd);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function(string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
                     self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
 
@@ -3453,16 +3857,15 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return $expected;
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(3);
+        $matcher    = self::exactly(3);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $value2, $value3, $name4, $textDomain, $value2Translated, $value3Translated, $name4Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($value2, $message),
                         2 => self::assertSame($value3, $message),
@@ -3477,16 +3880,26 @@ final class FormMultiCheckboxTest extends TestCase
                         2 => $value3Translated,
                         default => $name4Translated,
                     };
-                }
+                },
             );
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
             ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue));
+            ->willReturn(
+                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            );
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, $translator);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            $translator,
+        );
 
         $element = $this->createMock(Radio::class);
         $element->expects(self::exactly(2))
@@ -3501,7 +3914,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getValue')
             ->willReturn($value1);
-        $element->expects(self::exactly(2))
+        $element->expects(self::once())
             ->method('useHiddenElement')
             ->willReturn(true);
         $element->expects(self::once())
@@ -3515,8 +3928,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function (string $key) use ($matcher, $disableEscape, $wrap): bool
-                {
+                static function (string $key) use ($matcher, $disableEscape, $wrap): bool {
                     match ($matcher->numberOfInvocations()) {
                         1, 4, 7 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -3526,7 +3938,7 @@ final class FormMultiCheckboxTest extends TestCase
                         1, 4, 7 => $disableEscape,
                         default => $wrap,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('hasLabelOption')
@@ -3546,10 +3958,7 @@ final class FormMultiCheckboxTest extends TestCase
         self::assertSame($labelPosition, $helper->getLabelPosition());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent1(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3578,16 +3987,21 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertSame($helper, $helper->setIndent(4));
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent2(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -3616,7 +4030,15 @@ final class FormMultiCheckboxTest extends TestCase
         $formHidden->expects(self::never())
             ->method('render');
 
-        $helper = new FormMultiCheckbox($escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $htmlElement, $formHidden, null);
+        $helper = new FormMultiCheckbox(
+            $escapeHtml,
+            $escapeHtmlAttr,
+            $doctype,
+            $formLabel,
+            $htmlElement,
+            $formHidden,
+            null,
+        );
 
         self::assertSame($helper, $helper->setIndent('  '));
         self::assertSame('  ', $helper->getIndent());

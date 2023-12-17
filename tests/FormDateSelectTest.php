@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use Laminas\Form\Element\DateSelect as DateSelectElement;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\ElementInterface;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\ExtensionNotLoadedException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect;
@@ -57,8 +57,8 @@ final class FormDateSelectTest extends TestCase
             sprintf(
                 '%s requires that the element is of type %s',
                 'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render',
-                DateSelectElement::class
-            )
+                DateSelectElement::class,
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -103,8 +103,8 @@ final class FormDateSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -149,8 +149,8 @@ final class FormDateSelectTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateSelect::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -164,7 +164,7 @@ final class FormDateSelectTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testInvokeWithoutName2(): void
     {
@@ -188,7 +188,7 @@ final class FormDateSelectTest extends TestCase
         try {
             $helper($element, IntlDateFormatter::FULL, $locale);
             self::fail('expecting throwing an exception');
-        } catch (DomainException $e) {
+        } catch (DomainException) {
             self::assertSame(IntlDateFormatter::LONG, $helper->getDateType());
             self::assertSame($locale, $helper->getLocale());
         }
@@ -198,7 +198,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender1(): void
     {
@@ -250,7 +249,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::once())
@@ -311,7 +310,7 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -320,10 +319,12 @@ final class FormDateSelectTest extends TestCase
             ->willReturnSelf();
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -341,8 +342,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -354,7 +354,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -392,7 +392,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender2(): void
     {
@@ -444,7 +443,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::once())
@@ -505,7 +504,7 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -514,10 +513,12 @@ final class FormDateSelectTest extends TestCase
             ->willReturnSelf();
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -535,8 +536,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -548,7 +548,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -586,7 +586,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender3(): void
     {
@@ -638,7 +637,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::never())
@@ -697,17 +696,19 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -723,8 +724,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -736,7 +736,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -774,7 +774,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender4(): void
     {
@@ -826,7 +825,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::never())
@@ -885,17 +884,19 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -911,8 +912,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -924,7 +924,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -962,7 +962,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender5(): void
     {
@@ -1014,7 +1013,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::never())
@@ -1073,17 +1072,19 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::never())
             ->method('setEmptyOption');
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -1099,8 +1100,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -1112,7 +1112,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -1152,7 +1152,6 @@ final class FormDateSelectTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
      */
     public function testRender6(): void
     {
@@ -1204,7 +1203,7 @@ final class FormDateSelectTest extends TestCase
                     '29' => ['value' => '29', 'label' => '29'],
                     '30' => ['value' => '30', 'label' => '30'],
                     '31' => ['value' => '31', 'label' => '31'],
-                ]
+                ],
             )
             ->willReturnSelf();
         $dayElement->expects(self::once())
@@ -1265,7 +1264,7 @@ final class FormDateSelectTest extends TestCase
                         'value' => '12',
                         'label' => 'Dezember',
                     ],
-                ]
+                ],
             )
             ->willReturnSelf();
         $monthElement->expects(self::once())
@@ -1274,10 +1273,12 @@ final class FormDateSelectTest extends TestCase
             ->willReturnSelf();
 
         $yearElement = $this->createMock(Select::class);
-        $years = [];
+        $years       = [];
+
         for ($i = $maxYear; $i >= $minYear; --$i) {
             $years[$i] = ['value' => (string) $i, 'label' => (string) $i];
         }
+
         $yearElement->expects(self::once())
             ->method('setValueOptions')
             ->with($years)
@@ -1295,8 +1296,7 @@ final class FormDateSelectTest extends TestCase
         $selectHelper->expects($matcher)
             ->method('render')
             ->willReturnCallback(
-                function(ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string
-                {
+                static function (ElementInterface $element) use ($matcher, $dayElement, $monthElement, $yearElement, $renderedDay, $renderedMonth, $renderedYear): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($dayElement, $element),
                         2 => self::assertSame($monthElement, $element),
@@ -1308,7 +1308,7 @@ final class FormDateSelectTest extends TestCase
                         2 => $renderedMonth,
                         default => $renderedYear,
                     };
-                }
+                },
             );
 
         $helper = new FormDateSelect($selectHelper);
@@ -1346,7 +1346,6 @@ final class FormDateSelectTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent1(): void
@@ -1365,7 +1364,6 @@ final class FormDateSelectTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExtensionNotLoadedException
      */
     public function testSetGetIndent2(): void

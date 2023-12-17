@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,20 +12,21 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Laminas\View\Helper\HelperInterface;
-use Psr\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
+use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckbox;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCheckboxFactory;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormHiddenInterface;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabelInterface;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 use function assert;
 
@@ -33,6 +34,7 @@ final class FormCheckboxFactoryTest extends TestCase
 {
     private FormCheckboxFactory $factory;
 
+    /** @throws void */
     protected function setUp(): void
     {
         $this->factory = new FormCheckboxFactory();
@@ -40,7 +42,7 @@ final class FormCheckboxFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws ContainerExceptionInterface
      */
     public function testInvocationWithTranslator(): void
     {
@@ -61,8 +63,7 @@ final class FormCheckboxFactoryTest extends TestCase
         $helperPluginManager->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function(string $name, ?array $options = null) use ($matcher, $escapeHtml, $translatePlugin, $escapeHtmlAttr, $doctype, $formLabel, $formHidden): HelperInterface|FormLabelInterface|FormHiddenInterface
-                {
+                static function (string $name, array | null $options = null) use ($matcher, $escapeHtml, $translatePlugin, $escapeHtmlAttr, $doctype, $formLabel, $formHidden): HelperInterface | FormLabelInterface | FormHiddenInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(Translate::class, $name),
                         2 => self::assertSame(EscapeHtml::class, $name),
@@ -82,16 +83,15 @@ final class FormCheckboxFactoryTest extends TestCase
                         5 => $formLabel,
                         default => $formHidden,
                     };
-                }
+                },
             );
 
         $container = $this->createMock(ContainerInterface::class);
-        $matcher = self::exactly(2);
+        $matcher   = self::exactly(2);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function(string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed
-                {
+                static function (string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(HelperPluginManager::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
@@ -101,7 +101,7 @@ final class FormCheckboxFactoryTest extends TestCase
                         1 => $helperPluginManager,
                         default => $htmlElement,
                     };
-                }
+                },
             );
 
         assert($container instanceof ContainerInterface);
@@ -112,7 +112,7 @@ final class FormCheckboxFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws ContainerExceptionInterface
      */
     public function testInvocationWithoutTranslator(): void
     {
@@ -132,8 +132,7 @@ final class FormCheckboxFactoryTest extends TestCase
         $helperPluginManager->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function(string $name, ?array $options = null) use ($matcher, $escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden): HelperInterface|FormLabelInterface|FormHiddenInterface
-                {
+                static function (string $name, array | null $options = null) use ($matcher, $escapeHtml, $escapeHtmlAttr, $doctype, $formLabel, $formHidden): HelperInterface | FormLabelInterface | FormHiddenInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(EscapeHtml::class, $name),
                         2 => self::assertSame(EscapeHtmlAttr::class, $name),
@@ -151,16 +150,15 @@ final class FormCheckboxFactoryTest extends TestCase
                         4 => $formLabel,
                         default => $formHidden,
                     };
-                }
+                },
             );
 
         $container = $this->createMock(ContainerInterface::class);
-        $matcher = self::exactly(2);
+        $matcher   = self::exactly(2);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function(string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed
-                {
+                static function (string $id) use ($matcher, $helperPluginManager, $htmlElement): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(HelperPluginManager::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
@@ -170,7 +168,7 @@ final class FormCheckboxFactoryTest extends TestCase
                         1 => $helperPluginManager,
                         default => $htmlElement,
                     };
-                }
+                },
             );
 
         assert($container instanceof ContainerInterface);

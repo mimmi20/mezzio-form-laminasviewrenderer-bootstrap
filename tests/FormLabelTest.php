@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,9 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Text;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
+use Laminas\Form\Exception\InvalidArgumentException;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\EscapeHtml;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel;
@@ -22,14 +24,14 @@ use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 use function assert;
-use function gettype;
+use function get_debug_type;
 use function sprintf;
 
 final class FormLabelTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderOpenTagWithNull(): void
@@ -47,7 +49,7 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderOpenTagWithArray(): void
@@ -66,7 +68,7 @@ final class FormLabelTest extends TestCase
     }
 
     /**
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws Exception
      */
@@ -80,13 +82,13 @@ final class FormLabelTest extends TestCase
 
         $helper = new FormLabel($escapeHtml, null);
 
-        $this->expectException(\Laminas\Form\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects an array or Laminas\Form\ElementInterface instance; received "%s"',
                 'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel::openTag',
-                gettype($value)
-            )
+                get_debug_type($value),
+            ),
         );
         $this->expectExceptionCode(0);
         $helper->openTag($value);
@@ -94,7 +96,7 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderOpenTagWithElementWithoutNameAndId(): void
@@ -130,8 +132,8 @@ final class FormLabelTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects the Element provided to have either a name or an id present; neither found',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel::openTag'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel::openTag',
+            ),
         );
         $this->expectExceptionCode(0);
         $helper->openTag($element);
@@ -139,7 +141,7 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderOpenTagWithElementWithId(): void
@@ -180,7 +182,7 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
      */
     public function testRenderOpenTagWithElementWithoutId(): void
@@ -222,8 +224,11 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithElementWithoutId(): void
     {
@@ -268,8 +273,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithoutLabel(): void
     {
@@ -302,8 +309,8 @@ final class FormLabelTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s expects either label content as the second argument, or that the element provided has a label attribute; neither found',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel::__invoke'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormLabel::__invoke',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -312,8 +319,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithoutLabelButWithPosition(): void
     {
@@ -357,8 +366,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPosition1(): void
     {
@@ -367,7 +378,13 @@ final class FormLabelTest extends TestCase
         $labelContent = 'test';
         $label        = 'test-label';
         $escaledLabel = 'test-label-escaped';
-        $expected     = sprintf('<label for="%s" class="%s">%s<span>%s</span></label>', $for, $class, $labelContent, $escaledLabel);
+        $expected     = sprintf(
+            '<label for="%s" class="%s">%s<span>%s</span></label>',
+            $for,
+            $class,
+            $labelContent,
+            $escaledLabel,
+        );
         $position     = FormLabelInterface::APPEND;
 
         $element = $this->createMock(Text::class);
@@ -410,8 +427,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPosition2(): void
     {
@@ -420,7 +439,13 @@ final class FormLabelTest extends TestCase
         $labelContent = 'test';
         $label        = 'test-label';
         $escaledLabel = 'test-label-escaped';
-        $expected     = sprintf('<label for="%s" class="%s">%s%s</label>', $for, $class, $escaledLabel, $labelContent);
+        $expected     = sprintf(
+            '<label for="%s" class="%s">%s%s</label>',
+            $for,
+            $class,
+            $escaledLabel,
+            $labelContent,
+        );
         $position     = FormLabelInterface::PREPEND;
 
         $element = $this->createMock(Text::class);
@@ -445,15 +470,14 @@ final class FormLabelTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
                     };
 
                     return false;
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabelAttributes')
@@ -472,8 +496,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPosition3(): void
     {
@@ -482,7 +508,13 @@ final class FormLabelTest extends TestCase
         $labelContent = 'test';
         $label        = 'test-label';
         $escaledLabel = 'test-label-escaped';
-        $expected     = sprintf('<label for="%s" class="%s"><span>%s</span>%s</label>', $for, $class, $escaledLabel, $labelContent);
+        $expected     = sprintf(
+            '<label for="%s" class="%s"><span>%s</span>%s</label>',
+            $for,
+            $class,
+            $escaledLabel,
+            $labelContent,
+        );
         $position     = FormLabelInterface::PREPEND;
 
         $element = $this->createMock(Text::class);
@@ -507,8 +539,7 @@ final class FormLabelTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
@@ -518,7 +549,7 @@ final class FormLabelTest extends TestCase
                         1 => false,
                         default => true,
                     };
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabelAttributes')
@@ -537,8 +568,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPosition4(): void
     {
@@ -546,7 +579,13 @@ final class FormLabelTest extends TestCase
         $class        = 'xyz';
         $labelContent = 'test';
         $label        = 'test-label';
-        $expected     = sprintf('<label for="%s" class="%s">%s<span>%s</span></label>', $for, $class, $labelContent, $label);
+        $expected     = sprintf(
+            '<label for="%s" class="%s">%s<span>%s</span></label>',
+            $for,
+            $class,
+            $labelContent,
+            $label,
+        );
         $position     = FormLabelInterface::APPEND;
 
         $element = $this->createMock(Text::class);
@@ -587,8 +626,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPosition5(): void
     {
@@ -596,7 +637,13 @@ final class FormLabelTest extends TestCase
         $class        = 'xyz';
         $labelContent = 'test';
         $label        = 'test-label';
-        $expected     = sprintf('<label for="%s" class="%s"><span>%s</span>%s</label>', $for, $class, $label, $labelContent);
+        $expected     = sprintf(
+            '<label for="%s" class="%s"><span>%s</span>%s</label>',
+            $for,
+            $class,
+            $label,
+            $labelContent,
+        );
         $position     = FormLabelInterface::PREPEND;
 
         $element = $this->createMock(Text::class);
@@ -621,15 +668,14 @@ final class FormLabelTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
                     };
 
                     return true;
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabelAttributes')
@@ -646,8 +692,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPositionAndTranslator1(): void
     {
@@ -658,7 +706,13 @@ final class FormLabelTest extends TestCase
         $textDomain            = 'text-domain';
         $tranlatedLabel        = 'test-label-translated';
         $escapedTranlatedLabel = 'test-label-translated-escaped';
-        $expected              = sprintf('<label for="%s" class="%s">%s%s</label>', $for, $class, $escapedTranlatedLabel, $labelContent);
+        $expected              = sprintf(
+            '<label for="%s" class="%s">%s%s</label>',
+            $for,
+            $class,
+            $escapedTranlatedLabel,
+            $labelContent,
+        );
         $position              = FormLabelInterface::PREPEND;
 
         $element = $this->createMock(Text::class);
@@ -683,15 +737,14 @@ final class FormLabelTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
                     };
 
                     return false;
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabelAttributes')
@@ -718,8 +771,10 @@ final class FormLabelTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
-     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     public function testInvokeWithLabelAndPositionAndTranslator2(): void
     {
@@ -729,7 +784,12 @@ final class FormLabelTest extends TestCase
         $textDomain            = 'text-domain';
         $tranlatedLabel        = 'test-label-translated';
         $escapedTranlatedLabel = 'test-label-translated-escaped';
-        $expected              = sprintf('<label for="%s" class="%s">%s</label>', $for, $class, $escapedTranlatedLabel);
+        $expected              = sprintf(
+            '<label for="%s" class="%s">%s</label>',
+            $for,
+            $class,
+            $escapedTranlatedLabel,
+        );
         $position              = FormLabelInterface::PREPEND;
 
         $element = $this->createMock(Text::class);
@@ -754,15 +814,14 @@ final class FormLabelTest extends TestCase
         $element->expects($matcher)
             ->method('getLabelOption')
             ->willReturnCallback(
-                function(string $key) use ($matcher): bool
-                {
+                static function (string $key) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('disable_html_escape', $key),
                         default => self::assertSame('always_wrap', $key),
                     };
 
                     return false;
-                }
+                },
             );
         $element->expects(self::once())
             ->method('getLabelAttributes')

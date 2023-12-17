@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,11 +15,10 @@ namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\Element\Checkbox as CheckboxElement;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
@@ -33,7 +32,6 @@ use function array_unique;
 use function explode;
 use function implode;
 use function is_string;
-use function method_exists;
 use function sprintf;
 use function trim;
 
@@ -45,63 +43,57 @@ final class FormCheckbox extends FormInput
     use LabelPositionTrait;
     use UseHiddenElementTrait;
 
-    private ?Translate $translate;
-    private HtmlElementInterface $htmlElement;
-    private FormLabelInterface $formLabel;
-    private FormHiddenInterface $formHidden;
-
+    /** @throws void */
     public function __construct(
         EscapeHtml $escapeHtml,
         EscapeHtmlAttr $escapeHtmlAttr,
         Doctype $doctype,
-        FormLabelInterface $formLabel,
-        HtmlElementInterface $htmlElement,
-        FormHiddenInterface $formHidden,
-        ?Translate $translator = null
+        private readonly FormLabelInterface $formLabel,
+        private readonly HtmlElementInterface $htmlElement,
+        private readonly FormHiddenInterface $formHidden,
+        private readonly Translate | null $translate = null,
     ) {
         parent::__construct($escapeHtml, $escapeHtmlAttr, $doctype);
-
-        $this->htmlElement = $htmlElement;
-        $this->formLabel   = $formLabel;
-        $this->formHidden  = $formHidden;
-        $this->translate   = $translator;
     }
 
     /**
      * Render a form <input> element from the provided $element
      *
+     * @throws InvalidArgumentException
+     * @throws DomainException
      * @throws \Laminas\View\Exception\InvalidArgumentException
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws RuntimeException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof CheckboxElement) {
-            throw new \Laminas\View\Exception\InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,
-                    CheckboxElement::class
-                )
+                    CheckboxElement::class,
+                ),
             );
         }
 
         $name = $element->getName();
-        if (empty($name) && 0 !== $name) {
-            throw new \Laminas\View\Exception\DomainException(
+
+        if (empty($name)) {
+            throw new DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
-                    __METHOD__
-                )
+                    __METHOD__,
+                ),
             );
         }
 
         $label = $element->getLabel();
 
-        if (!empty($label) && null !== $this->translate) {
+        if (!empty($label) && $this->translate !== null) {
             $label = ($this->translate)($label, $this->getTranslatorTextDomain());
         }
 
-        if (!empty($label) && (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape'))) {
+        if (!empty($label) && !$element->getLabelOption('disable_html_escape')) {
             $label = ($this->escapeHtml)($label);
         }
 
@@ -111,20 +103,19 @@ final class FormCheckbox extends FormInput
         $labelClasses = ['form-check-label'];
         $inputClasses = ['form-check-input'];
 
-        if (Form::LAYOUT_INLINE === $element->getOption('layout')) {
+        if ($element->getOption('layout') === Form::LAYOUT_INLINE) {
             $groupClasses[] = 'form-check-inline';
         }
 
-        $labelAttributes = [];
+        $labelAttributes = $element->getLabelAttributes();
 
-        if ($element instanceof LabelAwareInterface) {
-            $labelAttributes = $element->getLabelAttributes();
-        }
-
-        $labelAttributes = array_merge($labelAttributes, ['for' => $id]);
+        $labelAttributes = [...$labelAttributes, 'for' => $id];
 
         if (array_key_exists('class', $labelAttributes)) {
-            $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+            $labelClasses = array_merge(
+                $labelClasses,
+                explode(' ', (string) $labelAttributes['class']),
+            );
         }
 
         $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
@@ -141,7 +132,7 @@ final class FormCheckbox extends FormInput
         }
 
         if (array_key_exists('class', $attributes)) {
-            $inputClasses = array_merge($inputClasses, explode(' ', $attributes['class']));
+            $inputClasses = array_merge($inputClasses, explode(' ', (string) $attributes['class']));
         }
 
         $attributes['class'] = trim(implode(' ', array_unique($inputClasses)));
@@ -152,33 +143,30 @@ final class FormCheckbox extends FormInput
         $filteredAttributes = array_filter(
             $labelAttributes,
             static fn ($key): bool => is_string($key),
-            ARRAY_FILTER_USE_KEY
+            ARRAY_FILTER_USE_KEY,
         );
 
         $rendered = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
-            $closingBracket
+            $closingBracket,
         );
 
         $hidden = '';
 
         // Render hidden element
-        $useHiddenElement = method_exists($element, 'useHiddenElement') && $element->useHiddenElement()
-            ? $element->useHiddenElement()
-            : $this->useHiddenElement;
+        $useHiddenElement = $element->useHiddenElement() || $this->useHiddenElement;
 
         if ($useHiddenElement) {
             $hidden = $this->renderHiddenElement($element);
         }
 
-        if (
-            array_key_exists('id', $attributes)
-            && ($element instanceof LabelAwareInterface && !$element->getLabelOption('always_wrap'))
-        ) {
+        if (array_key_exists('id', $attributes) && !$element->getLabelOption('always_wrap')) {
             $labelOpen  = '';
             $labelClose = '';
-            $label      = $indent . $this->getWhitespace(4) . $this->formLabel->openTag($filteredAttributes) . $label . $this->formLabel->closeTag();
+            $label      = $indent . $this->getWhitespace(4) . $this->formLabel->openTag(
+                $filteredAttributes,
+            ) . $label . $this->formLabel->closeTag();
             $rendered   = $indent . $this->getWhitespace(4) . $rendered;
 
             if ($useHiddenElement) {
@@ -195,33 +183,34 @@ final class FormCheckbox extends FormInput
         }
 
         if (
-            '' !== $label && !array_key_exists('id', $attributes)
-            || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
+            $label !== '' && !array_key_exists('id', $attributes)
+            || $element->getLabelOption('always_wrap')
         ) {
             $label = '<span>' . $label . '</span>';
 
-            if ('' !== $labelClose) {
+            if ($labelClose !== '') {
                 $label = $indent . $this->getWhitespace(4) . $label;
             }
         }
 
         $labelPosition = $this->getLabelPosition();
 
-        switch ($labelPosition) {
-            case BaseFormRow::LABEL_PREPEND:
-                $markup = $labelOpen . $label . PHP_EOL . $rendered . $labelClose;
-                break;
-            case BaseFormRow::LABEL_APPEND:
-            default:
-                $markup = $labelOpen . $rendered . PHP_EOL . $label . $labelClose;
-                break;
-        }
+        $markup = match ($labelPosition) {
+            BaseFormRow::LABEL_PREPEND => $labelOpen . $label . PHP_EOL . $rendered . $labelClose,
+            default => $labelOpen . $rendered . PHP_EOL . $label . $labelClose,
+        };
 
-        return $indent . $this->htmlElement->toHtml('div', ['class' => $groupClasses], PHP_EOL . $hidden . $markup . PHP_EOL . $indent);
+        return $indent . $this->htmlElement->toHtml(
+            'div',
+            ['class' => $groupClasses],
+            PHP_EOL . $hidden . $markup . PHP_EOL . $indent,
+        );
     }
 
     /**
      * Return input type
+     *
+     * @throws void
      */
     protected function getInputType(): string
     {

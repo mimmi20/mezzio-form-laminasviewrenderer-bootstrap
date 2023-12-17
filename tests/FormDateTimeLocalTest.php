@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,14 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Button;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormDateTimeLocal;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 
 use function sprintf;
 
@@ -68,8 +69,8 @@ final class FormDateTimeLocalTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormInput::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormInput::render',
+            ),
         );
         $this->expectExceptionCode(0);
         $helper->render($element);
@@ -85,7 +86,12 @@ final class FormDateTimeLocalTest extends TestCase
         $class = 'test-class';
         $value = 'test-value';
 
-        $expected = sprintf('<input class="form-control&#x20;%s" name="%s" type="datetime-local" value="%s">', $class, $name, $value);
+        $expected = sprintf(
+            '<input class="form-control&#x20;%s" name="%s" type="datetime-local" value="%s">',
+            $class,
+            $name,
+            $value,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -136,7 +142,12 @@ final class FormDateTimeLocalTest extends TestCase
         $class = 'test-class';
         $value = 'test-value';
 
-        $expected = sprintf('<input class="form-control&#x20;%s" name="%s" type="datetime-local" value="%s"/>', $class, $name, $value);
+        $expected = sprintf(
+            '<input class="form-control&#x20;%s" name="%s" type="datetime-local" value="%s"/>',
+            $class,
+            $name,
+            $value,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -187,7 +198,11 @@ final class FormDateTimeLocalTest extends TestCase
         $class = 'test-class';
         $value = 'test-value';
 
-        $expected = sprintf('<input class="form-control-plaintext" readonly="readonly" name="%s" type="datetime-local" value="%s"/>', $name, $value);
+        $expected = sprintf(
+            '<input class="form-control-plaintext" readonly="readonly" name="%s" type="datetime-local" value="%s"/>',
+            $name,
+            $value,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -232,6 +247,7 @@ final class FormDateTimeLocalTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testSetGetIndent1(): void
     {
@@ -257,6 +273,7 @@ final class FormDateTimeLocalTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testSetGetIndent2(): void
     {

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -43,12 +43,12 @@ final class FormHidden extends FormInput implements FormHiddenInterface
     {
         $name = $element->getName();
 
-        if (null === $name || '' === $name) {
+        if ($name === null || $name === '') {
             throw new DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
-                    __METHOD__
-                )
+                    __METHOD__,
+                ),
             );
         }
 
@@ -62,7 +62,7 @@ final class FormHidden extends FormInput implements FormHiddenInterface
         $markup = sprintf(
             '<input %s%s',
             $this->createAttributesString($attributes),
-            $this->getInlineClosingBracket()
+            $this->getInlineClosingBracket(),
         );
 
         $indent = $this->getIndent();
@@ -72,6 +72,8 @@ final class FormHidden extends FormInput implements FormHiddenInterface
 
     /**
      * Determine input type to use
+     *
+     * @throws void
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */

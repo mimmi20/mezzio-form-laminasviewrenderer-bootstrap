@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,10 +13,11 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\File;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
+use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
-use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,7 @@ final class FormTextareaTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithoutName(): void
     {
@@ -50,8 +52,8 @@ final class FormTextareaTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormTextarea::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -61,7 +63,7 @@ final class FormTextareaTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
+     * @throws InvalidArgumentException
      */
     public function testRenderWithName(): void
     {
@@ -76,7 +78,7 @@ final class FormTextareaTest extends TestCase
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
@@ -105,7 +107,7 @@ final class FormTextareaTest extends TestCase
     /**
      * @throws Exception
      * @throws DomainException
-     *
+     * @throws InvalidArgumentException
      */
     public function testInvoke1(): void
     {
@@ -120,7 +122,7 @@ final class FormTextareaTest extends TestCase
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
@@ -152,7 +154,8 @@ final class FormTextareaTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testInvoke2(): void
     {
@@ -167,7 +170,7 @@ final class FormTextareaTest extends TestCase
             ->with(
                 'textarea',
                 ['class' => 'form-control abc', 'name' => $name],
-                $escapedValue
+                $escapedValue,
             )
             ->willReturn($expected);
 
@@ -193,10 +196,7 @@ final class FormTextareaTest extends TestCase
         self::assertSame($expected, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent1(): void
     {
         $htmlElement = $this->createMock(HtmlElementInterface::class);
@@ -213,10 +213,7 @@ final class FormTextareaTest extends TestCase
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent2(): void
     {
         $htmlElement = $this->createMock(HtmlElementInterface::class);

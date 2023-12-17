@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
 
 use function sprintf;
 
@@ -21,6 +21,8 @@ final class FormRadio extends AbstractFormMultiCheckbox
 {
     /**
      * Return input type
+     *
+     * @throws void
      */
     protected function getInputType(): string
     {
@@ -30,18 +32,18 @@ final class FormRadio extends AbstractFormMultiCheckbox
     /**
      * Get element name
      *
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws DomainException
      */
     protected static function getName(ElementInterface $element): string
     {
         $name = $element->getName();
 
-        if (null === $name || '' === $name) {
-            throw new \Laminas\View\Exception\DomainException(
+        if ($name === null || $name === '') {
+            throw new DomainException(
                 sprintf(
                     '%s requires that the element has an assigned name; none discovered',
-                    __METHOD__
-                )
+                    __METHOD__,
+                ),
             );
         }
 

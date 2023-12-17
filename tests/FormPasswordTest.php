@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Button;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
@@ -68,8 +68,8 @@ final class FormPasswordTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormInput::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormInput::render',
+            ),
         );
         $this->expectExceptionCode(0);
         $helper->render($element);
@@ -77,7 +77,6 @@ final class FormPasswordTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws DomainException
      */
     public function testRenderHtml(): void
@@ -85,7 +84,11 @@ final class FormPasswordTest extends TestCase
         $name  = 'test-name';
         $class = 'test-class';
 
-        $expected = sprintf('<input class="form-control&#x20;%s" name="%s" type="password" value="">', $class, $name);
+        $expected = sprintf(
+            '<input class="form-control&#x20;%s" name="%s" type="password" value="">',
+            $class,
+            $name,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -127,7 +130,6 @@ final class FormPasswordTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws DomainException
      */
     public function testRenderXHtml(): void
@@ -135,7 +137,11 @@ final class FormPasswordTest extends TestCase
         $name  = 'test-name';
         $class = 'test-class';
 
-        $expected = sprintf('<input class="form-control&#x20;%s" name="%s" type="password" value=""/>', $class, $name);
+        $expected = sprintf(
+            '<input class="form-control&#x20;%s" name="%s" type="password" value=""/>',
+            $class,
+            $name,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -177,7 +183,6 @@ final class FormPasswordTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws DomainException
      */
     public function testRenderReadonlyXHtml(): void
@@ -185,7 +190,10 @@ final class FormPasswordTest extends TestCase
         $name  = 'test-name';
         $class = 'test-class';
 
-        $expected = sprintf('<input class="form-control-plaintext" readonly="readonly" name="%s" type="password" value=""/>', $name);
+        $expected = sprintf(
+            '<input class="form-control-plaintext" readonly="readonly" name="%s" type="password" value=""/>',
+            $name,
+        );
 
         $element = $this->createMock(Button::class);
         $element->expects(self::once())
@@ -227,10 +235,7 @@ final class FormPasswordTest extends TestCase
         self::assertSame($expected, $helper->render($element));
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent1(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -253,10 +258,7 @@ final class FormPasswordTest extends TestCase
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetGetIndent2(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,12 +13,12 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Text;
-use Laminas\View\Exception\DomainException;
 use Laminas\I18n\View\Helper\Translate;
+use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\Escaper\AbstractHelper;
-use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormElementErrors;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ final class FormElementErrorsTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithoutMessages(): void
     {
@@ -61,7 +61,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithMessages(): void
     {
@@ -78,12 +78,11 @@ final class FormElementErrorsTest extends TestCase
             ->willReturn($messageEscaped);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(3);
+        $matcher     = self::exactly(3);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $messageEscaped, $listEntryMessage, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $messageEscaped, $listEntryMessage, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         3 => self::assertSame('div', $element),
                         2 => self::assertSame('ul', $element),
@@ -97,7 +96,10 @@ final class FormElementErrorsTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($messageEscaped, $content),
-                        2 => self::assertSame('        ' . $listEntryMessage . PHP_EOL . '    ', $content),
+                        2 => self::assertSame(
+                            '        ' . $listEntryMessage . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -106,7 +108,7 @@ final class FormElementErrorsTest extends TestCase
                         2 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, null);
@@ -131,7 +133,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithEmptyMessages(): void
     {
@@ -161,7 +163,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithMessagesAndTranslator(): void
     {
@@ -178,12 +180,11 @@ final class FormElementErrorsTest extends TestCase
         $textDomain                = 'test-domain';
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function(string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $message1Translated, $message2Translated, $message1TranslatedEscaped, $message2TranslatedEscaped): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $message1Translated, $message2Translated, $message1TranslatedEscaped, $message2TranslatedEscaped): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1Translated, $value),
                         default => self::assertSame($message2Translated, $value),
@@ -195,16 +196,15 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1TranslatedEscaped,
                         default => $message2TranslatedEscaped,
                     };
-                }
+                },
             );
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2TranslatedEscaped, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2TranslatedEscaped, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         4 => self::assertSame('div', $element),
                         3 => self::assertSame('ul', $element),
@@ -219,7 +219,10 @@ final class FormElementErrorsTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1TranslatedEscaped, $content),
                         2 => self::assertSame($message2TranslatedEscaped, $content),
-                        3 => self::assertSame('        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -229,16 +232,15 @@ final class FormElementErrorsTest extends TestCase
                         3 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1, $message),
                         default => self::assertSame($message2, $message),
@@ -251,7 +253,7 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1Translated,
                         default => $message2Translated,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
@@ -278,7 +280,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testRenderWithMessagesAndTranslatorWithoutEscape(): void
     {
@@ -300,12 +302,11 @@ final class FormElementErrorsTest extends TestCase
             ->willReturn($message1TranslatedEscaped);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         4 => self::assertSame('div', $element),
                         3 => self::assertSame('ul', $element),
@@ -320,7 +321,10 @@ final class FormElementErrorsTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1TranslatedEscaped, $content),
                         2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame('        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -330,16 +334,15 @@ final class FormElementErrorsTest extends TestCase
                         3 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1, $message),
                         default => self::assertSame($message2, $message),
@@ -352,7 +355,7 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1Translated,
                         default => $message2Translated,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
@@ -379,7 +382,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws DomainException
+     * @throws InvalidArgumentException
      */
     public function testInvokeWithMessagesAndTranslatorWithoutEscape1(): void
     {
@@ -401,12 +404,11 @@ final class FormElementErrorsTest extends TestCase
             ->willReturn($message1TranslatedEscaped);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         4 => self::assertSame('div', $element),
                         3 => self::assertSame('ul', $element),
@@ -421,7 +423,10 @@ final class FormElementErrorsTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1TranslatedEscaped, $content),
                         2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame('        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -431,16 +436,15 @@ final class FormElementErrorsTest extends TestCase
                         3 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1, $message),
                         default => self::assertSame($message2, $message),
@@ -453,7 +457,7 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1Translated,
                         default => $message2Translated,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
@@ -484,7 +488,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws InvalidArgumentException
      */
     public function testInvokeWithMessagesAndTranslatorWithoutEscape2(): void
     {
@@ -506,12 +510,11 @@ final class FormElementErrorsTest extends TestCase
             ->willReturn($message1TranslatedEscaped);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         4 => self::assertSame('div', $element),
                         3 => self::assertSame('ul', $element),
@@ -526,7 +529,10 @@ final class FormElementErrorsTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1TranslatedEscaped, $content),
                         2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame('        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -536,16 +542,15 @@ final class FormElementErrorsTest extends TestCase
                         3 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1, $message),
                         default => self::assertSame($message2, $message),
@@ -558,7 +563,7 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1Translated,
                         default => $message2Translated,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
@@ -583,9 +588,7 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame($divMessage, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     public function testSetGetAttributes(): void
     {
         $attributes = ['class' => 'xyz', 'data-message' => 'void'];
@@ -606,7 +609,7 @@ final class FormElementErrorsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\View\Exception\DomainException
+     * @throws InvalidArgumentException
      */
     public function testInvokeWithMessagesAndTranslatorWithoutEscape3(): void
     {
@@ -630,12 +633,11 @@ final class FormElementErrorsTest extends TestCase
             ->willReturn($message1TranslatedEscaped);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $attributes, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $attributes, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
                     match ($matcher->numberOfInvocations()) {
                         4 => self::assertSame('div', $element),
                         3 => self::assertSame('ul', $element),
@@ -643,7 +645,10 @@ final class FormElementErrorsTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['class' => 'invalid-feedback', 'id' => 'test-idFeedback'], $attribs),
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback', 'id' => 'test-idFeedback'],
+                            $attribs,
+                        ),
                         3 => self::assertSame($attributes, $attribs),
                         default => self::assertSame([], $attribs),
                     };
@@ -651,7 +656,10 @@ final class FormElementErrorsTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1TranslatedEscaped, $content),
                         2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame('        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ', $content),
+                        3 => self::assertSame(
+                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                        ),
                         default => self::assertSame('    ' . $listMessage, $content),
                     };
 
@@ -661,16 +669,15 @@ final class FormElementErrorsTest extends TestCase
                         3 => $listMessage,
                         default => $divMessage,
                     };
-                }
+                },
             );
 
         $translator = $this->createMock(Translate::class);
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomainParam = null, ?string $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string
-                {
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $message1, $message2, $textDomain, $message1Translated, $message2Translated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($message1, $message),
                         default => self::assertSame($message2, $message),
@@ -683,7 +690,7 @@ final class FormElementErrorsTest extends TestCase
                         1 => $message1Translated,
                         default => $message2Translated,
                     };
-                }
+                },
             );
 
         $helper = new FormElementErrors($htmlElement, $escapeHtml, $translator);
@@ -711,9 +718,7 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame($divMessage, $helper($element));
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     public function testSetGetInden1(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);
@@ -730,9 +735,7 @@ final class FormElementErrorsTest extends TestCase
         self::assertSame('    ', $helper->getIndent());
     }
 
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     public function testSetGetInden2(): void
     {
         $escapeHtml = $this->createMock(EscapeHtml::class);

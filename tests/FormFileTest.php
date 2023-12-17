@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,14 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\File;
-use Laminas\View\Exception\DomainException;
+use Laminas\Form\Exception\DomainException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 
 use function sprintf;
 
@@ -54,8 +55,8 @@ final class FormFileTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 '%s requires that the element has an assigned name; none discovered',
-                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile::render'
-            )
+                'Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormFile::render',
+            ),
         );
         $this->expectExceptionCode(0);
 
@@ -212,6 +213,7 @@ final class FormFileTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testSetGetIndent1(): void
     {
@@ -235,6 +237,7 @@ final class FormFileTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testSetGetIndent2(): void
     {

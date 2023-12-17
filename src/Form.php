@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
-use Laminas\Form\Exception;
+use Laminas\Form\ElementInterface;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
 use Laminas\Form\View\Helper\Form as BaseForm;
@@ -36,16 +37,17 @@ final class Form extends BaseForm
     use FormTrait;
 
     public const LAYOUT_HORIZONTAL = 'horizontal';
-    public const LAYOUT_VERTICAL   = 'vertical';
-    public const LAYOUT_INLINE     = 'inline';
 
-    private FormCollectionInterface $formCollection;
-    private FormRowInterface $formRow;
+    public const LAYOUT_VERTICAL = 'vertical';
 
-    public function __construct(FormCollectionInterface $formCollection, FormRowInterface $formRow)
-    {
-        $this->formCollection = $formCollection;
-        $this->formRow        = $formRow;
+    public const LAYOUT_INLINE = 'inline';
+
+    /** @throws void */
+    public function __construct(
+        private readonly FormCollectionInterface $formCollection,
+        private readonly FormRowInterface $formRow,
+    ) {
+        // nothing to do
     }
 
     /**
@@ -55,10 +57,11 @@ final class Form extends BaseForm
      *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws Exception\DomainException
+     * @throws DomainException
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      *
      * @template TFilteredValues of object
      */
@@ -79,13 +82,13 @@ final class Form extends BaseForm
 
         assert(is_string($class));
 
-        if (null === $formLayout && $form->getOption('floating-labels')) {
+        if ($formLayout === null && $form->getOption('floating-labels')) {
             $formLayout = self::LAYOUT_VERTICAL;
         }
 
-        if (self::LAYOUT_VERTICAL === $formLayout) {
+        if ($formLayout === self::LAYOUT_VERTICAL) {
             $class .= ' row';
-        } elseif (self::LAYOUT_INLINE === $formLayout) {
+        } elseif ($formLayout === self::LAYOUT_INLINE) {
             $class .= ' row row-cols-lg-auto align-items-center';
         }
 
@@ -95,9 +98,11 @@ final class Form extends BaseForm
         $indent      = $this->getIndent();
 
         foreach ($form->getIterator() as $element) {
+            assert($element instanceof ElementInterface);
+
             $element->setOption('form', $form);
 
-            if (null !== $formLayout && !$element->getOption('layout')) {
+            if ($formLayout !== null && !$element->getOption('layout')) {
                 $element->setOption('layout', $formLayout);
             }
 
@@ -106,7 +111,13 @@ final class Form extends BaseForm
                 $element->setOption('field-required-mark', $form->getOption('field-required-mark'));
             }
 
-            if ((self::LAYOUT_VERTICAL === $formLayout || self::LAYOUT_INLINE === $formLayout) && $form->getOption('floating-labels')) {
+            if (
+                (
+                    $formLayout === self::LAYOUT_VERTICAL
+                    || $formLayout === self::LAYOUT_INLINE
+                )
+                && $form->getOption('floating-labels')
+            ) {
                 $element->setOption('floating', true);
             }
 

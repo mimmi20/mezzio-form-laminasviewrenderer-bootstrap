@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\Element\Collection as CollectionElement;
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
@@ -43,22 +43,19 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 {
     use FormTrait;
 
-    private FormRowInterface $formRow;
-    private EscapeHtml $escapeHtml;
-    private HtmlElementInterface $htmlElement;
-    private ?Translate $translate;
-
     /**
      * If set to true, collections are automatically wrapped around a fieldset
      */
     private bool $shouldWrap = true;
 
-    public function __construct(FormRowInterface $formRow, EscapeHtml $escapeHtml, HtmlElementInterface $htmlElement, ?Translate $translator = null)
-    {
-        $this->formRow     = $formRow;
-        $this->escapeHtml  = $escapeHtml;
-        $this->htmlElement = $htmlElement;
-        $this->translate   = $translator;
+    /** @throws void */
+    public function __construct(
+        private readonly FormRowInterface $formRow,
+        private readonly EscapeHtml $escapeHtml,
+        private readonly HtmlElementInterface $htmlElement,
+        private readonly Translate | null $translate = null,
+    ) {
+        // nothing to do
     }
 
     /**
@@ -70,12 +67,15 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
      *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws Exception\DomainException
+     * @throws DomainException
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function __invoke(ElementInterface $element = null, bool $wrap = true)
+    public function __invoke(ElementInterface | null $element = null, bool $wrap = true)
     {
         if (!$element) {
             return $this;
@@ -91,20 +91,21 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
      *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws Exception\DomainException
+     * @throws DomainException
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function render(ElementInterface $element): string
     {
         if (!$element instanceof FieldsetInterface) {
-            throw new \Laminas\View\Exception\InvalidArgumentException(
+            throw new \Laminas\Form\Exception\InvalidArgumentException(
                 sprintf(
                     '%s requires that the element is of type %s',
                     __METHOD__,
-                    FieldsetInterface::class
-                )
+                    FieldsetInterface::class,
+                ),
             );
         }
 
@@ -121,11 +122,13 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
         $floating = $element->getOption('floating');
 
         foreach ($element->getIterator() as $elementOrFieldset) {
-            if (null !== $form && !$elementOrFieldset->getOption('form')) {
+            assert($elementOrFieldset instanceof ElementInterface);
+
+            if ($form !== null && !$elementOrFieldset->getOption('form')) {
                 $elementOrFieldset->setOption('form', $form);
             }
 
-            if (null !== $layout && !$elementOrFieldset->getOption('layout')) {
+            if ($layout !== null && !$elementOrFieldset->getOption('layout')) {
                 $elementOrFieldset->setOption('layout', $layout);
             }
 
@@ -133,9 +136,15 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
                 $elementOrFieldset->setOption('floating', true);
             }
 
-            if ($element->getOption('show-required-mark') && $element->getOption('field-required-mark')) {
+            if (
+                $element->getOption('show-required-mark')
+                && $element->getOption('field-required-mark')
+            ) {
                 $elementOrFieldset->setOption('show-required-mark', true);
-                $elementOrFieldset->setOption('field-required-mark', $element->getOption('field-required-mark'));
+                $elementOrFieldset->setOption(
+                    'field-required-mark',
+                    $element->getOption('field-required-mark'),
+                );
             }
 
             if ($elementOrFieldset instanceof FieldsetInterface) {
@@ -145,6 +154,8 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 
                 $this->setIndent($indent);
             } else {
+                $elementOrFieldset->setOption('fieldset', $element);
+
                 $this->formRow->setIndent($indent . $this->getWhitespace(4));
                 $markup .= $this->formRow->render($elementOrFieldset) . PHP_EOL;
             }
@@ -164,23 +175,24 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
         $legend = '';
 
         if (!empty($label)) {
-            if (null !== $this->translate) {
+            if ($this->translate !== null) {
                 $label = ($this->translate)(
                     $label,
-                    $this->getTranslatorTextDomain()
+                    $this->getTranslatorTextDomain(),
                 );
-
-                assert(is_string($label));
             }
 
-            if (!$element instanceof LabelAwareInterface || !$element->getLabelOption('disable_html_escape')) {
+            if (
+                !$element instanceof LabelAwareInterface
+                || !$element->getLabelOption('disable_html_escape')
+            ) {
                 $label = ($this->escapeHtml)($label);
 
                 assert(is_string($label));
             }
 
             if (
-                '' !== $label && !$element->hasAttribute('id')
+                $label !== '' && !$element->hasAttribute('id')
                 || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))
             ) {
                 $label = '<span>' . $label . '</span>';
@@ -192,17 +204,28 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             assert(is_array($labelAttributes));
 
             if (array_key_exists('class', $labelAttributes)) {
-                $labelClasses = array_merge($labelClasses, explode(' ', $labelAttributes['class']));
+                $labelClasses = array_merge(
+                    $labelClasses,
+                    explode(' ', (string) $labelAttributes['class']),
+                );
             }
 
             $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
 
-            $legend = PHP_EOL . $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('legend', $labelAttributes, $label);
+            $legend = PHP_EOL . $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+                'legend',
+                $labelAttributes,
+                $label,
+            );
         }
 
         $markup = PHP_EOL . $markup;
 
-        return $indent . $this->htmlElement->toHtml('fieldset', $attributes, $legend . $markup . $templateMarkup . $indent);
+        return $indent . $this->htmlElement->toHtml(
+            'fieldset',
+            $attributes,
+            $legend . $markup . $templateMarkup . $indent,
+        );
     }
 
     /**
@@ -210,10 +233,11 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
      *
      * @throws ServiceNotFoundException
      * @throws InvalidServiceException
-     * @throws Exception\DomainException
+     * @throws DomainException
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\Form\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function renderTemplate(CollectionElement $collection): string
     {
@@ -240,11 +264,17 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 
         assert(is_array($templateAttrbutes));
 
-        return $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml('template', $templateAttrbutes, $templateMarkup . $indent) . PHP_EOL;
+        return $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+            'template',
+            $templateAttrbutes,
+            $templateMarkup . $indent,
+        ) . PHP_EOL;
     }
 
     /**
      * If set to true, collections are automatically wrapped around a fieldset
+     *
+     * @throws void
      */
     public function setShouldWrap(bool $wrap): self
     {
@@ -255,6 +285,8 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 
     /**
      * Get wrapped
+     *
+     * @throws void
      */
     public function shouldWrap(): bool
     {

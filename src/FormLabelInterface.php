@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,12 +13,13 @@ declare(strict_types = 1);
 namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
 use Laminas\Form\ElementInterface;
-use Laminas\Form\Exception;
+use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 
 interface FormLabelInterface
 {
-    public const APPEND  = 'append';
+    public const APPEND = 'append';
+
     public const PREPEND = 'prepend';
 
     /**
@@ -27,25 +28,29 @@ interface FormLabelInterface
      * Always generates a "for" statement, as we cannot assume the form input
      * will be provided in the $labelContent.
      *
-     * @return FormLabel|string
-     *
-     * @throws Exception\DomainException
+     * @throws DomainException
      * @throws InvalidArgumentException
      */
-    public function __invoke(?ElementInterface $element = null, ?string $labelContent = null, ?string $position = null);
+    public function __invoke(
+        ElementInterface | null $element = null,
+        string | null $labelContent = null,
+        string | null $position = null,
+    ): FormLabel | string;
 
     /**
      * Generate an opening label tag
      *
      * @param array<string, bool|string>|ElementInterface|null $attributesOrElement
      *
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
+     * @throws InvalidArgumentException
+     * @throws DomainException
      */
-    public function openTag($attributesOrElement = null): string;
+    public function openTag(array | ElementInterface | null $attributesOrElement = null): string;
 
     /**
      * Return a closing label tag
+     *
+     * @throws void
      */
     public function closeTag(): string;
 }

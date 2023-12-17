@@ -96,7 +96,6 @@ parameters:
 
   ignoreErrors:
     - '~Parameter #1 \$attributesOrElement of method Mimmi20\\Mezzio\\BootstrapForm\\LaminasView\\View\\Helper\\FormLabel::openTag\(\) expects array<string, bool\|string>\|Laminas\\Form\\ElementInterface\|null, int given~'
-    - '~Parameter #1 \$attributesOrElement of method Mimmi20\\Mezzio\\BootstrapForm\\LaminasView\\View\\Helper\\FormButton::openTag\(\) expects array<string, bool\|string>\|Laminas\\Form\\ElementInterface\|null, int given~'
     - '~Instantiation of deprecated class~'
     - '~Fetching class constant class of deprecated class~'
     - '~Parameter #2 \$factory of method~'
