@@ -33,7 +33,7 @@ use function str_replace;
 use const PHP_EOL;
 
 /**
- * Base class for navigation view helper tests
+ * Base class for form view helper tests
  */
 abstract class AbstractTestCase extends TestCase
 {
@@ -53,7 +53,7 @@ abstract class AbstractTestCase extends TestCase
     {
         $cwd = __DIR__;
 
-        // read navigation config
+        // read form config
         $this->files = $cwd . '/_files';
 
         $sm = $this->serviceManager = new ServiceManager();

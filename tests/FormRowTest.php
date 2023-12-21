@@ -34,6 +34,7 @@ use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormRow;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
+use function array_merge;
 use function get_debug_type;
 use function sprintf;
 
@@ -3064,7 +3065,7 @@ final class FormRowTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($legendAttributes + ['class' => ''], $attribs),
+                        1 => self::assertSame($legendAttributes + ['class' => 'form-label'], $attribs),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
                         default => self::assertSame($colAttributes, $attribs),
                     };
@@ -3744,7 +3745,10 @@ final class FormRowTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($legendAttributes + ['class' => ''], $attribs),
+                        1 => self::assertSame(
+                            array_merge($legendAttributes, ['class' => 'form-label legend-class']),
+                            $attribs,
+                        ),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
                         default => self::assertSame($colAttributes, $attribs),
                     };

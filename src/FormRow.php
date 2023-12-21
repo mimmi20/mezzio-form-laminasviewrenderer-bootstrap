@@ -17,7 +17,6 @@ use Laminas\Form\Element\Captcha;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\MonthSelect;
 use Laminas\Form\Element\MultiCheckbox;
-use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
@@ -243,8 +242,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         // Multicheckbox elements have to be handled differently as the HTML standard does not allow nested
         // labels. The semantic way is to group them inside a fieldset
         if (
-            $element instanceof Radio
-            || $element instanceof MultiCheckbox
+            $element instanceof MultiCheckbox
             || $element instanceof MonthSelect
             || $element instanceof Captcha
         ) {
@@ -385,13 +383,12 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         // Multicheckbox elements have to be handled differently as the HTML standard does not allow nested
         // labels. The semantic way is to group them inside a fieldset
         if (
-            $element instanceof Radio
-            || $element instanceof MultiCheckbox
+            $element instanceof MultiCheckbox
             || $element instanceof MonthSelect
             || $element instanceof Captcha
         ) {
             $legendClasses    = [];
-            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', []);
+            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', ['form-label']);
 
             if (array_key_exists('class', $legendAttributes)) {
                 $legendClasses = array_merge($legendClasses, explode(' ', $legendAttributes['class']));

@@ -20,7 +20,7 @@ use Mimmi20\Form\Paragraph\View\Helper\FormParagraphFactory;
 final class ConfigProvider
 {
     /**
-     * Return general-purpose laminas-navigation configuration.
+     * Return general-purpose laminas-form configuration.
      *
      * @return array<string, array<string, array<string, string>>>
      * @phpstan-return array{view_helpers: array{aliases: array<string, class-string>, factories: array<class-string, class-string>}}
