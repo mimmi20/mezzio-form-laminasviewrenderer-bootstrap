@@ -99,3 +99,4 @@ parameters:
     - '~Instantiation of deprecated class~'
     - '~Fetching class constant class of deprecated class~'
     - '~Parameter #2 \$factory of method~'
+    - '~Cannot cast mixed to string~'

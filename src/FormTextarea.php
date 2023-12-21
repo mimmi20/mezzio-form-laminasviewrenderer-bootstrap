@@ -112,7 +112,7 @@ final class FormTextarea extends AbstractHelper
 
         $attributes['class'] = trim(implode(' ', array_unique($classes)));
 
-        $value = $element->getValue();
+        $value = (string) $element->getValue();
 
         assert(is_string($value));
 
