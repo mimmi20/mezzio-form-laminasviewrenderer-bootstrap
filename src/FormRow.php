@@ -391,7 +391,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             || $element instanceof Captcha
         ) {
             $legendClasses    = [];
-            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', []);
+            $legendAttributes = $this->mergeAttributes($element, 'legend_attributes', ['form-label']);
 
             if (array_key_exists('class', $legendAttributes)) {
                 $legendClasses = array_merge($legendClasses, explode(' ', $legendAttributes['class']));
@@ -432,7 +432,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             if ($floating) {
                 $elementString = $this->htmlElement->toHtml(
                     'div',
-                    ['class' => 'form-control'],
+                    [],
                     PHP_EOL . $elementString . PHP_EOL . $indent,
                 ) . PHP_EOL . $legend;
                 $elementString = $indent . $this->htmlElement->toHtml(
