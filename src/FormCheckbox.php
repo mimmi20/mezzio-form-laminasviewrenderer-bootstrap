@@ -29,8 +29,10 @@ use function array_filter;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
+use function assert;
 use function explode;
 use function implode;
+use function is_array;
 use function is_string;
 use function sprintf;
 use function trim;
@@ -107,9 +109,21 @@ final class FormCheckbox extends FormInput
             $groupClasses[] = 'form-check-inline';
         }
 
-        $labelAttributes = $element->getLabelAttributes();
+        $groupAttributes = $element->getOption('group_attributes') ?? [];
+        assert(is_array($groupAttributes));
 
-        $labelAttributes = [...$labelAttributes, 'for' => $id];
+        if (array_key_exists('class', $groupAttributes) && is_string($groupAttributes['class'])) {
+            $groupClasses = array_merge(
+                $groupClasses,
+                explode(' ', $groupAttributes['class']),
+            );
+
+            unset($groupAttributes['class']);
+        }
+
+        $groupAttributes['class'] = implode(' ', array_unique($groupClasses));
+
+        $labelAttributes = [...$element->getLabelAttributes(), 'for' => $id];
 
         if (array_key_exists('class', $labelAttributes)) {
             $labelClasses = array_merge(
@@ -202,7 +216,7 @@ final class FormCheckbox extends FormInput
 
         return $indent . $this->htmlElement->toHtml(
             'div',
-            ['class' => $groupClasses],
+            $groupAttributes,
             PHP_EOL . $hidden . $markup . PHP_EOL . $indent,
         );
     }

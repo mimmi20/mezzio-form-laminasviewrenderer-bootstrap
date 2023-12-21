@@ -582,7 +582,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -618,10 +618,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('getLabelOption')
             ->with('disable_html_escape')
@@ -708,7 +720,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -744,10 +756,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -846,7 +870,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -882,10 +906,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $element->expects(self::once())
             ->method('getLabelOption')
             ->with('disable_html_escape')
@@ -974,7 +1010,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -1010,10 +1046,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -1113,7 +1161,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -1149,10 +1197,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -1257,7 +1317,7 @@ final class FormRadioTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => ['form-check']], $renderedField)
+            ->with('div', ['class' => 'form-check'], $renderedField)
             ->willReturn($expected);
 
         $translator = $this->createMock(Translate::class);
@@ -1299,10 +1359,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $matcher = self::exactly(4);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -1513,7 +1585,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check']], $attribs);
+                    self::assertSame(['class' => 'form-check'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -1581,10 +1653,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_VERTICAL);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_VERTICAL,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -1798,7 +1882,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -1870,10 +1954,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -2089,7 +2185,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -2161,10 +2257,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -2379,7 +2487,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -2451,10 +2559,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -2670,7 +2790,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -2742,10 +2862,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -2965,7 +3097,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -3037,10 +3169,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -3256,7 +3400,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -3328,10 +3472,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')
@@ -3559,7 +3715,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => ['form-check', 'form-check-inline']], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -3631,10 +3787,22 @@ final class FormRadioTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $element->expects(self::once())
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
             ->method('getOption')
-            ->with('layout')
-            ->willReturn(Form::LAYOUT_INLINE);
+            ->willReturnCallback(
+                static function (string $option) use ($matcher): string | null {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('group_attributes', $option),
+                        default => self::assertSame('layout', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => null,
+                        default => Form::LAYOUT_INLINE,
+                    };
+                },
+            );
         $matcher = self::exactly(9);
         $element->expects($matcher)
             ->method('getLabelOption')

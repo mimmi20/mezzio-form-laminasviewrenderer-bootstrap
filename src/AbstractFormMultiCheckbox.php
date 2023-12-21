@@ -252,6 +252,20 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $groupClasses[] = 'form-check-inline';
         }
 
+        $groupAttributes = $element->getOption('group_attributes') ?? [];
+        assert(is_array($groupAttributes));
+
+        if (array_key_exists('class', $groupAttributes) && is_string($groupAttributes['class'])) {
+            $groupClasses = array_merge(
+                $groupClasses,
+                explode(' ', $groupAttributes['class']),
+            );
+
+            unset($groupAttributes['class']);
+        }
+
+        $groupAttributes['class'] = implode(' ', array_unique($groupClasses));
+
         foreach ($options as $key => $optionSpec) {
             ++$count;
 
@@ -423,7 +437,7 @@ abstract class AbstractFormMultiCheckbox extends FormInput
 
             $combinedMarkup[] = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
                 'div',
-                ['class' => $groupClasses],
+                $groupAttributes,
                 PHP_EOL . $markup . PHP_EOL . $indent . $this->getWhitespace(4),
             );
         }
