@@ -410,20 +410,20 @@ abstract class AbstractFormMultiCheckbox extends FormInput
                 ) . $label . $this->formLabel->closeTag();
                 $input      = $indent . $this->getWhitespace(8) . $input;
             } else {
-                $labelOpen  = $indent . $this->getWhitespace(4) . $this->formLabel->openTag(
+                $labelOpen  = $indent . $this->getWhitespace(8) . $this->formLabel->openTag(
                     $filteredAttributes,
                 ) . PHP_EOL;
                 $labelClose = PHP_EOL . $indent . $this->getWhitespace(
-                    4,
+                    8,
                 ) . $this->formLabel->closeTag();
-                $input      = $indent . $this->getWhitespace(8) . $input;
+                $input      = $indent . $this->getWhitespace(12) . $input;
             }
 
             if (
                 $label !== '' && !array_key_exists('id', $inputAttributes)
                 || $element->getLabelOption('always_wrap')
             ) {
-                $label = '<span>' . $label . '</span>';
+                $label = $this->getWhitespace(4) . '<span>' . $label . '</span>';
 
                 if ($labelClose !== '') {
                     $label = $indent . $this->getWhitespace(8) . $label;

@@ -536,16 +536,16 @@ final class FormRadioTest extends TestCase
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
         $renderedField   = PHP_EOL
-            . '    ' . $labelStart . PHP_EOL
-            . '        ' . sprintf(
+            . '        ' . $labelStart . PHP_EOL
+            . '            ' . sprintf(
                 '<input class="form-check-input&#x20;%s" aria-label="%s" name="%s" type="radio" value="%s">',
                 $class,
                 $ariaLabel,
                 $name,
                 $value3,
             ) . PHP_EOL
-            . '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
-            . '    ' . $labelEnd . PHP_EOL
+            . '            ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
+            . '        ' . $labelEnd . PHP_EOL
             . '    ';
         $expected        = '<div></div>';
 
@@ -824,16 +824,16 @@ final class FormRadioTest extends TestCase
         $labelStart      = '<label>';
         $labelEnd        = '</label>';
         $renderedField   = PHP_EOL
-            . '    ' . $labelStart . PHP_EOL
-            . '        ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
-            . '        ' . sprintf(
+            . '        ' . $labelStart . PHP_EOL
+            . '            ' . sprintf('<span>%s</span>', $value2Escaped) . PHP_EOL
+            . '            ' . sprintf(
                 '<input class="form-check-input&#x20;%s" aria-label="%s" name="%s" type="radio" value="%s">',
                 $class,
                 $ariaLabel,
                 $name,
                 $value3,
             ) . PHP_EOL
-            . '    ' . $labelEnd . PHP_EOL
+            . '        ' . $labelEnd . PHP_EOL
             . '    ';
         $expected        = '<div></div>';
 
