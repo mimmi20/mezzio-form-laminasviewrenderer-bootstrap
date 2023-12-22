@@ -246,7 +246,10 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             || $element instanceof MonthSelect
             || $element instanceof Captcha
         ) {
-            $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+            $baseIndent = $indent;
+            $indent    .= $this->getWhitespace(4);
+
+            $legend = $indent . $this->htmlElement->toHtml(
                 'legend',
                 $labelAttributes,
                 $label,
@@ -256,27 +259,27 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $helpContent  = '';
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+                $errorContent = $this->renderFormErrors($element, $indent);
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+                $helpContent = $this->renderFormHelp($element, $indent);
             }
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $this->formElement->setIndent($indent);
             $elementString  = $this->formElement->render($element);
             $elementString .= $errorContent . $helpContent;
 
-            $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+            $outerDiv = $indent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
-                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                PHP_EOL . $elementString . PHP_EOL . $indent,
             );
 
-            return $indent . $this->htmlElement->toHtml(
+            return $baseIndent . $this->htmlElement->toHtml(
                 'fieldset',
                 $rowAttributes,
-                PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent,
+                PHP_EOL . $legend . $outerDiv . PHP_EOL . $baseIndent,
             );
         }
 
@@ -402,7 +405,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
                 'legend',
                 $legendAttributes,
                 $label,
-            ) . PHP_EOL;
+            );
 
             $errorContent = '';
             $helpContent  = '';
@@ -423,22 +426,32 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $this->formElement->setIndent($indent . $this->getWhitespace(4));
-            $elementString  = $indent . $this->getWhitespace(4) . $this->formElement->render($element);
+            $elementString  = $this->formElement->render($element);
             $elementString .= $errorContent . $helpContent;
 
             if ($floating) {
                 $elementString = $this->htmlElement->toHtml(
                     'div',
                     ['class' => 'form-control'],
-                    PHP_EOL . $elementString . PHP_EOL . $indent,
-                ) . PHP_EOL . $legend;
+                    PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                );
                 $elementString = $indent . $this->htmlElement->toHtml(
                     'div',
                     ['class' => 'form-floating'],
-                    PHP_EOL . $elementString . $indent,
+                    PHP_EOL . $indent . $this->getWhitespace(
+                        4,
+                    ) . $elementString . PHP_EOL . $this->getWhitespace(
+                        4,
+                    ) . $legend . PHP_EOL . $indent,
                 );
             } else {
-                $elementString = $legend . $elementString;
+                $elementString = $this->htmlElement->toHtml(
+                    'div',
+                    ['class' => 'form-control'],
+                    PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                );
+
+                $elementString = $legend . PHP_EOL . $indent . $this->getWhitespace(4) . $elementString;
             }
 
             return $baseIndent . $this->htmlElement->toHtml(
