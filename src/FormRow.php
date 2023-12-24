@@ -429,30 +429,27 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $elementString  = $this->formElement->render($element);
             $elementString .= $errorContent . $helpContent;
 
-            if ($floating) {
-                $elementString = $this->htmlElement->toHtml(
-                    'div',
-                    ['class' => 'form-control'],
-                    PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
-                );
-                $elementString = $indent . $this->htmlElement->toHtml(
-                    'div',
-                    ['class' => 'form-floating'],
-                    PHP_EOL . $indent . $this->getWhitespace(
-                        4,
-                    ) . $elementString . PHP_EOL . $this->getWhitespace(
-                        4,
-                    ) . $legend . PHP_EOL . $indent,
-                );
-            } else {
-                $elementString = $this->htmlElement->toHtml(
-                    'div',
-                    ['class' => 'form-control'],
-                    PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
-                );
+            $controlClasses = ['form-control'];
 
-                $elementString = $legend . PHP_EOL . $indent . $this->getWhitespace(4) . $elementString;
+            if ($element->getAttribute('required')) {
+                $controlClasses[] = 'required';
             }
+
+            $elementString = $this->htmlElement->toHtml(
+                'div',
+                ['class' => implode(' ', $controlClasses)],
+                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+            );
+
+            $elementString = $floating ? $indent . $this->htmlElement->toHtml(
+                'div',
+                ['class' => 'form-floating'],
+                PHP_EOL . $indent . $this->getWhitespace(
+                    4,
+                ) . $elementString . PHP_EOL . $this->getWhitespace(
+                    4,
+                ) . $legend . PHP_EOL . $indent,
+            ) : $legend . PHP_EOL . $indent . $this->getWhitespace(4) . $elementString;
 
             return $baseIndent . $this->htmlElement->toHtml(
                 'fieldset',

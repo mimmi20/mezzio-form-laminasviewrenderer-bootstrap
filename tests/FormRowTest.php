@@ -2999,7 +2999,7 @@ final class FormRowTest extends TestCase
                     };
                 },
             );
-        $matcher = self::exactly(9);
+        $matcher = self::exactly(10);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
@@ -3068,7 +3068,7 @@ final class FormRowTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($legendAttributes + ['class' => 'form-label'], $attribs),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        3 => self::assertSame(['class' => 'form-control'], $attribs),
+                        3 => self::assertSame(['class' => 'form-control required'], $attribs),
                         default => self::assertSame($colAttributes, $attribs),
                     };
 
@@ -3686,7 +3686,7 @@ final class FormRowTest extends TestCase
                     };
                 },
             );
-        $matcher = self::exactly(9);
+        $matcher = self::exactly(10);
         $element->expects($matcher)
             ->method('getAttribute')
             ->willReturnCallback(
@@ -3758,7 +3758,7 @@ final class FormRowTest extends TestCase
                             $attribs,
                         ),
                         2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        3 => self::assertSame(['class' => 'form-control'], $attribs),
+                        3 => self::assertSame(['class' => 'form-control required'], $attribs),
                         default => self::assertSame($colAttributes, $attribs),
                     };
 
