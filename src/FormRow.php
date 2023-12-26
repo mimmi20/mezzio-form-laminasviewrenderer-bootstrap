@@ -259,15 +259,27 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $helpContent  = '';
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent);
+                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent);
+                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
             }
 
-            $this->formElement->setIndent($indent);
-            $elementString  = $this->formElement->render($element);
+            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $elementString = $this->formElement->render($element);
+
+            $controlClasses = ['form-control'];
+
+            if ($element->getAttribute('required')) {
+                $controlClasses[] = 'required';
+            }
+
+            $elementString  = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+                'div',
+                ['class' => implode(' ', $controlClasses)],
+                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+            );
             $elementString .= $errorContent . $helpContent;
 
             $outerDiv = $indent . $this->htmlElement->toHtml(
@@ -409,25 +421,26 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
             $errorContent = '';
             $helpContent  = '';
+            $floating     = $element->getOption('floating');
 
-            if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
-            }
-
-            if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
-            }
-
-            $floating   = $element->getOption('floating');
             $baseIndent = $indent;
 
             if ($floating) {
                 $indent .= $this->getWhitespace(4);
             }
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $helpContent;
+            $lf1Indent = $indent . $this->getWhitespace(4);
+
+            if ($this->renderErrors) {
+                $errorContent = $this->renderFormErrors($element, $lf1Indent);
+            }
+
+            if ($element->getOption('help_content')) {
+                $helpContent = $this->renderFormHelp($element, $lf1Indent);
+            }
+
+            $this->formElement->setIndent($lf1Indent);
+            $elementString = $this->formElement->render($element);
 
             $controlClasses = ['form-control'];
 
@@ -438,18 +451,20 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $elementString = $this->htmlElement->toHtml(
                 'div',
                 ['class' => implode(' ', $controlClasses)],
-                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
             );
 
-            $elementString = $floating ? $indent . $this->htmlElement->toHtml(
-                'div',
-                ['class' => 'form-floating'],
-                PHP_EOL . $indent . $this->getWhitespace(
-                    4,
-                ) . $elementString . PHP_EOL . $this->getWhitespace(
-                    4,
-                ) . $legend . PHP_EOL . $indent,
-            ) : $legend . PHP_EOL . $indent . $this->getWhitespace(4) . $elementString;
+            if ($floating) {
+                $elementString = PHP_EOL . $lf1Indent . $elementString . PHP_EOL . '    ' . $legend . $errorContent . $helpContent . PHP_EOL . $indent;
+
+                $elementString = $indent . $this->htmlElement->toHtml(
+                    'div',
+                    ['class' => 'form-floating'],
+                    $elementString,
+                );
+            } else {
+                $elementString = $legend . PHP_EOL . $lf1Indent . $elementString . $errorContent . $helpContent;
+            }
 
             return $baseIndent . $this->htmlElement->toHtml(
                 'fieldset',

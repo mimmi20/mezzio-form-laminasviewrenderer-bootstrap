@@ -136,6 +136,6 @@ final class Form extends BaseForm
             $formContent .= $indent . $this->getWhitespace(4) . $requiredMark . PHP_EOL;
         }
 
-        return $this->openTag($form) . PHP_EOL . $formContent . $this->closeTag() . PHP_EOL;
+        return $this->openTag($form) . PHP_EOL . $formContent . $indent . $this->closeTag() . PHP_EOL;
     }
 }

@@ -237,7 +237,7 @@ final class FormTest extends AbstractTestCase
      */
     public function testHrForm(): void
     {
-        $form = (new Factory())->createForm(require '_files/config/default.hr.config.php');
+        $form = (new Factory())->createForm(require '_files/config/horizontal.hr.config.php');
 
         $expected = $this->getExpected('form/hr.html');
 
@@ -269,7 +269,7 @@ final class FormTest extends AbstractTestCase
      */
     public function testPhvForm(): void
     {
-        $form = (new Factory())->createForm(require '_files/config/default.phv.config.php');
+        $form = (new Factory())->createForm(require '_files/config/horizontal.phv.config.php');
 
         $expected = $this->getExpected('form/phv.html');
 
