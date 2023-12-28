@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper;
 
+use Laminas\Form\Element\Submit;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\View\Helper\FormInput as BaseFormInput;
@@ -24,6 +25,7 @@ use function array_merge;
 use function array_unique;
 use function explode;
 use function implode;
+use function in_array;
 use function is_scalar;
 use function sprintf;
 use function trim;
@@ -68,7 +70,13 @@ abstract class FormInput extends BaseFormInput implements FormInputInterface
 
         $attributes['value'] = $type === 'password' ? '' : $element->getValue();
 
-        if (isset($attributes['readonly']) && $element->getOption('plain')) {
+        if ($element instanceof Submit || in_array($type, ['submit', 'reset', 'button'], true)) {
+            $classes = ['btn'];
+
+            if (array_key_exists('class', $attributes) && is_scalar($attributes['class'])) {
+                $classes = array_merge($classes, explode(' ', (string) $attributes['class']));
+            }
+        } elseif (isset($attributes['readonly']) && $element->getOption('plain')) {
             $classes = ['form-control-plaintext'];
         } else {
             $classes = ['form-control'];

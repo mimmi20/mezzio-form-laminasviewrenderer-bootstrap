@@ -86,7 +86,7 @@ final class FormResetTest extends TestCase
         $value = 'test-value';
 
         $expected = sprintf(
-            '<input class="form-control&#x20;%s" name="%s" type="reset" value="%s">',
+            '<input class="btn&#x20;%s" name="%s" type="reset" value="%s">',
             $class,
             $name,
             $value,
@@ -142,7 +142,7 @@ final class FormResetTest extends TestCase
         $value = 'test-value';
 
         $expected = sprintf(
-            '<input class="form-control&#x20;%s" name="%s" type="reset" value="%s"/>',
+            '<input class="btn&#x20;%s" name="%s" type="reset" value="%s"/>',
             $class,
             $name,
             $value,
@@ -198,7 +198,7 @@ final class FormResetTest extends TestCase
         $value = 'test-value';
 
         $expected = sprintf(
-            '<input class="form-control-plaintext" name="%s" type="reset" value="%s"/>',
+            '<input class="btn&#x20;test-class" name="%s" type="reset" value="%s"/>',
             $name,
             $value,
         );
@@ -219,10 +219,8 @@ final class FormResetTest extends TestCase
             ->method('getLabel');
         $element->expects(self::never())
             ->method('getLabelOption');
-        $element->expects(self::once())
-            ->method('getOption')
-            ->with('plain')
-            ->willReturn(true);
+        $element->expects(self::never())
+            ->method('getOption');
 
         $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())

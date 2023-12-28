@@ -44,6 +44,7 @@ final class FormElement extends AbstractHelper implements FormElementInterface
         Element\DateTimeSelect::class => 'formDateTimeSelect',
         Element\DateSelect::class => 'formDateSelect',
         Element\MonthSelect::class => 'formMonthSelect',
+        Element\Submit::class => 'formSubmit',
         Links::class => 'formLinks',
         Paragraph::class => 'formParagraph',
     ];
