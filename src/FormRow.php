@@ -188,7 +188,13 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $this->renderHorizontalRow($element, $label);
         }
 
-        if ($label !== '') {
+        if (
+            $label !== ''
+            || $element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Checkbox
+            || $element instanceof Fieldset
+        ) {
             return $this->renderVerticalRow($element, $label, $labelPosition);
         }
 
