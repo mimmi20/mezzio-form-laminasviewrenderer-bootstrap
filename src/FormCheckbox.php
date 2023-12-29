@@ -101,12 +101,16 @@ final class FormCheckbox extends FormInput
 
         $id = $this->getId($element);
 
-        $groupClasses = ['form-check'];
+        $groupClasses = ['form-check', 'form-single-check'];
         $labelClasses = ['form-check-label'];
         $inputClasses = ['form-check-input'];
 
         if ($element->getOption('layout') === Form::LAYOUT_INLINE) {
             $groupClasses[] = 'form-check-inline';
+        }
+
+        if ($element->getOption('switch')) {
+            $groupClasses[] = 'form-switch';
         }
 
         $groupAttributes = $element->getOption('group_attributes') ?? [];

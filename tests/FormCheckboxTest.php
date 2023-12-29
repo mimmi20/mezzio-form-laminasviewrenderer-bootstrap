@@ -306,7 +306,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-check-inline'],
+                ['class' => 'form-check form-single-check form-check-inline'],
                 PHP_EOL
                 . '<label for="chck-id">' . PHP_EOL
                 . '    <input class="form-check-input&#x20;xyz" name="chkbox" type="checkbox" value="" checked="checked">' . PHP_EOL
@@ -344,18 +344,19 @@ final class FormCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -426,7 +427,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check'],
+                ['class' => 'form-check form-single-check form-check-inline'],
                 PHP_EOL
                 . '<label for="chck-id">' . PHP_EOL
                 . '    <span>test-label-translated-escaped</span>' . PHP_EOL
@@ -473,19 +474,20 @@ final class FormCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -557,7 +559,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check'],
+                ['class' => 'form-check form-single-check form-check-inline'],
                 PHP_EOL
                 . '    <label for="chck-id">test-label-translated-escaped</label>' . PHP_EOL
                 . '    <input class="form-check-input&#x20;xyz" id="chck-id" name="chkbox" type="checkbox" value="" checked="checked">' . PHP_EOL,
@@ -602,19 +604,20 @@ final class FormCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getName')
             ->willReturn($name);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -699,7 +702,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check'],
+                ['class' => 'form-check form-single-check form-check-inline'],
                 PHP_EOL
                 . sprintf(
                     '    <input type="hidden" name="%s" value="%s"/>',
@@ -753,19 +756,20 @@ final class FormCheckboxTest extends TestCase
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -853,7 +857,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check'],
+                ['class' => 'form-check form-single-check form-check-inline'],
                 PHP_EOL
                 . sprintf(
                     '<input type="hidden" name="%s" value="%s"/>',
@@ -909,19 +913,20 @@ final class FormCheckboxTest extends TestCase
         $element->expects(self::exactly(2))
             ->method('getName')
             ->willReturn($name);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
