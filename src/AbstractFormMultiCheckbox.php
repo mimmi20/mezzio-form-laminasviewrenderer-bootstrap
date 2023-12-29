@@ -252,6 +252,10 @@ abstract class AbstractFormMultiCheckbox extends FormInput
             $groupClasses[] = 'form-check-inline';
         }
 
+        if ($element->getOption('switch')) {
+            $groupClasses[] = 'form-switch';
+        }
+
         $groupAttributes = $element->getOption('group_attributes') ?? [];
         assert(is_array($groupAttributes));
 

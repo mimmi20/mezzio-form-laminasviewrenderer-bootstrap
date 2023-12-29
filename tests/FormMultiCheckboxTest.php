@@ -568,7 +568,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -604,19 +604,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -706,7 +707,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -742,19 +743,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -856,7 +858,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -892,19 +894,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -996,7 +999,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -1032,19 +1035,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -1147,7 +1151,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $formHidden = $this->createMock(FormHiddenInterface::class);
@@ -1183,19 +1187,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -1303,7 +1308,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
             ->willReturn($expected);
 
         $translator = $this->createMock(Translate::class);
@@ -1345,19 +1350,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -1571,7 +1577,7 @@ final class FormMultiCheckboxTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => 'form-check'], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -1639,19 +1645,20 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
-                        default => Form::LAYOUT_VERTICAL,
+                        2, 3 => null,
+                        default => Form::LAYOUT_INLINE,
                     };
                 },
             );
@@ -1940,18 +1947,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -2243,18 +2251,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn($labelAttributes);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -2545,18 +2554,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -2848,18 +2858,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -3155,18 +3166,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -3458,18 +3470,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -3770,18 +3783,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -4088,18 +4102,19 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects(self::once())
             ->method('getLabelAttributes')
             ->willReturn([]);
-        $matcher = self::exactly(2);
+        $matcher = self::exactly(3);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher): string | null {
                     match ($matcher->numberOfInvocations()) {
-                        2 => self::assertSame('group_attributes', $option),
+                        2 => self::assertSame('switch', $option),
+                        3 => self::assertSame('group_attributes', $option),
                         default => self::assertSame('layout', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2 => null,
+                        2, 3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
