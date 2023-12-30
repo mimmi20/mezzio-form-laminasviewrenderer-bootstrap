@@ -87,7 +87,11 @@ final class Form extends BaseForm
         }
 
         if ($formLayout === self::LAYOUT_VERTICAL) {
-            $class .= ' row';
+            if ($form->getOption('as-card')) {
+                $class .= ' card';
+            } else {
+                $class .= ' row';
+            }
         } elseif ($formLayout === self::LAYOUT_INLINE) {
             $class .= ' row row-cols-lg-auto align-items-center';
         }

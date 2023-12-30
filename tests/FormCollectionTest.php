@@ -245,22 +245,24 @@ final class FormCollectionTest extends TestCase
         $element = $this->createMock(Form::class);
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): array | null {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
                         default => self::assertSame('label_attributes', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
                         default => $labelAttributes,
                     };
                 },
@@ -437,22 +439,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(4);
+        $matcher           = self::exactly(5);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): mixed {
+                static function (string $option) use ($matcher, $form, $layout, $floating): array | null {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
                         default => self::assertSame('label_attributes', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
                         default => [],
                     };
                 },
@@ -489,24 +493,26 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | null {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        5, 6, 7 => self::assertSame('show-required-mark', $option),
                         default => self::assertSame('label_attributes', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -683,22 +689,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(4);
+        $matcher           = self::exactly(5);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): mixed {
+                static function (string $option) use ($matcher, $form, $layout, $floating): array | null {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
                         default => self::assertSame('label_attributes', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
                         default => [],
                     };
                 },
@@ -735,24 +743,26 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | null {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        5, 6, 7 => self::assertSame('show-required-mark', $option),
                         default => self::assertSame('label_attributes', $option),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -970,22 +980,26 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(6);
+        $matcher           = self::exactly(7);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        5 => self::assertSame('floating', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        6 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
-                        5 => $floating,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
+                        6 => $floating,
                         default => [],
                     };
                 },
@@ -1023,24 +1037,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        5, 6, 7 => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -1253,22 +1275,26 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(6);
+        $matcher           = self::exactly(7);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        5 => self::assertSame('floating', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        6 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
-                        5 => $floating,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
+                        6 => $floating,
                         default => [],
                     };
                 },
@@ -1306,24 +1332,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        5, 6, 7 => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -1569,22 +1603,26 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(6);
+        $matcher           = self::exactly(7);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        5 => self::assertSame('floating', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        6 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
-                        5 => $floating,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
+                        6 => $floating,
                         default => [],
                     };
                 },
@@ -1622,24 +1660,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        5, 6, 7 => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -1904,22 +1950,26 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(6);
+        $matcher           = self::exactly(7);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        5 => self::assertSame('floating', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        6 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
-                        5 => $floating,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
+                        6 => $floating,
                         default => [],
                     };
                 },
@@ -1957,24 +2007,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        4, 5, 6 => self::assertSame('show-required-mark', $option),
-                        default => self::assertSame('label_attributes', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        5, 6, 7 => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame('label_attributes', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
-                        4, 5, 6 => false,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
                         default => $labelAttributes,
                     };
                 },
@@ -2152,20 +2210,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -2197,22 +2259,30 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(6);
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
                         default => false,
                     };
                 },
@@ -2373,20 +2443,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -2418,22 +2492,30 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(6);
+        $matcher = self::exactly(7);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        3 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
-                        3 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
                         default => false,
                     };
                 },
@@ -2609,20 +2691,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -2654,24 +2740,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('template_attributes', $option),
-                        2 => self::assertSame('form', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('template_attributes', $option, (string) $invocation),
+                        3 => self::assertSame('form', $option, (string) $invocation),
+                        4 => self::assertSame('layout', $option, (string) $invocation),
+                        5 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $templateAttributes,
-                        2 => $form,
-                        3 => $layout,
-                        4 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $templateAttributes,
+                        3 => $form,
+                        4 => $layout,
+                        5 => $floating,
                         default => false,
                     };
                 },
@@ -2759,20 +2853,24 @@ final class FormCollectionTest extends TestCase
         $templateList = new PriorityList();
 
         $templateElement = $this->createMock(Collection::class);
-        $matcher         = self::exactly(3);
+        $matcher         = self::exactly(4);
         $templateElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
                         default => $floating,
                     };
                 },
@@ -2878,20 +2976,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -2923,24 +3025,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('template_attributes', $option),
-                        2 => self::assertSame('form', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('template_attributes', $option, (string) $invocation),
+                        3 => self::assertSame('form', $option, (string) $invocation),
+                        4 => self::assertSame('layout', $option, (string) $invocation),
+                        5 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $templateAttributes,
-                        2 => $form,
-                        3 => $layout,
-                        4 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $templateAttributes,
+                        3 => $form,
+                        4 => $layout,
+                        5 => $floating,
                         default => false,
                     };
                 },
@@ -3028,20 +3138,24 @@ final class FormCollectionTest extends TestCase
         $templateList = new PriorityList();
 
         $templateElement = $this->createMock(Collection::class);
-        $matcher         = self::exactly(3);
+        $matcher         = self::exactly(4);
         $templateElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
                         default => $floating,
                     };
                 },
@@ -3147,20 +3261,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -3192,24 +3310,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('template_attributes', $option),
-                        2 => self::assertSame('form', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('template_attributes', $option, (string) $invocation),
+                        3 => self::assertSame('form', $option, (string) $invocation),
+                        4 => self::assertSame('layout', $option, (string) $invocation),
+                        5 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $templateAttributes,
-                        2 => $form,
-                        3 => $layout,
-                        4 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $templateAttributes,
+                        3 => $form,
+                        4 => $layout,
+                        5 => $floating,
                         default => false,
                     };
                 },
@@ -3301,20 +3427,24 @@ final class FormCollectionTest extends TestCase
         $templateList = new PriorityList();
 
         $templateElement = $this->createMock(Collection::class);
-        $matcher         = self::exactly(3);
+        $matcher         = self::exactly(4);
         $templateElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('form', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $form,
-                        2 => $layout,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
                         default => $floating,
                     };
                 },
@@ -3420,20 +3550,24 @@ final class FormCollectionTest extends TestCase
         $innerList = new PriorityList();
 
         $collectionElement = $this->createMock(Collection::class);
-        $matcher           = self::exactly(5);
+        $matcher           = self::exactly(6);
         $collectionElement->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('form', $option),
-                        2, 4 => self::assertSame('layout', $option),
-                        default => self::assertSame('floating', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating): string | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('as-card', $option, (string) $invocation),
+                        1, 4 => self::assertSame('form', $option, (string) $invocation),
+                        2, 5 => self::assertSame('layout', $option, (string) $invocation),
+                        default => self::assertSame('floating', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 3 => $form,
-                        2, 4 => $layout,
+                    return match ($invocation) {
+                        3 => null,
+                        1, 4 => $form,
+                        2, 5 => $layout,
                         default => $floating,
                     };
                 },
@@ -3465,24 +3599,32 @@ final class FormCollectionTest extends TestCase
 
         $element->expects(self::never())
             ->method('getName');
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('template_attributes', $option),
-                        2 => self::assertSame('form', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('floating', $option),
-                        default => self::assertSame('show-required-mark', $option),
+                static function (string $option) use ($matcher, $form, $layout, $floating, $templateAttributes): string | bool | array | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('as-card', $option, (string) $invocation),
+                        2 => self::assertSame('template_attributes', $option, (string) $invocation),
+                        3 => self::assertSame('form', $option, (string) $invocation),
+                        4 => self::assertSame('layout', $option, (string) $invocation),
+                        5 => self::assertSame('floating', $option, (string) $invocation),
+                        default => self::assertSame(
+                            'show-required-mark',
+                            $option,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1 => $templateAttributes,
-                        2 => $form,
-                        3 => $layout,
-                        4 => $floating,
+                    return match ($invocation) {
+                        1 => null,
+                        2 => $templateAttributes,
+                        3 => $form,
+                        4 => $layout,
+                        5 => $floating,
                         default => false,
                     };
                 },
