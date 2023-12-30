@@ -62,7 +62,7 @@ interface FormCollectionInterface extends FormIndentInterface, FormRenderInterfa
      * @throws InvalidArgumentException
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      */
-    public function renderTemplate(CollectionElement $collection): string;
+    public function renderTemplate(CollectionElement $collection, string $indent): string;
 
     /**
      * If set to true, collections are automatically wrapped around a fieldset

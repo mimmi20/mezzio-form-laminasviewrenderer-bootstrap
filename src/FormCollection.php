@@ -16,6 +16,7 @@ use Laminas\Form\Element\Collection as CollectionElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\FieldsetInterface;
+use Laminas\Form\FormInterface;
 use Laminas\Form\LabelAwareInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\I18n\View\Helper\Translate;
@@ -31,6 +32,7 @@ use function array_merge;
 use function array_unique;
 use function assert;
 use function explode;
+use function get_debug_type;
 use function implode;
 use function is_array;
 use function is_string;
@@ -112,9 +114,15 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
         $markup         = '';
         $templateMarkup = '';
         $indent         = $this->getIndent();
+        $baseIndent     = $indent;
+        $asCard         = $element->getOption('as-card');
+
+        if ($this->shouldWrap && $asCard) {
+            $indent .= $this->getWhitespace(8);
+        }
 
         if ($element instanceof CollectionElement && $element->shouldCreateTemplate()) {
-            $templateMarkup = $this->renderTemplate($element);
+            $templateMarkup = $this->renderTemplate($element, $indent);
         }
 
         $form     = $element->getOption('form');
@@ -170,7 +178,6 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
 
         unset($attributes['name']);
 
-        $indent = $this->getIndent();
         $label  = $element->getLabel();
         $legend = '';
 
@@ -204,13 +211,19 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             assert(is_array($labelAttributes));
 
             if (array_key_exists('class', $labelAttributes)) {
-                $labelClasses = array_merge(
-                    $labelClasses,
-                    explode(' ', (string) $labelAttributes['class']),
-                );
+                $labelClasses = explode(' ', (string) $labelAttributes['class']);
             }
 
             $labelAttributes['class'] = trim(implode(' ', array_unique($labelClasses)));
+
+            if ($asCard) {
+                $labelAttributes = $this->mergeFormAttributes(
+                    $element,
+                    'col_attributes',
+                    ['card-title'],
+                    $labelAttributes,
+                );
+            }
 
             $legend = PHP_EOL . $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
                 'legend',
@@ -219,13 +232,44 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
             );
         }
 
-        $markup = PHP_EOL . $markup;
+        if ($asCard) {
+            $classes = ['card-body'];
 
-        return $indent . $this->htmlElement->toHtml(
+            if (array_key_exists('class', $attributes) && is_string($attributes['class'])) {
+                $classes = array_merge(
+                    $classes,
+                    explode(' ', $attributes['class']),
+                );
+            }
+
+            $attributes['class'] = trim(implode(' ', array_unique($classes)));
+        }
+
+        $markup = $baseIndent . $this->htmlElement->toHtml(
             'fieldset',
             $attributes,
-            $legend . $markup . $templateMarkup . $indent,
+            $legend . PHP_EOL . $markup . $templateMarkup . $indent,
         );
+
+        if ($asCard) {
+            $markup = PHP_EOL . $baseIndent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+                'div',
+                $this->mergeAttributes($element, 'card_attributes', ['card']),
+                PHP_EOL . $baseIndent . $this->getWhitespace(
+                    4,
+                ) . $markup . PHP_EOL . $baseIndent . $this->getWhitespace(
+                    4,
+                ),
+            );
+
+            $markup = $baseIndent . $this->htmlElement->toHtml(
+                'div',
+                $this->mergeAttributes($element, 'col_attributes', []),
+                $markup . PHP_EOL . $baseIndent,
+            );
+        }
+
+        return $markup;
     }
 
     /**
@@ -239,15 +283,13 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
      * @throws \Laminas\Form\Exception\InvalidArgumentException
      * @throws \Laminas\I18n\Exception\RuntimeException
      */
-    public function renderTemplate(CollectionElement $collection): string
+    public function renderTemplate(CollectionElement $collection, string $indent): string
     {
         $elementOrFieldset = $collection->getTemplateElement();
 
         if (!$elementOrFieldset instanceof ElementInterface) {
             return '';
         }
-
-        $indent = $this->getIndent();
 
         if ($elementOrFieldset instanceof FieldsetInterface) {
             $this->setIndent($indent . $this->getWhitespace(4));
@@ -291,5 +333,75 @@ final class FormCollection extends AbstractHelper implements FormCollectionInter
     public function shouldWrap(): bool
     {
         return $this->shouldWrap;
+    }
+
+    /**
+     * @param array<int, string> $classes
+     *
+     * @return array<string, string>
+     *
+     * @throws void
+     */
+    private function mergeAttributes(ElementInterface $element, string $optionName, array $classes = []): array
+    {
+        $attributes = $element->getOption($optionName) ?? [];
+        assert(is_array($attributes));
+
+        if (array_key_exists('class', $attributes)) {
+            $classes = array_merge($classes, explode(' ', (string) $attributes['class']));
+
+            unset($attributes['class']);
+        }
+
+        if ($classes) {
+            $attributes['class'] = implode(' ', array_unique($classes));
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * @param array<int, string>    $classes
+     * @param array<string, string> $attributes
+     *
+     * @return array<string, string>
+     *
+     * @throws void
+     */
+    private function mergeFormAttributes(
+        ElementInterface $element,
+        string $optionName,
+        array $classes = [],
+        array $attributes = [],
+    ): array {
+        $form = $element->getOption('form');
+        assert(
+            $form instanceof FormInterface || $form === null,
+            sprintf(
+                '$form should be an Instance of %s or null, but was %s',
+                FormInterface::class,
+                get_debug_type($form),
+            ),
+        );
+
+        if ($form !== null) {
+            $formAttributes = $form->getOption($optionName) ?? [];
+
+            assert(is_array($formAttributes));
+
+            if (array_key_exists('class', $formAttributes)) {
+                $classes = array_merge(explode(' ', (string) $formAttributes['class']), $classes);
+
+                unset($formAttributes['class']);
+            }
+
+            $attributes = [...$formAttributes, ...$attributes];
+        }
+
+        if ($classes) {
+            $attributes['class'] = implode(' ', array_unique($classes));
+        }
+
+        return $attributes;
     }
 }
