@@ -363,6 +363,38 @@ final class FormTest extends AbstractTestCase
      * @throws ContainerExceptionInterface
      * @throws \Laminas\I18n\Exception\RuntimeException
      */
+    public function testHrForm2(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/vertical.hr.config.php');
+
+        $expected = $this->getExpected('form/hr.vertical.html');
+
+        $plugin = $this->serviceManager->get(HelperPluginManager::class);
+
+        assert($plugin instanceof HelperPluginManager);
+
+        $row        = $plugin->get(FormRowInterface::class);
+        $collection = $plugin->get(FormCollectionInterface::class);
+
+        assert($row instanceof FormRowInterface);
+        assert($collection instanceof FormCollectionInterface);
+
+        $helper = new Form($collection, $row);
+
+        self::assertSame($expected, trim($helper->render($form)));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     */
     public function testHrFormAsCard(): void
     {
         $form = (new Factory())->createForm(require '_files/config/horizontal.hr.card.config.php');
@@ -400,6 +432,70 @@ final class FormTest extends AbstractTestCase
         $form = (new Factory())->createForm(require '_files/config/horizontal.hr.card2.config.php');
 
         $expected = $this->getExpected('form/hr.card2.html');
+
+        $plugin = $this->serviceManager->get(HelperPluginManager::class);
+
+        assert($plugin instanceof HelperPluginManager);
+
+        $row        = $plugin->get(FormRowInterface::class);
+        $collection = $plugin->get(FormCollectionInterface::class);
+
+        assert($row instanceof FormRowInterface);
+        assert($collection instanceof FormCollectionInterface);
+
+        $helper = new Form($collection, $row);
+
+        self::assertSame($expected, trim($helper->render($form)));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     */
+    public function testHrFormAsCard3(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/vertical.hr.card.config.php');
+
+        $expected = $this->getExpected('form/hr.vertical.card.html');
+
+        $plugin = $this->serviceManager->get(HelperPluginManager::class);
+
+        assert($plugin instanceof HelperPluginManager);
+
+        $row        = $plugin->get(FormRowInterface::class);
+        $collection = $plugin->get(FormCollectionInterface::class);
+
+        assert($row instanceof FormRowInterface);
+        assert($collection instanceof FormCollectionInterface);
+
+        $helper = new Form($collection, $row);
+
+        self::assertSame($expected, trim($helper->render($form)));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ContainerExceptionInterface
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     */
+    public function testHrFormAsCard4(): void
+    {
+        $form = (new Factory())->createForm(require '_files/config/vertical.hr.card2.config.php');
+
+        $expected = $this->getExpected('form/hr.vertical.card2.html');
 
         $plugin = $this->serviceManager->get(HelperPluginManager::class);
 
