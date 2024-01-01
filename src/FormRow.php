@@ -478,9 +478,9 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             );
 
             if ($floating) {
-                $elementString = PHP_EOL . $lf2Indent . $elementString . PHP_EOL . '    ' . $legend . $errorContent . $helpContent . PHP_EOL . $lf2Indent;
+                $elementString = PHP_EOL . $lf1Indent . $elementString . PHP_EOL . '    ' . $legend . $errorContent . $helpContent . PHP_EOL . $indent;
 
-                $elementString = $lf1Indent . $this->htmlElement->toHtml(
+                $elementString = $indent . $this->htmlElement->toHtml(
                     'div',
                     ['class' => 'form-floating'],
                     $elementString,
