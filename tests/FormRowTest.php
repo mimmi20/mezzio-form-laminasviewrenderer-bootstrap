@@ -2690,6 +2690,7 @@ final class FormRowTest extends TestCase
         $expectedLegend         = '<legend></legend>';
         $expectedCol1           = '<col1></col1>';
         $expectedCol2           = '<col2></col2>';
+        $expectedCol3           = '<col3></col3>';
         $expectedRow            = '<row></row>';
         $textDomain             = 'text-domain';
 
@@ -2798,7 +2799,7 @@ final class FormRowTest extends TestCase
         $formElement = $this->createMock(FormElementInterface::class);
         $formElement->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '        ');
+            ->with($indent . '            ');
         $formElement->expects(self::once())
             ->method('render')
             ->with($element)
@@ -2807,23 +2808,23 @@ final class FormRowTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $formElementErrors->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '        ');
+            ->with($indent . '            ');
         $formElementErrors->expects(self::once())
             ->method('render')
             ->with($element)
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher     = self::exactly(5);
+        $matcher     = self::exactly(6);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $labelAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $labelAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedCol3, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string {
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
                         1 => self::assertSame('legend', $element, (string) $invocation),
-                        5 => self::assertSame('fieldset', $element, (string) $invocation),
+                        6 => self::assertSame('fieldset', $element, (string) $invocation),
                         default => self::assertSame('div', $element, (string) $invocation),
                     };
 
@@ -2839,11 +2840,16 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'form-control required'],
+                            ['class' => 'card-body'],
                             $attribs,
                             (string) $invocation,
                         ),
-                        4 => self::assertSame($colAttributes, $attribs, (string) $invocation),
+                        4 => self::assertSame(
+                            ['class' => 'card required'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        5 => self::assertSame($colAttributes, $attribs, (string) $invocation),
                         default => self::assertSame(
                             $rowAttributes + ['class' => 'row'],
                             $attribs,
@@ -2855,17 +2861,22 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '        ',
+                            PHP_EOL . $expected . PHP_EOL . $indent . '            ',
                             $content,
                             (string) $invocation,
                         ),
                         4 => self::assertSame(
-                            PHP_EOL . $indent . '        ' . $expectedCol1 . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $indent . '            ' . $expectedCol1 . PHP_EOL . $indent . '        ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        5 => self::assertSame(
+                            PHP_EOL . $indent . '        ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '            ' . $expectedHelp . PHP_EOL . $indent . '    ',
                             $content,
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol3 . PHP_EOL . $indent,
                             $content,
                             (string) $invocation,
                         ),
@@ -2876,6 +2887,7 @@ final class FormRowTest extends TestCase
                         2 => $expectedHelp,
                         3 => $expectedCol1,
                         4 => $expectedCol2,
+                        5 => $expectedCol3,
                         default => $expectedRow,
                     };
                 },
@@ -2949,6 +2961,7 @@ final class FormRowTest extends TestCase
         $expectedLegend         = '<legend></legend>';
         $expectedCol1           = '<col1></col1>';
         $expectedCol2           = '<col2></col2>';
+        $expectedCol3           = '<col3></col3>';
         $textDomain             = 'text-domain';
         $disableEscape          = false;
 
@@ -3065,7 +3078,7 @@ final class FormRowTest extends TestCase
         $formElement = $this->createMock(FormElementInterface::class);
         $formElement->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '    ');
+            ->with($indent . '        ');
         $formElement->expects(self::once())
             ->method('render')
             ->with($element)
@@ -3074,23 +3087,23 @@ final class FormRowTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $formElementErrors->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '    ');
+            ->with($indent . '        ');
         $formElementErrors->expects(self::once())
             ->method('render')
             ->with($element)
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher     = self::exactly(4);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedCol3, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
                         1 => self::assertSame('legend', $element, (string) $invocation),
-                        4 => self::assertSame('fieldset', $element, (string) $invocation),
+                        5 => self::assertSame('fieldset', $element, (string) $invocation),
                         default => self::assertSame('div', $element, (string) $invocation),
                     };
 
@@ -3106,7 +3119,12 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'form-control required'],
+                            ['class' => 'card-body'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'card required'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -3117,12 +3135,17 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $expected . PHP_EOL . $indent . '        ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        4 => self::assertSame(
+                            PHP_EOL . $indent . '        ' . $expectedCol1 . PHP_EOL . $indent . '    ',
                             $content,
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol1 . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent . '',
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '',
                             $content,
                             (string) $invocation,
                         ),
@@ -3132,7 +3155,8 @@ final class FormRowTest extends TestCase
                         1 => $expectedLegend,
                         2 => $expectedHelp,
                         3 => $expectedCol1,
-                        default => $expectedCol2,
+                        4 => $expectedCol2,
+                        default => $expectedCol3,
                     };
                 },
             );
@@ -3166,7 +3190,7 @@ final class FormRowTest extends TestCase
         $helper->setRenderErrors($renderErrors);
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($indent . $expectedCol2, $helper->render($element));
+        self::assertSame($indent . $expectedCol3, $helper->render($element));
     }
 
     /**
@@ -3654,6 +3678,7 @@ final class FormRowTest extends TestCase
         $expectedLegend         = '<legend></legend>';
         $expectedCol1           = '<col1></col1>';
         $expectedCol2           = '<col2></col2>';
+        $expectedCol3           = '<col3></col3>';
         $textDomain             = 'text-domain';
         $disableEscape          = false;
 
@@ -3770,7 +3795,7 @@ final class FormRowTest extends TestCase
         $formElement = $this->createMock(FormElementInterface::class);
         $formElement->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '    ');
+            ->with($indent . '        ');
         $formElement->expects(self::once())
             ->method('render')
             ->with($element)
@@ -3779,23 +3804,23 @@ final class FormRowTest extends TestCase
         $formElementErrors = $this->createMock(FormElementErrorsInterface::class);
         $formElementErrors->expects(self::once())
             ->method('setIndent')
-            ->with($indent . '    ');
+            ->with($indent . '        ');
         $formElementErrors->expects(self::once())
             ->method('render')
             ->with($element)
             ->willReturn($expectedErrors);
 
         $htmlElement = $this->createMock(HtmlElementInterface::class);
-        $matcher     = self::exactly(4);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $legendAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedCol3, $expectedErrors, $expectedLegend, $expectedHelp, $indent): string {
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
                         1 => self::assertSame('legend', $element, (string) $invocation),
-                        4 => self::assertSame('fieldset', $element, (string) $invocation),
+                        5 => self::assertSame('fieldset', $element, (string) $invocation),
                         default => self::assertSame('div', $element, (string) $invocation),
                     };
 
@@ -3811,7 +3836,12 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'form-control required'],
+                            ['class' => 'card-body'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'card required'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -3822,12 +3852,17 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $expected . PHP_EOL . $indent . '        ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        4 => self::assertSame(
+                            PHP_EOL . $indent . '        ' . $expectedCol1 . PHP_EOL . $indent . '    ',
                             $content,
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol1 . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
                             (string) $invocation,
                         ),
@@ -3837,7 +3872,8 @@ final class FormRowTest extends TestCase
                         1 => $expectedLegend,
                         2 => $expectedHelp,
                         3 => $expectedCol1,
-                        default => $expectedCol2,
+                        4 => $expectedCol2,
+                        default => $expectedCol3,
                     };
                 },
             );
@@ -3871,7 +3907,7 @@ final class FormRowTest extends TestCase
         $helper->setRenderErrors($renderErrors);
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($indent . $expectedCol2, $helper->render($element));
+        self::assertSame($indent . $expectedCol3, $helper->render($element));
     }
 
     /**

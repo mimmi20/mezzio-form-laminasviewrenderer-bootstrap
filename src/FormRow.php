@@ -253,9 +253,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             || $element instanceof Captcha
         ) {
             $baseIndent = $indent;
-            $indent    .= $this->getWhitespace(4);
+            $lf1Indent  = $indent . $this->getWhitespace(4);
+            $lf2Indent  = $lf1Indent . $this->getWhitespace(4);
+            $lf3Indent  = $lf2Indent . $this->getWhitespace(4);
 
-            $legend = $indent . $this->htmlElement->toHtml(
+            $legend = $lf1Indent . $this->htmlElement->toHtml(
                 'legend',
                 $labelAttributes,
                 $label,
@@ -265,33 +267,39 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $helpContent  = '';
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+                $errorContent = $this->renderFormErrors($element, $lf3Indent);
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+                $helpContent = $this->renderFormHelp($element, $lf3Indent);
             }
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $this->formElement->setIndent($lf3Indent);
             $elementString = $this->formElement->render($element);
 
-            $controlClasses = ['form-control'];
+            $controlClasses = ['card'];
 
             if ($element->getAttribute('required')) {
                 $controlClasses[] = 'required';
             }
 
-            $elementString  = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+            $elementString = $lf3Indent . $this->htmlElement->toHtml(
+                'div',
+                ['class' => 'card-body'],
+                PHP_EOL . $elementString . PHP_EOL . $lf3Indent,
+            );
+
+            $elementString  = $lf2Indent . $this->htmlElement->toHtml(
                 'div',
                 ['class' => implode(' ', $controlClasses)],
-                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                PHP_EOL . $elementString . PHP_EOL . $lf2Indent,
             );
             $elementString .= $errorContent . $helpContent;
 
-            $outerDiv = $indent . $this->htmlElement->toHtml(
+            $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
-                PHP_EOL . $elementString . PHP_EOL . $indent,
+                PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
             );
 
             return $baseIndent . $this->htmlElement->toHtml(
@@ -310,29 +318,32 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
+            $baseIndent   = $indent;
+            $lf1Indent    = $indent . $this->getWhitespace(4);
+            $lf2Indent    = $lf1Indent . $this->getWhitespace(4);
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+                $errorContent = $this->renderFormErrors($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+                $helpContent = $this->renderFormHelp($element, $lf2Indent);
             }
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(8));
+            $this->formElement->setIndent($lf2Indent);
             $elementString  = $this->formElement->render($element);
             $elementString .= $errorContent . $helpContent;
 
-            $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+            $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
-                PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+                PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
             );
 
-            return $indent . $this->htmlElement->toHtml(
+            return $baseIndent . $this->htmlElement->toHtml(
                 'div',
                 $rowAttributes,
-                PHP_EOL . $outerDiv . PHP_EOL . $indent,
+                PHP_EOL . $outerDiv . PHP_EOL . $baseIndent,
             );
         }
 
@@ -344,37 +355,36 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $labelAttributes['for'] = $id;
         }
 
-        $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
-            'label',
-            $labelAttributes,
-            $label,
-        ) . PHP_EOL;
-
         $errorContent = '';
         $helpContent  = '';
+        $baseIndent   = $indent;
+        $lf1Indent    = $indent . $this->getWhitespace(4);
+        $lf2Indent    = $lf1Indent . $this->getWhitespace(4);
+
+        $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
 
         if ($this->renderErrors) {
-            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(8));
+            $errorContent = $this->renderFormErrors($element, $lf2Indent);
         }
 
         if ($element->getOption('help_content')) {
-            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(8));
+            $helpContent = $this->renderFormHelp($element, $lf2Indent);
         }
 
-        $this->formElement->setIndent($indent . $this->getWhitespace(8));
+        $this->formElement->setIndent($lf2Indent);
         $elementString  = $this->formElement->render($element);
         $elementString .= $errorContent . $helpContent;
 
-        $outerDiv = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+        $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
             'div',
             $colAttributes,
-            PHP_EOL . $elementString . PHP_EOL . $indent . $this->getWhitespace(4),
+            PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
         );
 
-        return $indent . $this->htmlElement->toHtml(
+        return $baseIndent . $this->htmlElement->toHtml(
             'div',
             $rowAttributes,
-            PHP_EOL . $legend . $outerDiv . PHP_EOL . $indent,
+            PHP_EOL . $legend . PHP_EOL . $outerDiv . PHP_EOL . $baseIndent,
         );
     }
 
@@ -436,23 +446,30 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $lf1Indent = $indent . $this->getWhitespace(4);
+            $lf2Indent = $lf1Indent . $this->getWhitespace(4);
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $lf1Indent);
+                $errorContent = $this->renderFormErrors($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $lf1Indent);
+                $helpContent = $this->renderFormHelp($element, $lf2Indent);
             }
 
-            $this->formElement->setIndent($lf1Indent);
+            $this->formElement->setIndent($lf2Indent);
             $elementString = $this->formElement->render($element);
 
-            $controlClasses = ['form-control'];
+            $controlClasses = ['card'];
 
             if ($element->getAttribute('required')) {
                 $controlClasses[] = 'required';
             }
+
+            $elementString = $lf2Indent . $this->htmlElement->toHtml(
+                'div',
+                ['class' => 'card-body'],
+                PHP_EOL . $elementString . PHP_EOL . $lf2Indent,
+            );
 
             $elementString = $this->htmlElement->toHtml(
                 'div',
@@ -461,9 +478,9 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             );
 
             if ($floating) {
-                $elementString = PHP_EOL . $lf1Indent . $elementString . PHP_EOL . '    ' . $legend . $errorContent . $helpContent . PHP_EOL . $indent;
+                $elementString = PHP_EOL . $lf2Indent . $elementString . PHP_EOL . '    ' . $legend . $errorContent . $helpContent . PHP_EOL . $lf2Indent;
 
-                $elementString = $indent . $this->htmlElement->toHtml(
+                $elementString = $lf1Indent . $this->htmlElement->toHtml(
                     'div',
                     ['class' => 'form-floating'],
                     $elementString,
@@ -488,23 +505,25 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             // this is a special case, because label is always rendered inside it
             $errorContent = '';
             $helpContent  = '';
+            $baseIndent   = $indent;
+            $lf1Indent    = $indent . $this->getWhitespace(4);
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+                $errorContent = $this->renderFormErrors($element, $lf1Indent);
             }
 
             if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+                $helpContent = $this->renderFormHelp($element, $lf1Indent);
             }
 
-            $this->formElement->setIndent($indent . $this->getWhitespace(4));
+            $this->formElement->setIndent($lf1Indent);
             $elementString  = $this->formElement->render($element);
             $elementString .= $errorContent . $helpContent;
 
-            return $indent . $this->htmlElement->toHtml(
+            return $baseIndent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
-                PHP_EOL . $elementString . PHP_EOL . $indent,
+                PHP_EOL . $elementString . PHP_EOL . $baseIndent,
             );
         }
 
@@ -514,6 +533,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         if ($floating) {
             $indent .= $this->getWhitespace(4);
         }
+
+        $lf1Indent = $indent . $this->getWhitespace(4);
 
         if ($element instanceof LabelAwareInterface) {
             if ($floating) {
@@ -525,24 +546,20 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
         }
 
-        $legend = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
-            'label',
-            $labelAttributes,
-            $label,
-        );
+        $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
 
         $errorContent = '';
         $helpContent  = '';
 
         if ($this->renderErrors) {
-            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
+            $errorContent = $this->renderFormErrors($element, $lf1Indent);
         }
 
         if ($element->getOption('help_content')) {
-            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
+            $helpContent = $this->renderFormHelp($element, $lf1Indent);
         }
 
-        $this->formElement->setIndent($indent . $this->getWhitespace(4));
+        $this->formElement->setIndent($lf1Indent);
         $elementString = $this->formElement->render($element);
 
         $rendered = match ($labelPosition) {
