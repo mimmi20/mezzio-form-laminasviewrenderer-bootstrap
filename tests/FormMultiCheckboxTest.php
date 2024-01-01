@@ -747,7 +747,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -755,7 +755,8 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => true],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -898,7 +899,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -906,7 +907,8 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => 1],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -1039,7 +1041,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -1047,7 +1049,8 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => 'form-check'],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
