@@ -1194,7 +1194,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | bool | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -1202,7 +1202,8 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => false,
+                        3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -1311,7 +1312,7 @@ final class FormMultiCheckboxTest extends TestCase
         $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('div', ['class' => 'form-check form-check-inline'], $renderedField)
+            ->with('div', ['class' => 'form-check form-check-inline form-switch'], $renderedField)
             ->willReturn($expected);
 
         $translator = $this->createMock(Translate::class);
@@ -1357,7 +1358,7 @@ final class FormMultiCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | bool | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -1365,7 +1366,8 @@ final class FormMultiCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => true,
+                        3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
