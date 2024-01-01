@@ -46,7 +46,9 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager;
+use Laminas\View\Renderer\RendererInterface as Renderer;
 use Mimmi20\Form\Links\Element\Links;
 use Mimmi20\Form\Paragraph\Element\Paragraph;
 use Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\FormCollectionInterface;
@@ -442,5 +444,49 @@ final class FormElementTest extends TestCase
         $helper = new FormElement($helperPluginManager);
 
         self::assertSame($rendered, $helper($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws ServiceNotFoundException
+     * @throws InvalidServiceException
+     */
+    public function testInvoke3(): void
+    {
+        $element    = new Text();
+        $helperType = 'formText';
+
+        $subHelper = new class () implements HelperInterface {
+            /**
+             * @throws void
+             *
+             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+             */
+            public function setView(Renderer $view): self
+            {
+                return $this;
+            }
+
+            /** @throws void */
+            public function getView(): Renderer | null
+            {
+                return null;
+            }
+        };
+
+        $helperPluginManager = $this->createMock(HelperPluginManager::class);
+        $helperPluginManager->expects(self::once())
+            ->method('get')
+            ->with($helperType)
+            ->willReturn($subHelper);
+
+        $helper = new FormElement($helperPluginManager);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage('the element does not support the render function');
+
+        $helper($element);
     }
 }

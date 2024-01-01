@@ -3653,4 +3653,314 @@ final class FormCollectionTest extends TestCase
         self::assertSame($expected, $helper($element, false));
         self::assertFalse($helper->shouldWrap());
     }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws InvalidServiceException
+     * @throws ServiceNotFoundException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     */
+    public function testRenderWithCollectionAndElementsAndOptionsAndTranslator9(): void
+    {
+        $form                 = null;
+        $layout               = null;
+        $floating             = null;
+        $elementAttributes    = ['name' => 'element-name', 'class' => 'card-body body-1'];
+        $collectionAttributes = ['name' => 'collection-name', 'class' => 'card-body body-2'];
+        $labelAttributes      = ['class' => 'card-title card-title-1'];
+        $cardAttributes       = ['class' => 'card card-1'];
+        $colAttributes        = ['class' => 'col col-1'];
+        $label                = 'test-label';
+        $labelEscaped         = 'test-label-escaped';
+        $disableEscape        = false;
+        $wrap                 = true;
+        $indent               = '';
+
+        $innerLabel        = 'inner-test-label';
+        $innerLabelEscaped = 'inner-test-label-escaped';
+
+        $expectedLegend   = '<legend></legend>';
+        $expectedFieldset = '<fieldset></fieldset>';
+        $expectedCard     = '<card></card>';
+        $expectedCol      = '<col></col>';
+
+        $expectedInnerLegend   = '<legend>inside</legend>';
+        $expectedInnerFieldset = '<fieldset>inside</fieldset>';
+
+        $element = $this->createMock(Collection::class);
+
+        $textElement = $this->createMock(Text::class);
+        $textElement->expects(self::never())
+            ->method('getOption');
+        $textElement->expects(self::once())
+            ->method('setOption')
+            ->with('fieldset', $element);
+
+        $buttonElement = $this->createMock(Button::class);
+        $buttonElement->expects(self::never())
+            ->method('getOption');
+        $buttonElement->expects(self::once())
+            ->method('setOption')
+            ->with('fieldset', $element);
+
+        $expectedButton = $indent . '    <button></button>';
+        $expectedText   = $indent . '    <text></text>';
+
+        $formRow = $this->createMock(FormRowInterface::class);
+        $formRow->expects(self::exactly(2))
+            ->method('setIndent')
+            ->with($indent . '            ');
+        $matcher = self::exactly(2);
+        $formRow->expects($matcher)
+            ->method('render')
+            ->willReturnCallback(
+                static function (ElementInterface $element, string | null $labelPosition = null) use ($matcher, $buttonElement, $textElement, $expectedButton, $expectedText): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($buttonElement, $element),
+                        default => self::assertSame($textElement, $element),
+                    };
+
+                    self::assertNull($labelPosition);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $expectedButton,
+                        default => $expectedText,
+                    };
+                },
+            );
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher    = self::exactly(2);
+        $escapeHtml->expects($matcher)
+            ->method('__invoke')
+            ->willReturnCallback(
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $innerLabel, $label, $innerLabelEscaped, $labelEscaped): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($innerLabel, $value),
+                        default => self::assertSame($label, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $innerLabelEscaped,
+                        default => $labelEscaped,
+                    };
+                },
+            );
+
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
+        $matcher     = self::exactly(6);
+        $htmlElement->expects($matcher)
+            ->method('toHtml')
+            ->willReturnCallback(
+                static function (string $element, array $attribs, string $content) use ($matcher, $innerLabelEscaped, $expectedInnerLegend, $labelEscaped, $expectedLegend, $expectedInnerFieldset, $expectedButton, $expectedText, $expectedFieldset, $expectedCard, $expectedCol): string {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 3 => self::assertSame('legend', $element, (string) $invocation),
+                        5, 6 => self::assertSame('div', $element, (string) $invocation),
+                        default => self::assertSame('fieldset', $element, (string) $invocation),
+                    };
+
+                    match ($invocation) {
+                        1 => self::assertSame(['class' => ''], $attribs, (string) $invocation),
+                        2 => self::assertSame(
+                            ['class' => 'card-body body-2'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'card-title'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'card-body body-1'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        5 => self::assertSame(
+                            ['class' => 'card card-1'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        6 => self::assertSame(['class' => 'col col-1'], $attribs, (string) $invocation),
+                        default => self::assertSame([], $attribs, (string) $invocation),
+                    };
+
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            sprintf('<span>%s</span>', $innerLabelEscaped),
+                            $content,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame(
+                            PHP_EOL . '                ' . $expectedInnerLegend . PHP_EOL . '            ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        3 => self::assertSame(
+                            sprintf('<span>%s</span>', $labelEscaped),
+                            $content,
+                            (string) $invocation,
+                        ),
+                        5 => self::assertSame(
+                            PHP_EOL . '    ' . $expectedFieldset . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        6 => self::assertSame(
+                            PHP_EOL . '    ' . $expectedCard . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '            ' . $expectedLegend . PHP_EOL . '            ' . $expectedInnerFieldset . PHP_EOL . $expectedButton . PHP_EOL . $expectedText . PHP_EOL . '        ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
+                        1 => $expectedInnerLegend,
+                        2 => $expectedInnerFieldset,
+                        3 => $expectedLegend,
+                        5 => $expectedCard,
+                        6 => $expectedCol,
+                        default => $expectedFieldset,
+                    };
+                },
+            );
+
+        $helper = new FormCollection($formRow, $escapeHtml, $htmlElement, null);
+
+        $innerList = new PriorityList();
+
+        $collectionElement = $this->createMock(Collection::class);
+        $matcher           = self::exactly(5);
+        $collectionElement->expects($matcher)
+            ->method('getOption')
+            ->willReturnCallback(
+                static function (string $option) use ($matcher, $form, $layout, $floating): array | null {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('as-card', $option),
+                        2 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => null,
+                        2 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        default => [],
+                    };
+                },
+            );
+        $collectionElement->expects(self::never())
+            ->method('setOption');
+        $collectionElement->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn($collectionAttributes);
+        $collectionElement->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($innerLabel);
+        $collectionElement->expects(self::once())
+            ->method('getLabelOption')
+            ->with('disable_html_escape')
+            ->willReturn($disableEscape);
+        $collectionElement->expects(self::once())
+            ->method('hasAttribute')
+            ->with('id')
+            ->willReturn(false);
+        $collectionElement->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($innerList);
+        $collectionElement->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $collectionElement->expects(self::never())
+            ->method('getTemplateElement');
+
+        $list = new PriorityList();
+        $list->insert('x', $textElement);
+        $list->insert('y', $buttonElement);
+        $list->insert('z', $collectionElement);
+
+        $element->expects(self::never())
+            ->method('getName');
+        $matcher = self::exactly(11);
+        $element->expects($matcher)
+            ->method('getOption')
+            ->willReturnCallback(
+                static function (string $option) use ($matcher, $form, $layout, $floating, $labelAttributes, $cardAttributes, $colAttributes): bool | array | null {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('as-card', $option),
+                        2, 9 => self::assertSame('form', $option),
+                        3 => self::assertSame('layout', $option),
+                        4 => self::assertSame('floating', $option),
+                        5, 6, 7 => self::assertSame('show-required-mark', $option),
+                        10 => self::assertSame('card_attributes', $option),
+                        11 => self::assertSame('col_attributes', $option),
+                        default => self::assertSame('label_attributes', $option),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => true,
+                        2, 9 => $form,
+                        3 => $layout,
+                        4 => $floating,
+                        5, 6, 7 => false,
+                        10 => $cardAttributes,
+                        11 => $colAttributes,
+                        default => $labelAttributes,
+                    };
+                },
+            );
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn($elementAttributes);
+        $element->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($label);
+        $matcher = self::exactly(2);
+        $element->expects($matcher)
+            ->method('getLabelOption')
+            ->willReturnCallback(
+                static function (string $key) use ($matcher, $disableEscape, $wrap): mixed {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame('disable_html_escape', $key),
+                        default => self::assertSame('always_wrap', $key),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $disableEscape,
+                        default => $wrap,
+                    };
+                },
+            );
+        $element->expects(self::once())
+            ->method('hasAttribute')
+            ->with('id')
+            ->willReturn(true);
+        $element->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($list);
+        $element->expects(self::once())
+            ->method('shouldCreateTemplate')
+            ->willReturn(false);
+        $element->expects(self::never())
+            ->method('getTemplateElement');
+
+        $helper->setIndent($indent);
+
+        self::assertSame($indent . $expectedCol, $helper->render($element));
+    }
 }

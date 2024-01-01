@@ -16,14 +16,16 @@ use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Email;
 use Laminas\Form\Element\Password;
-use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 
 return [
     'type' => Form::class,
-    'options' => ['floating-labels' => true],
+    'options' => [
+        'layout' => \Mimmi20\Mezzio\BootstrapForm\LaminasView\View\Helper\Form::LAYOUT_INLINE,
+        'floating-labels' => true,
+    ],
     'attributes' => ['class' => 'g-3'],
     'elements' => [
         [
@@ -130,42 +132,6 @@ return [
                     'use_hidden_element' => false,
                 ],
                 'attributes' => ['id' => 'gridCheck'],
-            ],
-        ],
-        [
-            'spec' => [
-                'type' => Radio::class,
-                'name' => 'zusatzfragen',
-                'options' => [
-                    'label' => 'weitere Fragen',
-                    'value_options' => [
-                        'nein' => [
-                            'value' => 'nein',
-                            'label' => 'Ich verzichte auf die Beantwortung weiterer Fragen und wähle aus dem Vergleich einen Tarif, der meinen Bedarf erfüllt.',
-                            'attributes' => [
-                                'id' => 'zusatzfragen_nein',
-                                'class' => 'form-check-input form-radio-input js-gtm-event',
-                                'data-event-type' => 'click',
-                                'data-event-category' => 'versicherung',
-                                'data-event-action' => 'no additional questions',
-                                'data-event-label' => 'hr',
-                            ],
-                        ],
-                        'ja' => [
-                            'value' => 'ja',
-                            'label' => 'Ich möchte weitere Angaben zum gewünschten Versicherungsschutz machen. Es werden dann nur Tarife angezeigt, welche die Vorgaben erfüllen.',
-                            'attributes' => [
-                                'id' => 'zusatzfragen_ja',
-                                'class' => 'form-check-input form-radio-input js-gtm-event',
-                                'data-event-type' => 'click',
-                                'data-event-category' => 'versicherung',
-                                'data-event-action' => 'additional questions requested',
-                                'data-event-label' => 'hr',
-                            ],
-                        ],
-                    ],
-                ],
-                'attributes' => ['id' => 'zusatzfragen'],
             ],
         ],
         [

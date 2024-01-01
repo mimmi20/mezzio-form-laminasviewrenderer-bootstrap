@@ -15,6 +15,7 @@ namespace Mimmi20Test\Mezzio\BootstrapForm\LaminasView\View\Helper;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\View\Helper\FormRow as BaseFormRow;
@@ -478,7 +479,7 @@ final class FormCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -486,7 +487,8 @@ final class FormCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => true],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -608,7 +610,7 @@ final class FormCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -616,7 +618,8 @@ final class FormCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => 1],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -734,9 +737,18 @@ final class FormCheckboxTest extends TestCase
         $formHidden = $this->createMock(FormHiddenInterface::class);
         $formHidden->expects(self::once())
             ->method('render')
-            ->with(new IsInstanceOf(Hidden::class))
-            ->willReturn(
-                sprintf('<input type="hidden" name="%s" value="%s"/>', $name, $uncheckedValue),
+            ->willReturnCallback(
+                static function (ElementInterface $element) use ($name, $uncheckedValue): string {
+                    self::assertInstanceOf(Hidden::class, $element);
+                    self::assertSame($name, $element->getName());
+                    self::assertSame($uncheckedValue, $element->getValue());
+
+                    return sprintf(
+                        '<input type="hidden" name="%s" value="%s"/>',
+                        $name,
+                        $uncheckedValue,
+                    );
+                },
             );
 
         $helper = new FormCheckbox(
@@ -760,7 +772,7 @@ final class FormCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | bool {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -768,7 +780,8 @@ final class FormCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => false,
+                        3 => ['class' => 'form-check'],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -857,7 +870,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline'],
+                ['class' => 'form-check form-single-check form-check-inline form-switch'],
                 PHP_EOL
                 . sprintf(
                     '<input type="hidden" name="%s" value="%s"/>',
@@ -917,7 +930,7 @@ final class FormCheckboxTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | bool | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -925,7 +938,8 @@ final class FormCheckboxTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => true,
+                        3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },

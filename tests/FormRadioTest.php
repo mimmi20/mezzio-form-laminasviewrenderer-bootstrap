@@ -761,7 +761,7 @@ final class FormRadioTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -769,7 +769,8 @@ final class FormRadioTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => true],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -912,7 +913,7 @@ final class FormRadioTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -920,7 +921,8 @@ final class FormRadioTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => 1],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -1053,7 +1055,7 @@ final class FormRadioTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | array | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -1061,7 +1063,8 @@ final class FormRadioTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => null,
+                        3 => ['class' => 'form-check'],
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -1965,7 +1968,7 @@ final class FormRadioTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | bool | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -1973,7 +1976,8 @@ final class FormRadioTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => false,
+                        3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },
@@ -2193,7 +2197,7 @@ final class FormRadioTest extends TestCase
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $renderedField1, $renderedField2, $renderedField3, $expected): string {
                     self::assertSame('div', $element);
-                    self::assertSame(['class' => 'form-check form-check-inline'], $attribs);
+                    self::assertSame(['class' => 'form-check form-check-inline form-switch'], $attribs);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($renderedField1, $content),
@@ -2269,7 +2273,7 @@ final class FormRadioTest extends TestCase
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher): string | null {
+                static function (string $option) use ($matcher): string | bool | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertSame('switch', $option),
                         3 => self::assertSame('group_attributes', $option),
@@ -2277,7 +2281,8 @@ final class FormRadioTest extends TestCase
                     };
 
                     return match ($matcher->numberOfInvocations()) {
-                        2, 3 => null,
+                        2 => true,
+                        3 => null,
                         default => Form::LAYOUT_INLINE,
                     };
                 },

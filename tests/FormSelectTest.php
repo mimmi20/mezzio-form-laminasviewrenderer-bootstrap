@@ -901,6 +901,232 @@ final class FormSelectTest extends TestCase
      * @throws RuntimeException
      * @throws \Laminas\View\Exception\InvalidArgumentException
      */
+    public function testRenderMultipleOptions3(): void
+    {
+        $name                    = 'test-name';
+        $id                      = 'test-id';
+        $value1                  = 'xyz';
+        $label1                  = 'def1';
+        $label1Translated        = 'def1-translated';
+        $label1TranslatedEscaped = 'def1-translated-escaped';
+        $value2                  = '1';
+        $label2                  = '...2';
+        $label2Translated        = '...2-translated';
+        $label2TranslatedEscaped = '...2-translated-escaped';
+        $label3                  = 'group3';
+        $value4                  = '2';
+        $label4                  = 'Choose...4';
+        $label4Translated        = 'Choose...4-translated';
+        $label4TranslatedEscaped = 'Choose...4-translated-escaped';
+        $value5                  = '3';
+        $label5                  = '...5';
+        $label5Translated        = '...5-translated';
+        $label5TranslatedEscaped = '...5-translated-escaped';
+        $label6                  = 'group6';
+        $value7                  = '4';
+        $label7                  = 'Choose...7';
+        $label7Translated        = 'Choose...7-translated';
+        $label7TranslatedEscaped = 'Choose...7-translated-escaped';
+        $value8                  = '5';
+        $label8                  = '...8';
+        $label8Translated        = '...8-translated';
+
+        $class                        = 'test-class';
+        $ariaLabel                    = 'test';
+        $valueOptions                 = [
+            [
+                'value' => $value1,
+                'label' => $label1,
+                'attributes' => ['selected' => true],
+            ],
+            [
+                'value' => $value2,
+                'label' => $label2,
+            ],
+            [
+                'label' => $label3,
+                'options' => [
+                    [
+                        'value' => $value4,
+                        'label' => $label4,
+                    ],
+                    [
+                        'value' => $value5,
+                        'label' => $label5,
+                        'selected' => true,
+                    ],
+                    [
+                        'label' => $label6,
+                        'options' => [
+                            [
+                                'value' => $value7,
+                                'label' => $label7,
+                            ],
+                            [
+                                'value' => $value8,
+                                'label' => $label8,
+                                'disabled' => true,
+                                'disable_html_escape' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $attributes                   = ['class' => $class, 'aria-label' => $ariaLabel, 'id' => $id, 'multiple' => true];
+        $emptyOption                  = '0';
+        $emptyOptionTranslated        = '0t';
+        $emptyOptionTranslatedEscaped = '0te';
+
+        $expected   = sprintf(
+            '<select class="form-select&#x20;%s" aria-label="%s" id="%s" multiple="multiple" name="%s&#x5B;&#x5D;">',
+            $class,
+            $ariaLabel,
+            $id,
+            $name,
+        ) . PHP_EOL
+            . sprintf('    <option value="">%s</option>', $emptyOptionTranslatedEscaped) . PHP_EOL
+            . sprintf(
+                '    <option value="%s" selected="selected">%s</option>',
+                $value1,
+                $label1TranslatedEscaped,
+            ) . PHP_EOL
+            . sprintf('    <option value="%s">%s</option>', $value2, $label2TranslatedEscaped) . PHP_EOL
+            . sprintf('    <optgroup label="%s">', $label3) . PHP_EOL
+            . sprintf(
+                '        <option value="%s">%s</option>',
+                $value4,
+                $label4TranslatedEscaped,
+            ) . PHP_EOL
+            . sprintf(
+                '        <option value="%s" selected="selected">%s</option>',
+                $value5,
+                $label5TranslatedEscaped,
+            ) . PHP_EOL
+            . sprintf('        <optgroup label="%s">', $label6) . PHP_EOL
+            . sprintf(
+                '            <option value="%s">%s</option>',
+                $value7,
+                $label7TranslatedEscaped,
+            ) . PHP_EOL
+            . sprintf(
+                '            <option value="%s" disabled="disabled">%s</option>',
+                $value8,
+                $label8Translated,
+            ) . PHP_EOL
+            . '        </optgroup>' . PHP_EOL
+            . '    </optgroup>' . PHP_EOL
+            . '</select>';
+        $textDomain = 'test-domain';
+
+        $escapeHtml = $this->createMock(EscapeHtml::class);
+        $matcher    = self::exactly(6);
+        $escapeHtml->expects($matcher)
+            ->method('__invoke')
+            ->willReturnCallback(
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher, $emptyOptionTranslated, $label1Translated, $label2Translated, $label4Translated, $label5Translated, $label7Translated, $emptyOptionTranslatedEscaped, $label1TranslatedEscaped, $label2TranslatedEscaped, $label4TranslatedEscaped, $label5TranslatedEscaped, $label7TranslatedEscaped): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($emptyOptionTranslated, $value),
+                        2 => self::assertSame($label1Translated, $value),
+                        3 => self::assertSame($label2Translated, $value),
+                        4 => self::assertSame($label4Translated, $value),
+                        5 => self::assertSame($label5Translated, $value),
+                        default => self::assertSame($label7Translated, $value),
+                    };
+
+                    self::assertSame(0, $recurse);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $emptyOptionTranslatedEscaped,
+                        2 => $label1TranslatedEscaped,
+                        3 => $label2TranslatedEscaped,
+                        4 => $label4TranslatedEscaped,
+                        5 => $label5TranslatedEscaped,
+                        default => $label7TranslatedEscaped,
+                    };
+                },
+            );
+
+        $formHidden = $this->createMock(FormHiddenInterface::class);
+        $formHidden->expects(self::never())
+            ->method('render');
+
+        $translator = $this->createMock(Translate::class);
+        $matcher    = self::exactly(7);
+        $translator->expects($matcher)
+            ->method('__invoke')
+            ->willReturnCallback(
+                static function (string $message, string | null $textDomainParam = null, string | null $locale = null) use ($matcher, $emptyOption, $label1, $label2, $label4, $label5, $label7, $label8, $textDomain, $emptyOptionTranslated, $label1Translated, $label2Translated, $label4Translated, $label5Translated, $label7Translated, $label8Translated): string {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($emptyOption, $message),
+                        2 => self::assertSame($label1, $message),
+                        3 => self::assertSame($label2, $message),
+                        4 => self::assertSame($label4, $message),
+                        5 => self::assertSame($label5, $message),
+                        6 => self::assertSame($label7, $message),
+                        default => self::assertSame($label8, $message),
+                    };
+
+                    self::assertSame($textDomain, $textDomainParam);
+                    self::assertNull($locale);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $emptyOptionTranslated,
+                        2 => $label1Translated,
+                        3 => $label2Translated,
+                        4 => $label4Translated,
+                        5 => $label5Translated,
+                        6 => $label7Translated,
+                        default => $label8Translated,
+                    };
+                },
+            );
+
+        $helper = new FormSelect($escapeHtml, $formHidden, $translator);
+
+        $element = $this->createMock(SelectElement::class);
+        $element->expects(self::once())
+            ->method('getName')
+            ->willReturn($name);
+        $element->expects(self::once())
+            ->method('getValueOptions')
+            ->willReturn($valueOptions);
+        $element->expects(self::once())
+            ->method('getAttributes')
+            ->willReturn($attributes);
+        $element->expects(self::once())
+            ->method('getValue')
+            ->willReturn(42);
+        $element->expects(self::once())
+            ->method('useHiddenElement')
+            ->willReturn(false);
+        $element->expects(self::never())
+            ->method('getLabelAttributes');
+        $element->expects(self::never())
+            ->method('getOption');
+        $element->expects(self::never())
+            ->method('getLabelOption');
+        $element->expects(self::never())
+            ->method('hasLabelOption');
+        $element->expects(self::once())
+            ->method('getEmptyOption')
+            ->willReturn($emptyOption);
+        $element->expects(self::never())
+            ->method('getUnselectedValue');
+
+        $helper->setTranslatorTextDomain($textDomain);
+
+        self::assertSame($expected, $helper->render($element));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws DomainException
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     */
     public function testRenderWithHiddenElement(): void
     {
         $name               = 'test-name';
