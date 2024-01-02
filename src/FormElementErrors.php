@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -115,13 +115,17 @@ final class FormElementErrors extends AbstractHelper implements FormElementError
             $errorAttributes['id'] = $element->getAttribute('id') . 'Feedback';
         }
 
-        $ul = $indent . $this->getWhitespace(4) . $this->htmlElement->toHtml(
+        $ul = $this->htmlElement->toHtml(
             'ul',
             $attributes,
-            implode(PHP_EOL, $markups) . PHP_EOL . $indent . $this->getWhitespace(4),
+            PHP_EOL . implode(PHP_EOL, $markups) . PHP_EOL . $indent . $this->getWhitespace(4),
         );
 
-        return $indent . $this->htmlElement->toHtml('div', $errorAttributes, $ul);
+        return PHP_EOL . $indent . $this->htmlElement->toHtml(
+            'div',
+            $errorAttributes,
+            PHP_EOL . $indent . $this->getWhitespace(4) . $ul . PHP_EOL . $indent,
+        );
     }
 
     /**

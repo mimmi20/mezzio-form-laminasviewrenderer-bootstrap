@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -307,7 +307,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline'],
+                ['class' => 'form-check form-check-inline'],
                 PHP_EOL
                 . '<label for="chck-id">' . PHP_EOL
                 . '    <input class="form-check-input&#x20;xyz" name="chkbox" type="checkbox" value="" checked="checked">' . PHP_EOL
@@ -428,7 +428,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline'],
+                ['class' => 'form-check form-check-inline'],
                 PHP_EOL
                 . '<label for="chck-id">' . PHP_EOL
                 . '    <span>test-label-translated-escaped</span>' . PHP_EOL
@@ -561,7 +561,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline'],
+                ['class' => 'form-check form-check-inline'],
                 PHP_EOL
                 . '    <label for="chck-id">test-label-translated-escaped</label>' . PHP_EOL
                 . '    <input class="form-check-input&#x20;xyz" id="chck-id" name="chkbox" type="checkbox" value="" checked="checked">' . PHP_EOL,
@@ -705,7 +705,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline'],
+                ['class' => 'form-check form-check-inline'],
                 PHP_EOL
                 . sprintf(
                     '    <input type="hidden" name="%s" value="%s"/>',
@@ -870,7 +870,7 @@ final class FormCheckboxTest extends TestCase
             ->method('toHtml')
             ->with(
                 'div',
-                ['class' => 'form-check form-single-check form-check-inline form-switch'],
+                ['class' => 'form-check form-check-inline form-switch'],
                 PHP_EOL
                 . sprintf(
                     '<input type="hidden" name="%s" value="%s"/>',
