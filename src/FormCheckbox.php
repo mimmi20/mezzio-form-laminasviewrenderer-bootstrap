@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -101,7 +101,7 @@ final class FormCheckbox extends FormInput
 
         $id = $this->getId($element);
 
-        $groupClasses = ['form-check', 'form-single-check'];
+        $groupClasses = ['form-check'];
         $labelClasses = ['form-check-label'];
         $inputClasses = ['form-check-input'];
 

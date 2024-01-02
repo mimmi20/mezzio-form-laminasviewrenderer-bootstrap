@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -433,12 +433,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('class', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('class', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $class,
                     };
@@ -814,12 +816,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('class', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('class', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $class,
                     };
@@ -1235,12 +1239,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('class', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('class', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $class,
                     };
@@ -1335,22 +1341,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -1369,12 +1379,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $required): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $required,
                     };
@@ -1459,22 +1471,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -1493,12 +1509,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $required): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $required,
                     };
@@ -1583,22 +1601,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -1627,12 +1649,14 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $required): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         default => $required,
                     };
@@ -1718,22 +1742,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -1765,13 +1793,15 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         default => $required,
@@ -1860,22 +1890,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -1922,14 +1956,16 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4 => self::assertSame('id', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4 => self::assertSame('id', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4 => $id,
@@ -2021,22 +2057,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -2069,13 +2109,15 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         default => $required,
@@ -2168,22 +2210,26 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(4);
+        $matcher = self::exactly(5);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): bool | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent): array | bool | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -2230,15 +2276,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        5 => self::assertSame('id', $key),
-                        4 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        5 => self::assertSame('id', $key, (string) $invocation),
+                        4 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         5 => $id,
@@ -2334,24 +2382,28 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 7 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        6 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 8 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        7 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 7 => $form,
+                    return match ($invocation) {
+                        1, 8 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
-                        6 => $helpAttributes,
+                        7 => $helpAttributes,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -2398,15 +2450,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6 => self::assertSame('id', $key),
-                        5 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6 => self::assertSame('id', $key, (string) $invocation),
+                        5 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6 => $id,
@@ -2505,24 +2559,28 @@ final class FormRowTest extends TestCase
         $textDomain       = 'text-domain';
 
         $element = $this->createMock(ElementInterface::class);
-        $matcher = self::exactly(7);
+        $matcher = self::exactly(8);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 7 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        6 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 8 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        7 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        4 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 7 => $form,
+                    return match ($invocation) {
+                        1, 8 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
-                        6 => $helpAttributes,
+                        7 => $helpAttributes,
+                        4 => [],
                         default => $helpContent,
                     };
                 },
@@ -2573,15 +2631,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        5, 6, 8 => self::assertSame('id', $key),
-                        4, 7 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        5, 6, 8 => self::assertSame('id', $key, (string) $invocation),
+                        4, 7 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         5, 6, 8 => $id,
@@ -2685,7 +2745,6 @@ final class FormRowTest extends TestCase
         $form                   = null;
         $rowAttributes          = ['c' => 'd'];
         $colAttributes          = ['e' => 'f'];
-        $labelAttributes        = ['g' => 'h'];
         $labelColAttributes     = ['i' => 'j'];
         $expectedLegend         = '<legend></legend>';
         $expectedCol1           = '<col1></col1>';
@@ -2695,32 +2754,34 @@ final class FormRowTest extends TestCase
         $textDomain             = 'text-domain';
 
         $element = $this->createMock(Radio::class);
-        $matcher = self::exactly(15);
+        $matcher = self::exactly(14);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('row_attributes', $option),
-                        6 => self::assertSame('col_attributes', $option),
-                        8 => self::assertSame('label_attributes', $option),
-                        10 => self::assertSame('label_col_attributes', $option),
-                        14 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelColAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 5, 7, 9, 14 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('row_attributes', $option, (string) $invocation),
+                        6 => self::assertSame('col_attributes', $option, (string) $invocation),
+                        8 => self::assertSame('label_col_attributes', $option, (string) $invocation),
+                        13 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        10 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => $form,
+                    return match ($invocation) {
+                        1, 5, 7, 9, 14 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $rowAttributes,
                         6 => $colAttributes,
-                        8 => $labelAttributes,
-                        10 => $labelColAttributes,
-                        14 => $helpAttributes,
+                        8 => $labelColAttributes,
+                        13 => $helpAttributes,
+                        10 => [],
                         default => $helpContent,
                     };
                 },
@@ -2771,15 +2832,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        5, 6, 8 => self::assertSame('id', $key),
-                        4, 7 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        5, 6, 8 => self::assertSame('id', $key, (string) $invocation),
+                        4, 7 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         5, 6, 8 => $id,
@@ -2819,7 +2882,7 @@ final class FormRowTest extends TestCase
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $labelAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedCol3, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string {
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $helpAttributes, $colAttributes, $rowAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol1, $expectedCol2, $expectedCol3, $expectedErrors, $expectedLegend, $expectedHelp, $expectedRow, $indent): string {
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
@@ -2830,7 +2893,7 @@ final class FormRowTest extends TestCase
 
                     match ($invocation) {
                         1 => self::assertSame(
-                            $labelColAttributes + $labelAttributes + ['class' => 'col-form-label'],
+                            $labelColAttributes + ['class' => 'col-form-label'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -2845,7 +2908,7 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'card required'],
+                            ['class' => 'card has-validation required'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -2861,7 +2924,7 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '            ',
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '            ',
                             $content,
                             (string) $invocation,
                         ),
@@ -2871,12 +2934,12 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         5 => self::assertSame(
-                            PHP_EOL . $indent . '        ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '            ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $indent . '        ' . $expectedCol2 . PHP_EOL . $indent . '    ',
                             $content,
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol3 . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol3 . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
                             (string) $invocation,
                         ),
@@ -2966,7 +3029,7 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Radio::class);
-        $matcher = self::exactly(14);
+        $matcher = self::exactly(15);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
@@ -2974,26 +3037,28 @@ final class FormRowTest extends TestCase
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
-                        1, 5, 7, 9, 14 => self::assertSame('form', $option, (string) $invocation),
+                        1, 5, 7, 9, 15 => self::assertSame('form', $option, (string) $invocation),
                         2 => self::assertSame('show-required-mark', $option, (string) $invocation),
                         3 => self::assertSame('layout', $option, (string) $invocation),
                         4 => self::assertSame('col_attributes', $option, (string) $invocation),
                         6 => self::assertSame('label_attributes', $option, (string) $invocation),
                         8 => self::assertSame('legend_attributes', $option, (string) $invocation),
-                        13 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        14 => self::assertSame('help_attributes', $option, (string) $invocation),
                         10 => self::assertSame('floating', $option, (string) $invocation),
+                        11 => self::assertSame('messages', $option, (string) $invocation),
                         default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
                     return match ($invocation) {
-                        1, 5, 7, 9, 14 => $form,
+                        1, 5, 7, 9, 15 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $colAttributes,
                         6 => $labelAttributes,
                         8 => $legendAttributes,
-                        13 => $helpAttributes,
+                        14 => $helpAttributes,
                         10 => false,
+                        11 => [],
                         default => $helpContent,
                     };
                 },
@@ -3044,15 +3109,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6, 7, 9 => self::assertSame('id', $key),
-                        5, 8 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6, 7, 9 => self::assertSame('id', $key, (string) $invocation),
+                        5, 8 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6, 7, 9 => $id,
@@ -3124,7 +3191,7 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'card required'],
+                            ['class' => 'card has-validation required'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -3135,7 +3202,7 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '        ',
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ',
                             $content,
                             (string) $invocation,
                         ),
@@ -3145,7 +3212,7 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '',
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent . '',
                             $content,
                             (string) $invocation,
                         ),
@@ -3225,7 +3292,6 @@ final class FormRowTest extends TestCase
         $form                   = null;
         $rowAttributes          = ['c' => 'd'];
         $colAttributes          = ['e' => 'f'];
-        $labelAttributes        = ['g' => 'h'];
         $labelColAttributes     = ['i' => 'j'];
         $expectedCol            = '<col1></col1>';
         $expectedRow            = '<row></row>';
@@ -3233,32 +3299,34 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Button::class);
-        $matcher = self::exactly(15);
+        $matcher = self::exactly(14);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('row_attributes', $option),
-                        6 => self::assertSame('col_attributes', $option),
-                        8 => self::assertSame('label_attributes', $option),
-                        10 => self::assertSame('label_col_attributes', $option),
-                        14 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelColAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 5, 7, 9, 14 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('row_attributes', $option, (string) $invocation),
+                        6 => self::assertSame('col_attributes', $option, (string) $invocation),
+                        8 => self::assertSame('label_col_attributes', $option, (string) $invocation),
+                        13 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        10 => self::assertSame('messages', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => $form,
+                    return match ($invocation) {
+                        1, 5, 7, 9, 14 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $rowAttributes,
                         6 => $colAttributes,
-                        8 => $labelAttributes,
-                        10 => $labelColAttributes,
-                        14 => $helpAttributes,
+                        8 => $labelColAttributes,
+                        13 => $helpAttributes,
+                        10 => [],
                         default => $helpContent,
                     };
                 },
@@ -3309,15 +3377,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        5, 6, 8 => self::assertSame('id', $key),
-                        4, 7 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        5, 6, 8 => self::assertSame('id', $key, (string) $invocation),
+                        4, 7 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         5, 6, 8 => $id,
@@ -3364,27 +3434,39 @@ final class FormRowTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $rowAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedRow, $expectedHelp, $indent): string {
-                    self::assertSame('div', $element);
+                    $invocation = $matcher->numberOfInvocations();
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        2 => self::assertSame($colAttributes, $attribs),
-                        default => self::assertSame($rowAttributes + ['class' => 'row'], $attribs),
+                    self::assertSame('div', $element, (string) $invocation);
+
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $helpAttributes + ['id' => $id . 'Help'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame($colAttributes, $attribs, (string) $invocation),
+                        default => self::assertSame(
+                            $rowAttributes + ['class' => 'row'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($helpContent, $content),
+                    match ($invocation) {
+                        1 => self::assertSame($helpContent, $content, (string) $invocation),
                         2 => self::assertSame(
-                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ',
                             $content,
+                            (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
+                            (string) $invocation,
                         ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $expectedHelp,
                         2 => $expectedCol,
                         default => $expectedRow,
@@ -3461,28 +3543,32 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Button::class);
-        $matcher = self::exactly(11);
+        $matcher = self::exactly(12);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 11 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('col_attributes', $option),
-                        6 => self::assertSame('label_attributes', $option),
-                        10 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 5, 7, 12 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('col_attributes', $option, (string) $invocation),
+                        6 => self::assertSame('label_attributes', $option, (string) $invocation),
+                        8 => self::assertSame('messages', $option, (string) $invocation),
+                        11 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 11 => $form,
+                    return match ($invocation) {
+                        1, 5, 7, 12 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $colAttributes,
                         6 => $labelAttributes,
-                        10 => $helpAttributes,
+                        8 => [],
+                        11 => $helpAttributes,
                         default => $helpContent,
                     };
                 },
@@ -3533,15 +3619,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6, 7, 9 => self::assertSame('id', $key),
-                        5, 8 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6, 7, 9 => self::assertSame('id', $key, (string) $invocation),
+                        5, 8 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6, 7, 9 => $id,
@@ -3588,22 +3676,29 @@ final class FormRowTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $id, $helpAttributes, $colAttributes, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $indent): string {
-                    self::assertSame('div', $element);
+                    $invocation = $matcher->numberOfInvocations();
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        default => self::assertSame($colAttributes, $attribs),
+                    self::assertSame('div', $element, (string) $invocation);
+
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $helpAttributes + ['id' => $id . 'Help'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame($colAttributes, $attribs, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($helpContent, $content),
+                    match ($invocation) {
+                        1 => self::assertSame($helpContent, $content, (string) $invocation),
                         default => self::assertSame(
                             PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
+                            (string) $invocation,
                         ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $expectedHelp,
                         default => $expectedCol,
                     };
@@ -3683,7 +3778,7 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Radio::class);
-        $matcher = self::exactly(14);
+        $matcher = self::exactly(15);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
@@ -3691,26 +3786,28 @@ final class FormRowTest extends TestCase
                     $invocation = $matcher->numberOfInvocations();
 
                     match ($invocation) {
-                        1, 5, 7, 9, 14 => self::assertSame('form', $option, (string) $invocation),
+                        1, 5, 7, 9, 15 => self::assertSame('form', $option, (string) $invocation),
                         2 => self::assertSame('show-required-mark', $option, (string) $invocation),
                         3 => self::assertSame('layout', $option, (string) $invocation),
                         4 => self::assertSame('col_attributes', $option, (string) $invocation),
                         6 => self::assertSame('label_attributes', $option, (string) $invocation),
                         8 => self::assertSame('legend_attributes', $option, (string) $invocation),
-                        13 => self::assertSame('help_attributes', $option, (string) $invocation),
                         10 => self::assertSame('floating', $option, (string) $invocation),
+                        11 => self::assertSame('messages', $option, (string) $invocation),
+                        14 => self::assertSame('help_attributes', $option, (string) $invocation),
                         default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
                     return match ($invocation) {
-                        1, 5, 7, 9, 14 => $form,
+                        1, 5, 7, 9, 15 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $colAttributes,
                         6 => $labelAttributes,
                         8 => $legendAttributes,
-                        13 => $helpAttributes,
                         10 => false,
+                        11 => [],
+                        14 => $helpAttributes,
                         default => $helpContent,
                     };
                 },
@@ -3761,15 +3858,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6, 7, 9 => self::assertSame('id', $key),
-                        5, 8 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6, 7, 9 => self::assertSame('id', $key, (string) $invocation),
+                        5, 8 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6, 7, 9 => $id,
@@ -3841,7 +3940,7 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'card required'],
+                            ['class' => 'card has-validation required'],
                             $attribs,
                             (string) $invocation,
                         ),
@@ -3852,7 +3951,7 @@ final class FormRowTest extends TestCase
                         1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
                         2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '        ',
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ',
                             $content,
                             (string) $invocation,
                         ),
@@ -3862,7 +3961,7 @@ final class FormRowTest extends TestCase
                             (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol2 . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
                             (string) $invocation,
                         ),
@@ -3950,30 +4049,34 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Text::class);
-        $matcher = self::exactly(12);
+        $matcher = self::exactly(13);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
                 static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $colAttributes, $labelAttributes, $floating): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 12 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('col_attributes', $option),
-                        6 => self::assertSame('label_attributes', $option),
-                        8 => self::assertSame('floating', $option),
-                        11 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 5, 7, 13 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('col_attributes', $option, (string) $invocation),
+                        6 => self::assertSame('label_attributes', $option, (string) $invocation),
+                        8 => self::assertSame('floating', $option, (string) $invocation),
+                        9 => self::assertSame('messages', $option, (string) $invocation),
+                        12 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 12 => $form,
+                    return match ($invocation) {
+                        1, 5, 7, 13 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $colAttributes,
                         6 => $labelAttributes,
                         8 => $floating,
-                        11 => $helpAttributes,
+                        9 => [],
+                        12 => $helpAttributes,
                         default => $helpContent,
                     };
                 },
@@ -4024,15 +4127,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6, 7, 9 => self::assertSame('id', $key),
-                        5, 8 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6, 7, 9 => self::assertSame('id', $key, (string) $invocation),
+                        5, 8 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6, 7, 9 => $id,
@@ -4093,30 +4198,38 @@ final class FormRowTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $indent): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('label', $element),
-                        default => self::assertSame('div', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('label', $element, (string) $invocation),
+                        default => self::assertSame('div', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
                         1 => self::assertSame(
                             $labelAttributes + ['class' => 'form-label', 'for' => $id],
                             $attribs,
+                            (string) $invocation,
                         ),
-                        2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        default => self::assertSame($colAttributes, $attribs),
+                        2 => self::assertSame(
+                            $helpAttributes + ['id' => $id . 'Help'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame($colAttributes, $attribs, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($labelTranslatedEscaped, $content),
-                        2 => self::assertSame($helpContent, $content),
+                    match ($invocation) {
+                        1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
+                        2 => self::assertSame($helpContent, $content, (string) $invocation),
                         default => self::assertSame(
-                            PHP_EOL . $expected . PHP_EOL . $indent . '    ' . $expectedLegend . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
+                            (string) $invocation,
                         ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $expectedLegend,
                         2 => $expectedHelp,
                         default => $expectedCol,
@@ -4188,7 +4301,6 @@ final class FormRowTest extends TestCase
         $form                   = null;
         $rowAttributes          = ['c' => 'd'];
         $colAttributes          = ['e' => 'f'];
-        $labelAttributes        = ['g' => 'h'];
         $labelColAttributes     = ['i' => 'j'];
         $expectedLegend         = '<legend></legend>';
         $expectedCol            = '<col1></col1>';
@@ -4197,32 +4309,34 @@ final class FormRowTest extends TestCase
         $disableEscape          = false;
 
         $element = $this->createMock(Text::class);
-        $matcher = self::exactly(15);
+        $matcher = self::exactly(14);
         $element->expects($matcher)
             ->method('getOption')
             ->willReturnCallback(
-                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelAttributes, $labelColAttributes): bool | array | string | null {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => self::assertSame('form', $option),
-                        2 => self::assertSame('show-required-mark', $option),
-                        3 => self::assertSame('layout', $option),
-                        4 => self::assertSame('row_attributes', $option),
-                        6 => self::assertSame('col_attributes', $option),
-                        8 => self::assertSame('label_attributes', $option),
-                        10 => self::assertSame('label_col_attributes', $option),
-                        14 => self::assertSame('help_attributes', $option),
-                        default => self::assertSame('help_content', $option),
+                static function (string $option) use ($matcher, $form, $showRequiredMark, $layout, $helpContent, $helpAttributes, $rowAttributes, $colAttributes, $labelColAttributes): bool | array | string | null {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1, 5, 7, 9, 14 => self::assertSame('form', $option, (string) $invocation),
+                        2 => self::assertSame('show-required-mark', $option, (string) $invocation),
+                        3 => self::assertSame('layout', $option, (string) $invocation),
+                        4 => self::assertSame('row_attributes', $option, (string) $invocation),
+                        6 => self::assertSame('col_attributes', $option, (string) $invocation),
+                        8 => self::assertSame('label_col_attributes', $option, (string) $invocation),
+                        10 => self::assertSame('messages', $option, (string) $invocation),
+                        13 => self::assertSame('help_attributes', $option, (string) $invocation),
+                        default => self::assertSame('help_content', $option, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
-                        1, 5, 7, 9, 11, 15 => $form,
+                    return match ($invocation) {
+                        1, 5, 7, 9, 14 => $form,
                         2 => $showRequiredMark,
                         3 => $layout,
                         4 => $rowAttributes,
                         6 => $colAttributes,
-                        8 => $labelAttributes,
-                        10 => $labelColAttributes,
-                        14 => $helpAttributes,
+                        8 => $labelColAttributes,
+                        10 => [],
+                        13 => $helpAttributes,
                         default => $helpContent,
                     };
                 },
@@ -4273,15 +4387,17 @@ final class FormRowTest extends TestCase
             ->method('getAttribute')
             ->willReturnCallback(
                 static function (string $key) use ($matcher, $type, $class, $required, $id, $aria): string | bool {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('type', $key),
-                        2 => self::assertSame('class', $key),
-                        4, 6, 7, 9 => self::assertSame('id', $key),
-                        5, 8 => self::assertSame('aria-describedby', $key),
-                        default => self::assertSame('required', $key),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('type', $key, (string) $invocation),
+                        2 => self::assertSame('class', $key, (string) $invocation),
+                        4, 6, 7, 9 => self::assertSame('id', $key, (string) $invocation),
+                        5, 8 => self::assertSame('aria-describedby', $key, (string) $invocation),
+                        default => self::assertSame('required', $key, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $type,
                         2 => $class,
                         4, 6, 7, 9 => $id,
@@ -4327,36 +4443,49 @@ final class FormRowTest extends TestCase
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelAttributes, $labelColAttributes, $rowAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $expectedRow, $indent): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('label', $element),
-                        default => self::assertSame('div', $element),
+                static function (string $element, array $attribs, string $content) use ($matcher, $id, $labelColAttributes, $rowAttributes, $helpAttributes, $colAttributes, $labelTranslatedEscaped, $helpContent, $expected, $expectedCol, $expectedErrors, $expectedHelp, $expectedLegend, $expectedRow, $indent): string {
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        1 => self::assertSame('label', $element, (string) $invocation),
+                        default => self::assertSame('div', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
                         1 => self::assertSame(
-                            $labelColAttributes + $labelAttributes + ['class' => 'col-form-label', 'for' => $id],
+                            $labelColAttributes + ['class' => 'col-form-label', 'for' => $id],
                             $attribs,
+                            (string) $invocation,
                         ),
-                        2 => self::assertSame($helpAttributes + ['id' => $id . 'Help'], $attribs),
-                        3 => self::assertSame($colAttributes, $attribs),
-                        default => self::assertSame($rowAttributes + ['class' => 'row'], $attribs),
+                        2 => self::assertSame(
+                            $helpAttributes + ['id' => $id . 'Help'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
+                        3 => self::assertSame($colAttributes, $attribs, (string) $invocation),
+                        default => self::assertSame(
+                            $rowAttributes + ['class' => 'row'],
+                            $attribs,
+                            (string) $invocation,
+                        ),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($labelTranslatedEscaped, $content),
-                        2 => self::assertSame($helpContent, $content),
+                    match ($invocation) {
+                        1 => self::assertSame($labelTranslatedEscaped, $content, (string) $invocation),
+                        2 => self::assertSame($helpContent, $content, (string) $invocation),
                         3 => self::assertSame(
-                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '        ' . $expectedHelp . PHP_EOL . $indent . '    ',
+                            PHP_EOL . $expected . $expectedErrors . PHP_EOL . $indent . '    ',
                             $content,
+                            (string) $invocation,
                         ),
                         default => self::assertSame(
-                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent,
+                            PHP_EOL . $indent . '    ' . $expectedLegend . PHP_EOL . $indent . '    ' . $expectedCol . PHP_EOL . $indent . '    ' . $expectedHelp . PHP_EOL . $indent,
                             $content,
+                            (string) $invocation,
                         ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $expectedLegend,
                         2 => $expectedHelp,
                         3 => $expectedCol,

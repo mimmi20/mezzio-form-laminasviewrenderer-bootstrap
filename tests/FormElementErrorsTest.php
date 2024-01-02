@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-form-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -83,27 +83,38 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $messageEscaped, $listEntryMessage, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        3 => self::assertSame('div', $element),
-                        2 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        3 => self::assertSame('div', $element, (string) $invocation),
+                        2 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        3 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
-                        default => self::assertSame([], $attribs),
-                    };
-
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($messageEscaped, $content),
-                        2 => self::assertSame(
-                            '        ' . $listEntryMessage . PHP_EOL . '    ',
-                            $content,
+                    match ($invocation) {
+                        3 => self::assertSame(
+                            ['class' => 'invalid-feedback'],
+                            $attribs,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
+                        1 => self::assertSame($messageEscaped, $content, (string) $invocation),
+                        2 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
                         1 => $listEntryMessage,
                         2 => $listMessage,
                         default => $divMessage,
@@ -128,7 +139,7 @@ final class FormElementErrorsTest extends TestCase
             ->with('disable_html_escape')
             ->willReturn(false);
 
-        self::assertSame($divMessage, $helper->render($element));
+        self::assertSame(PHP_EOL . $divMessage, $helper->render($element));
     }
 
     /**
@@ -205,28 +216,47 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2TranslatedEscaped, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame('div', $element),
-                        3 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        4 => self::assertSame('div', $element, (string) $invocation),
+                        3 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
-                        default => self::assertSame([], $attribs),
-                    };
-
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($message1TranslatedEscaped, $content),
-                        2 => self::assertSame($message2TranslatedEscaped, $content),
-                        3 => self::assertSame(
-                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
-                            $content,
+                    match ($invocation) {
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback'],
+                            $attribs,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $message1TranslatedEscaped,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame(
+                            $message2TranslatedEscaped,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        3 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
                         1 => $listEntryMessage1,
                         2 => $listEntryMessage2,
                         3 => $listMessage,
@@ -275,7 +305,7 @@ final class FormElementErrorsTest extends TestCase
 
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($divMessage, $helper->render($element));
+        self::assertSame(PHP_EOL . $divMessage, $helper->render($element));
     }
 
     /**
@@ -307,28 +337,43 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame('div', $element),
-                        3 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        4 => self::assertSame('div', $element, (string) $invocation),
+                        3 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
-                        default => self::assertSame([], $attribs),
-                    };
-
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($message1TranslatedEscaped, $content),
-                        2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame(
-                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
-                            $content,
+                    match ($invocation) {
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback'],
+                            $attribs,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $message1TranslatedEscaped,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame($message2Translated, $content, (string) $invocation),
+                        3 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
                         1 => $listEntryMessage1,
                         2 => $listEntryMessage2,
                         3 => $listMessage,
@@ -377,7 +422,7 @@ final class FormElementErrorsTest extends TestCase
 
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($divMessage, $helper->render($element));
+        self::assertSame(PHP_EOL . $divMessage, $helper->render($element));
     }
 
     /**
@@ -409,28 +454,43 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame('div', $element),
-                        3 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        4 => self::assertSame('div', $element, (string) $invocation),
+                        3 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
-                        default => self::assertSame([], $attribs),
-                    };
-
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($message1TranslatedEscaped, $content),
-                        2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame(
-                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
-                            $content,
+                    match ($invocation) {
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback'],
+                            $attribs,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $message1TranslatedEscaped,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame($message2Translated, $content, (string) $invocation),
+                        3 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
                         1 => $listEntryMessage1,
                         2 => $listEntryMessage2,
                         3 => $listMessage,
@@ -483,7 +543,7 @@ final class FormElementErrorsTest extends TestCase
 
         assert($helperObject instanceof FormElementErrors);
 
-        self::assertSame($divMessage, $helperObject->render($element));
+        self::assertSame(PHP_EOL . $divMessage, $helperObject->render($element));
     }
 
     /**
@@ -515,28 +575,43 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame('div', $element),
-                        3 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        4 => self::assertSame('div', $element, (string) $invocation),
+                        3 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['class' => 'invalid-feedback'], $attribs),
-                        default => self::assertSame([], $attribs),
-                    };
-
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($message1TranslatedEscaped, $content),
-                        2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame(
-                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
-                            $content,
+                    match ($invocation) {
+                        4 => self::assertSame(
+                            ['class' => 'invalid-feedback'],
+                            $attribs,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $message1TranslatedEscaped,
+                            $content,
+                            (string) $invocation,
+                        ),
+                        2 => self::assertSame($message2Translated, $content, (string) $invocation),
+                        3 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
+                    };
+
+                    return match ($invocation) {
                         1 => $listEntryMessage1,
                         2 => $listEntryMessage2,
                         3 => $listMessage,
@@ -585,7 +660,7 @@ final class FormElementErrorsTest extends TestCase
 
         $helper->setTranslatorTextDomain($textDomain);
 
-        self::assertSame($divMessage, $helper($element));
+        self::assertSame(PHP_EOL . $divMessage, $helper($element));
     }
 
     /** @throws Exception */
@@ -638,32 +713,44 @@ final class FormElementErrorsTest extends TestCase
             ->method('toHtml')
             ->willReturnCallback(
                 static function (string $element, array $attribs, string $content) use ($matcher, $attributes, $message1TranslatedEscaped, $message2Translated, $listEntryMessage1, $listEntryMessage2, $listMessage, $divMessage): string {
-                    match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame('div', $element),
-                        3 => self::assertSame('ul', $element),
-                        default => self::assertSame('li', $element),
+                    $invocation = $matcher->numberOfInvocations();
+
+                    match ($invocation) {
+                        4 => self::assertSame('div', $element, (string) $invocation),
+                        3 => self::assertSame('ul', $element, (string) $invocation),
+                        default => self::assertSame('li', $element, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
+                    match ($invocation) {
                         4 => self::assertSame(
                             ['class' => 'invalid-feedback', 'id' => 'test-idFeedback'],
                             $attribs,
+                            (string) $invocation,
                         ),
-                        3 => self::assertSame($attributes, $attribs),
-                        default => self::assertSame([], $attribs),
+                        3 => self::assertSame($attributes, $attribs, (string) $invocation),
+                        default => self::assertSame([], $attribs, (string) $invocation),
                     };
 
-                    match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($message1TranslatedEscaped, $content),
-                        2 => self::assertSame($message2Translated, $content),
-                        3 => self::assertSame(
-                            '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                    match ($invocation) {
+                        1 => self::assertSame(
+                            $message1TranslatedEscaped,
                             $content,
+                            (string) $invocation,
                         ),
-                        default => self::assertSame('    ' . $listMessage, $content),
+                        2 => self::assertSame($message2Translated, $content, (string) $invocation),
+                        3 => self::assertSame(
+                            PHP_EOL . '        ' . $listEntryMessage1 . PHP_EOL . '        ' . $listEntryMessage2 . PHP_EOL . '    ',
+                            $content,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame(
+                            PHP_EOL . '    ' . $listMessage . PHP_EOL,
+                            $content,
+                            (string) $invocation,
+                        ),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invocation) {
                         1 => $listEntryMessage1,
                         2 => $listEntryMessage2,
                         3 => $listMessage,
@@ -715,7 +802,7 @@ final class FormElementErrorsTest extends TestCase
         $helper->setTranslatorTextDomain($textDomain);
         $helper->setAttributes($attributes);
 
-        self::assertSame($divMessage, $helper($element));
+        self::assertSame(PHP_EOL . $divMessage, $helper($element));
     }
 
     /** @throws Exception */
