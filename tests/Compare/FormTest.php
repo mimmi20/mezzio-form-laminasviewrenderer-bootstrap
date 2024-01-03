@@ -32,152 +32,152 @@ use function trim;
 final class FormTest extends AbstractTestCase
 {
     /**
-     * @return array<int, array{config: non-empty-string, template: non-empty-string, indent: string, messages: array<string, array<int, string>>}>
+     * @return array<string, array{config: string, template: string, indent: string, messages: array<string, array<int, string>>}>
      *
      * @throws void
      */
     public static function providerTests(): array
     {
         return [
-            [
+            'vertical' => [
                 'config' => 'vertical.config.php',
                 'template' => 'vertical.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical2' => [
                 'config' => 'vertical2.config.php',
                 'template' => 'vertical2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.floating2' => [
                 'config' => 'vertical.floating2.config.php',
                 'template' => 'vertical.floating2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.card' => [
                 'config' => 'vertical.card.config.php',
                 'template' => 'vertical.card.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.floating' => [
                 'config' => 'vertical.floating.config.php',
                 'template' => 'vertical.floating.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.floating.card' => [
                 'config' => 'vertical.floating.card.config.php',
                 'template' => 'vertical.floating.card.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal' => [
                 'config' => 'horizontal.config.php',
                 'template' => 'horizontal.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal2' => [
                 'config' => 'horizontal2.config.php',
                 'template' => 'horizontal2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.collection' => [
                 'config' => 'horizontal.collection.config.php',
                 'template' => 'horizontal.collection.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.element-group' => [
                 'config' => 'horizontal.element-group.config.php',
                 'template' => 'horizontal.element-group.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.floating' => [
                 'config' => 'horizontal.floating.config.php',
                 'template' => 'horizontal.floating.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'inline' => [
                 'config' => 'inline.config.php',
                 'template' => 'inline.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'inline.floating' => [
                 'config' => 'inline.floating.config.php',
                 'template' => 'inline.floating.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.hr' => [
                 'config' => 'horizontal.hr.config.php',
                 'template' => 'horizontal.hr.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.hr2' => [
                 'config' => 'horizontal.hr2.config.php',
                 'template' => 'horizontal.hr2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.hr' => [
                 'config' => 'vertical.hr.config.php',
                 'template' => 'vertical.hr.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.hr.card' => [
                 'config' => 'horizontal.hr.card.config.php',
                 'template' => 'horizontal.hr.card.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.hr.card2' => [
                 'config' => 'horizontal.hr.card2.config.php',
                 'template' => 'horizontal.hr.card2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.hr.card' => [
                 'config' => 'vertical.hr.card.config.php',
                 'template' => 'vertical.hr.card.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.hr.card2' => [
                 'config' => 'vertical.hr.card2.config.php',
                 'template' => 'vertical.hr.card2.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.phv' => [
                 'config' => 'horizontal.phv.config.php',
                 'template' => 'horizontal.phv.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.phv2' => [
                 'config' => 'horizontal.phv2.config.php',
                 'template' => 'horizontal.phv2.html',
                 'indent' => '<!-- -->',
                 'messages' => [],
             ],
-            [
+            'horizontal.rs' => [
                 'config' => 'horizontal.rs.config.php',
                 'template' => 'horizontal.rs.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'horizontal.rs.messages' => [
                 'config' => 'horizontal.rs.config.php',
                 'template' => 'horizontal.rs.messages.html',
                 'indent' => '',
@@ -186,13 +186,13 @@ final class FormTest extends AbstractTestCase
                     'anag' => ['value not in group'],
                 ],
             ],
-            [
+            'vertical.floating.rs' => [
                 'config' => 'vertical.floating.rs.config.php',
                 'template' => 'vertical.floating.rs.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.floating.rs.messages' => [
                 'config' => 'vertical.floating.rs.config.php',
                 'template' => 'vertical.floating.rs.messages.html',
                 'indent' => '',
@@ -201,13 +201,13 @@ final class FormTest extends AbstractTestCase
                     'anag' => ['value not in group'],
                 ],
             ],
-            [
+            'vertical.rs' => [
                 'config' => 'vertical.rs.config.php',
                 'template' => 'vertical.rs.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.rs.messages' => [
                 'config' => 'vertical.rs.config.php',
                 'template' => 'vertical.rs.messages.html',
                 'indent' => '',
@@ -216,13 +216,13 @@ final class FormTest extends AbstractTestCase
                     'anag' => ['value not in group'],
                 ],
             ],
-            [
+            'vertical.admin' => [
                 'config' => 'vertical.admin.config.php',
                 'template' => 'vertical.admin.html',
                 'indent' => '',
                 'messages' => [],
             ],
-            [
+            'vertical.admin2' => [
                 'config' => 'vertical.admin2.config.php',
                 'template' => 'vertical.admin2.html',
                 'indent' => '',

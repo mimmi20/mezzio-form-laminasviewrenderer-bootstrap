@@ -12,8 +12,6 @@ declare(strict_types = 1);
 
 namespace Calculator;
 
-use DateInterval;
-use DateTimeImmutable;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Date;
@@ -336,9 +334,7 @@ return [
                     'placeholder' => 'TT.MM.JJJJ',
 
                     'autocomplete' => 'off',
-                    'max' => (new DateTimeImmutable())->sub(
-                        new DateInterval('P18Y'),
-                    )->format('Y-m-d'),
+                    'max' => '2006-01-02',
                 ],
             ],
         ],

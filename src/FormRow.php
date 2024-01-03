@@ -188,36 +188,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $this->renderHorizontalRow($element, $label);
         }
 
-        if (
-            $label !== ''
-            || $element instanceof Button
-            || $element instanceof Submit
-            || $element instanceof Checkbox
-            || $element instanceof Fieldset
-        ) {
-            return $this->renderVerticalRow($element, $label, $labelPosition);
-        }
-
-        $errorContent   = '';
-        $messageContent = '';
-        $helpContent    = '';
-
-        if ($this->renderErrors) {
-            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
-        }
-
-        if ($element->getOption('messages')) {
-            $messageContent = $this->renderMessages($element, $indent . $this->getWhitespace(4));
-        }
-
-        if ($element->getOption('help_content')) {
-            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
-        }
-
-        $this->formElement->setIndent($indent . $this->getWhitespace(4));
-        $markup = $this->formElement->render($element);
-
-        return $markup . $errorContent . $messageContent . $helpContent;
+        return $this->renderVerticalRow($element, $label, $labelPosition);
     }
 
     /**
@@ -657,18 +628,6 @@ final class FormRow extends BaseFormRow implements FormRowInterface
 
         $lf1Indent = $indent . $this->getWhitespace(4);
 
-        if ($element instanceof LabelAwareInterface) {
-            if ($floating) {
-                $labelPosition = BaseFormRow::LABEL_APPEND;
-            } elseif ($element->hasLabelOption('label_position')) {
-                $labelPosition = $element->getLabelOption('label_position');
-            } else {
-                $labelPosition = BaseFormRow::LABEL_PREPEND;
-            }
-        }
-
-        $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
-
         $errorContent   = '';
         $helpContent    = '';
         $messageContent = '';
@@ -689,10 +648,26 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         $elementString  = $this->formElement->render($element);
         $elementString .= $errorContent . $messageContent;
 
-        $rendered = match ($labelPosition) {
-            BaseFormRow::LABEL_PREPEND => $legend . PHP_EOL . $elementString,
-            default => $elementString . PHP_EOL . $legend,
-        };
+        $rendered = $elementString;
+
+        if ($label !== '') {
+            if ($element instanceof LabelAwareInterface) {
+                if ($floating) {
+                    $labelPosition = BaseFormRow::LABEL_APPEND;
+                } elseif ($element->hasLabelOption('label_position')) {
+                    $labelPosition = $element->getLabelOption('label_position');
+                } else {
+                    $labelPosition = BaseFormRow::LABEL_PREPEND;
+                }
+            }
+
+            $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
+
+            $rendered = match ($labelPosition) {
+                BaseFormRow::LABEL_PREPEND => $legend . PHP_EOL . $elementString,
+                default => $elementString . PHP_EOL . $legend,
+            };
+        }
 
         if ($floating) {
             $rendered = $indent . $this->htmlElement->toHtml(
