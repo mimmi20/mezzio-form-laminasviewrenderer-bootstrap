@@ -4,14 +4,19 @@
         <div class="card&#x20;has-validation&#x20;required">
             <div class="card-body">
                 <div class="form-check">
-                    <input type="radio" name="zusatzfragen" id="zusatzfragen_nein" required="required" aria-describedby="zusatzfragenHelp" value="nein" class="form-check-input">
+                    <input type="radio" name="zusatzfragen" id="zusatzfragen_nein" required="required" class="form-check-input&#x20;is-invalid" aria-describedby="zusatzfragenFeedback&#x20;zusatzfragenHelp" value="nein">
                     <label class="form-check-label" for="zusatzfragen_nein">Ich verzichte auf die Beantwortung weiterer Fragen und wähle aus dem Vergleich einen Tarif, der meinen Bedarf erfüllt.</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" name="zusatzfragen" required="required" aria-describedby="zusatzfragenHelp" id="zusatzfragen_ja" value="ja" class="form-check-input">
+                    <input type="radio" name="zusatzfragen" required="required" class="form-check-input&#x20;is-invalid" aria-describedby="zusatzfragenFeedback&#x20;zusatzfragenHelp" id="zusatzfragen_ja" value="ja">
                     <label class="form-check-label" for="zusatzfragen_ja">Ich möchte weitere Angaben zum gewünschten Versicherungsschutz machen. Es werden dann nur Tarife angezeigt, welche die Vorgaben erfüllen.</label>
                 </div>
             </div>
+        </div>
+        <div class="invalid-feedback" id="zusatzfragenFeedback">
+            <ul>
+                <li>is required</li>
+            </ul>
         </div>
         <div class="col-2&#x20;help-content" id="zusatzfragenHelp">Help-Content</div>
     </fieldset>
@@ -20,10 +25,15 @@
             <div class="card-body">
                 <div class="form-check">
                     <input type="hidden" name="tarif_privat" value="">
-                    <input type="checkbox" name="tarif_privat" id="tarif_privat" class="form-check-input&#x20;&#x20;area-selector&#x20;js-tarif-privat" data-toggle="collapse" data-target=".collapse-more-questions" aria-expanded="true" aria-controls="collapse-unterhalt&#x20;collapse-spezialstraf" role="button" aria-describedby="tarif_privatHelp" value="1">
+                    <input type="checkbox" name="tarif_privat" id="tarif_privat" class="form-check-input&#x20;&#x20;area-selector&#x20;js-tarif-privat&#x20;is-invalid" data-toggle="collapse" data-target=".collapse-more-questions" aria-expanded="true" aria-controls="collapse-unterhalt&#x20;collapse-spezialstraf" role="button" aria-describedby="tarif_privatFeedback&#x20;tarif_privatHelp" value="1">
                     <label for="tarif_privat" class="form-check-label">Privater Bereich</label>
                 </div>
             </div>
+        </div>
+        <div class="invalid-feedback" id="tarif_privatFeedback">
+            <ul>
+                <li>not checked yet</li>
+            </ul>
         </div>
         <div class="col-2&#x20;help-content" id="tarif_privatHelp">Help-Content</div>
     </div>
@@ -232,10 +242,15 @@
         <div class="card&#x20;has-validation">
             <div class="card-body">
                 <div class="form-check">
-                    <input type="checkbox" name="KrPHV" id="KrPHV" class="form-check-input" aria-describedby="KrPHVHelp" value="1">
+                    <input type="checkbox" name="KrPHV" id="KrPHV" class="form-check-input&#x20;is-invalid" aria-describedby="KrPHVFeedback&#x20;KrPHVHelp" value="1">
                     <label for="KrPHV" class="form-check-label">Privathaftpflicht</label>
                 </div>
             </div>
+        </div>
+        <div class="invalid-feedback" id="KrPHVFeedback">
+            <ul>
+                <li>add some more</li>
+            </ul>
         </div>
         <div class="col-2&#x20;help-content" id="KrPHVHelp">Help-Content</div>
     </div>

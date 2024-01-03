@@ -184,6 +184,9 @@ final class FormTest extends AbstractTestCase
                 'messages' => [
                     'gebdatum' => ['too young'],
                     'anag' => ['value not in group'],
+                    'zusatzfragen' => ['is required'],
+                    'tarif_privat' => ['not checked yet'],
+                    'KrPHV' => ['add some more'],
                 ],
             ],
             'vertical.floating.rs' => [
@@ -199,6 +202,9 @@ final class FormTest extends AbstractTestCase
                 'messages' => [
                     'gebdatum' => ['too young'],
                     'anag' => ['value not in group'],
+                    'zusatzfragen' => ['is required'],
+                    'tarif_privat' => ['not checked yet'],
+                    'KrPHV' => ['add some more'],
                 ],
             ],
             'vertical.rs' => [
@@ -214,6 +220,9 @@ final class FormTest extends AbstractTestCase
                 'messages' => [
                     'gebdatum' => ['too young'],
                     'anag' => ['value not in group'],
+                    'zusatzfragen' => ['is required'],
+                    'tarif_privat' => ['not checked yet'],
+                    'KrPHV' => ['add some more'],
                 ],
             ],
             'vertical.admin' => [
@@ -247,9 +256,11 @@ final class FormTest extends AbstractTestCase
     #[DataProvider('providerTests')]
     public function testForm(string $config, string $template, string $indent, array $messages): void
     {
+        $file = 'form/' . $template;
+
         $form = (new Factory())->createForm(require '_files/config/' . $config);
 
-        $expected = $this->getExpected('form/' . $template);
+        $expected = $this->getExpected($file);
 
         $plugin = $this->serviceManager->get(HelperPluginManager::class);
 
@@ -270,6 +281,8 @@ final class FormTest extends AbstractTestCase
         if ($messages !== []) {
             $form->setMessages($messages);
         }
+
+        // file_put_contents($this->files . '/expected/' . $file, trim($helper->render($form)));
 
         self::assertSame($expected, trim($helper->render($form)));
     }
