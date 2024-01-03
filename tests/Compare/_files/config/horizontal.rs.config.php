@@ -504,6 +504,20 @@ return [
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'messages' => [
+                        [
+                            'attributes' => ['class' => 'invalid-feedback'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => [
                     'id' => 'KrPHV',
@@ -666,6 +680,7 @@ return [
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'messages' => '',
                 ],
                 'attributes' => [
                     'id' => 'KrRS',
@@ -694,6 +709,22 @@ return [
                     ],
                     'col_attributes' => ['data-toogle' => '1'],
                     'help_content' => 'Help-Content',
+                    'messages' => [
+                        ['content' => ''],
+                        [],
+                        [
+                            'attributes' => ['class' => 'invalid-feedback', 'id' => 'messageInvalidId'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => ['id' => 'zusatzfragen'],
             ],

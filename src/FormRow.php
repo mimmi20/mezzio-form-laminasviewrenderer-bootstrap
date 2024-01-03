@@ -220,7 +220,6 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $lf1Indent  = $indent . $this->getWhitespace(4);
             $lf2Indent  = $lf1Indent . $this->getWhitespace(4);
             $lf3Indent  = $lf2Indent . $this->getWhitespace(4);
-            $lf4Indent  = $lf3Indent . $this->getWhitespace(4);
 
             $legend = $lf1Indent . $this->htmlElement->toHtml(
                 'legend',
@@ -237,7 +236,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
+                $messageContent = $this->renderMessages($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {
@@ -298,7 +297,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
+                $messageContent = $this->renderMessages($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {

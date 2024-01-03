@@ -694,6 +694,20 @@ return [
                     ],
                     'col_attributes' => ['data-toogle' => '1'],
                     'help_content' => 'Help-Content',
+                    'messages' => [
+                        [
+                            'attributes' => ['class' => 'invalid-feedback'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => ['id' => 'zusatzfragen'],
             ],
@@ -836,6 +850,7 @@ return [
                         '4' => 'vierteljährlich',
                         '12' => 'monatlich',
                     ],
+                    'messages' => '',
                 ],
                 'attributes' => ['id' => 'zahlweise'],
             ],
@@ -850,6 +865,22 @@ return [
                     'checked_value' => '1',
                     'unchecked_value' => '0',
                     'help_content' => 'Help-Content',
+                    'messages' => [
+                        ['content' => ''],
+                        [],
+                        [
+                            'attributes' => ['class' => 'invalid-feedback', 'id' => 'messageInvalidId'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => [
                     'id' => 'mrmoErstinfo',
