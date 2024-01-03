@@ -12,8 +12,6 @@ declare(strict_types = 1);
 
 namespace Calculator;
 
-use DateInterval;
-use DateTimeImmutable;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Date;
@@ -335,9 +333,7 @@ return [
                     'placeholder' => 'TT.MM.JJJJ',
 
                     'autocomplete' => 'off',
-                    'max' => (new DateTimeImmutable())->sub(
-                        new DateInterval('P18Y'),
-                    )->format('Y-m-d'),
+                    'max' => '2006-01-02',
                 ],
             ],
         ],
@@ -508,6 +504,20 @@ return [
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'messages' => [
+                        [
+                            'attributes' => ['class' => 'invalid-feedback'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => [
                     'id' => 'KrPHV',
@@ -670,6 +680,7 @@ return [
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'messages' => 42,
                 ],
                 'attributes' => [
                     'id' => 'KrRS',
@@ -698,6 +709,22 @@ return [
                     ],
                     'col_attributes' => ['data-toogle' => '1'],
                     'help_content' => 'Help-Content',
+                    'messages' => [
+                        ['content' => ''],
+                        [],
+                        [
+                            'attributes' => ['class' => 'invalid-feedback', 'id' => 'messageInvalidId'],
+                            'content' => 'nicht in Ordnung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'invalid-max-feedback'],
+                            'content' => 'zu jung',
+                        ],
+                        [
+                            'attributes' => ['class' => 'valid-feedback'],
+                            'content' => 'in Ordnung',
+                        ],
+                    ],
                 ],
                 'attributes' => ['id' => 'zusatzfragen'],
             ],

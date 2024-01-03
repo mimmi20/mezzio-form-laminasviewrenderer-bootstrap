@@ -44,6 +44,7 @@ use function assert;
 use function explode;
 use function get_debug_type;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_string;
 use function mb_strlen;
@@ -188,36 +189,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $this->renderHorizontalRow($element, $label);
         }
 
-        if (
-            $label !== ''
-            || $element instanceof Button
-            || $element instanceof Submit
-            || $element instanceof Checkbox
-            || $element instanceof Fieldset
-        ) {
-            return $this->renderVerticalRow($element, $label, $labelPosition);
-        }
-
-        $errorContent   = '';
-        $messageContent = '';
-        $helpContent    = '';
-
-        if ($this->renderErrors) {
-            $errorContent = $this->renderFormErrors($element, $indent . $this->getWhitespace(4));
-        }
-
-        if ($element->getOption('messages')) {
-            $messageContent = $this->renderMessages($element, $indent . $this->getWhitespace(4));
-        }
-
-        if ($element->getOption('help_content')) {
-            $helpContent = $this->renderFormHelp($element, $indent . $this->getWhitespace(4));
-        }
-
-        $this->formElement->setIndent($indent . $this->getWhitespace(4));
-        $markup = $this->formElement->render($element);
-
-        return $markup . $errorContent . $messageContent . $helpContent;
+        return $this->renderVerticalRow($element, $label, $labelPosition);
     }
 
     /**
@@ -260,11 +232,11 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $messageContent = '';
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $lf3Indent);
+                $errorContent = $this->renderFormErrors($element, $lf2Indent);
             }
 
             if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
+                $messageContent = $this->renderMessages($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {
@@ -272,8 +244,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $this->formElement->setIndent($lf3Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
+            $elementString = $this->formElement->render($element);
 
             $controlClasses = ['card', 'has-validation'];
 
@@ -292,6 +263,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
                 ['class' => implode(' ', $controlClasses)],
                 PHP_EOL . $elementString . PHP_EOL . $lf2Indent,
             );
+
+            $elementString .= $errorContent . $messageContent;
 
             $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
                 'div',
@@ -324,7 +297,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
+                $messageContent = $this->renderMessages($element, $lf2Indent);
             }
 
             if ($element->getOption('help_content')) {
@@ -332,8 +305,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $this->formElement->setIndent($lf4Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
+            $elementString = $this->formElement->render($element);
 
             $controlClasses = ['card', 'has-validation'];
 
@@ -353,6 +325,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
                 PHP_EOL . $elementString . PHP_EOL . $lf2Indent,
             );
 
+            $elementString .= $errorContent . $messageContent;
+
             $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
@@ -366,30 +340,21 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             );
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Fieldset) {
+        $type = $element->getAttribute('type');
+
+        if (
+            $element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Fieldset
+            || in_array($type, ['button', 'submit', 'reset'], true)
+        ) {
             // this is a special case, because label is always rendered inside it
-            $errorContent   = '';
-            $helpContent    = '';
-            $messageContent = '';
-            $baseIndent     = $indent;
-            $lf1Indent      = $indent . $this->getWhitespace(4);
-            $lf2Indent      = $lf1Indent . $this->getWhitespace(4);
-
-            if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $lf2Indent);
-            }
-
-            if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
-            }
-
-            if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $lf2Indent);
-            }
+            $baseIndent = $indent;
+            $lf1Indent  = $indent . $this->getWhitespace(4);
+            $lf2Indent  = $lf1Indent . $this->getWhitespace(4);
 
             $this->formElement->setIndent($lf2Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
+            $elementString = $this->formElement->render($element);
 
             $outerDiv = $lf1Indent . $this->htmlElement->toHtml(
                 'div',
@@ -400,7 +365,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             return $baseIndent . $this->htmlElement->toHtml(
                 'div',
                 $rowAttributes,
-                PHP_EOL . $outerDiv . $helpContent . PHP_EOL . $baseIndent,
+                PHP_EOL . $outerDiv . PHP_EOL . $baseIndent,
             );
         }
 
@@ -512,7 +477,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             $lf2Indent = $lf1Indent . $this->getWhitespace(4);
 
             if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $lf2Indent);
+                $errorContent = $this->renderFormErrors($element, $lf1Indent);
             }
 
             if ($element->getOption('messages')) {
@@ -524,8 +489,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $this->formElement->setIndent($lf2Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
+            $elementString = $this->formElement->render($element);
 
             $controlClasses = ['card', 'has-validation'];
 
@@ -544,6 +508,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
                 ['class' => implode(' ', $controlClasses)],
                 PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
             );
+
+            $elementString .= $errorContent . $messageContent;
 
             if ($floating) {
                 $elementString = PHP_EOL . $lf1Indent . $elementString . PHP_EOL . '    ' . $legend . PHP_EOL . $indent;
@@ -588,8 +554,7 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             }
 
             $this->formElement->setIndent($lf3Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
+            $elementString = $this->formElement->render($element);
 
             $controlClasses = ['card', 'has-validation'];
 
@@ -609,6 +574,8 @@ final class FormRow extends BaseFormRow implements FormRowInterface
                 PHP_EOL . $elementString . PHP_EOL . $lf1Indent,
             );
 
+            $elementString .= $errorContent . $messageContent;
+
             return $baseIndent . $this->htmlElement->toHtml(
                 'div',
                 $colAttributes,
@@ -616,30 +583,20 @@ final class FormRow extends BaseFormRow implements FormRowInterface
             );
         }
 
-        if ($element instanceof Button || $element instanceof Submit || $element instanceof Fieldset) {
+        $type = $element->getAttribute('type');
+
+        if (
+            $element instanceof Button
+            || $element instanceof Submit
+            || $element instanceof Fieldset
+            || in_array($type, ['button', 'submit', 'reset'], true)
+        ) {
             // this is a special case, because label is always rendered inside it
-            $errorContent   = '';
-            $helpContent    = '';
-            $messageContent = '';
-            $baseIndent     = $indent;
-            $lf1Indent      = $indent . $this->getWhitespace(4);
-
-            if ($this->renderErrors) {
-                $errorContent = $this->renderFormErrors($element, $lf1Indent);
-            }
-
-            if ($element->getOption('messages')) {
-                $messageContent = $this->renderMessages($element, $lf1Indent);
-            }
-
-            if ($element->getOption('help_content')) {
-                $helpContent = $this->renderFormHelp($element, $lf1Indent);
-            }
+            $baseIndent = $indent;
+            $lf1Indent  = $indent . $this->getWhitespace(4);
 
             $this->formElement->setIndent($lf1Indent);
-            $elementString  = $this->formElement->render($element);
-            $elementString .= $errorContent . $messageContent;
-            $elementString .= $helpContent;
+            $elementString = $this->formElement->render($element);
 
             return $baseIndent . $this->htmlElement->toHtml(
                 'div',
@@ -656,18 +613,6 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         }
 
         $lf1Indent = $indent . $this->getWhitespace(4);
-
-        if ($element instanceof LabelAwareInterface) {
-            if ($floating) {
-                $labelPosition = BaseFormRow::LABEL_APPEND;
-            } elseif ($element->hasLabelOption('label_position')) {
-                $labelPosition = $element->getLabelOption('label_position');
-            } else {
-                $labelPosition = BaseFormRow::LABEL_PREPEND;
-            }
-        }
-
-        $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
 
         $errorContent   = '';
         $helpContent    = '';
@@ -689,10 +634,26 @@ final class FormRow extends BaseFormRow implements FormRowInterface
         $elementString  = $this->formElement->render($element);
         $elementString .= $errorContent . $messageContent;
 
-        $rendered = match ($labelPosition) {
-            BaseFormRow::LABEL_PREPEND => $legend . PHP_EOL . $elementString,
-            default => $elementString . PHP_EOL . $legend,
-        };
+        $rendered = $elementString;
+
+        if ($label !== '') {
+            if ($element instanceof LabelAwareInterface) {
+                if ($floating) {
+                    $labelPosition = BaseFormRow::LABEL_APPEND;
+                } elseif ($element->hasLabelOption('label_position')) {
+                    $labelPosition = $element->getLabelOption('label_position');
+                } else {
+                    $labelPosition = BaseFormRow::LABEL_PREPEND;
+                }
+            }
+
+            $legend = $lf1Indent . $this->htmlElement->toHtml('label', $labelAttributes, $label);
+
+            $rendered = match ($labelPosition) {
+                BaseFormRow::LABEL_PREPEND => $legend . PHP_EOL . $elementString,
+                default => $elementString . PHP_EOL . $legend,
+            };
+        }
 
         if ($floating) {
             $rendered = $indent . $this->htmlElement->toHtml(
