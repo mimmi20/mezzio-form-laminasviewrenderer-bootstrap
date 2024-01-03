@@ -680,7 +680,7 @@ return [
                     'use_hidden_element' => false,
                     'checked_value' => '1',
                     'unchecked_value' => '0',
-                    'messages' => '',
+                    'messages' => 42,
                 ],
                 'attributes' => [
                     'id' => 'KrRS',

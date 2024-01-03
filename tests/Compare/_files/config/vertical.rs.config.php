@@ -850,7 +850,7 @@ return [
                         '4' => 'vierteljährlich',
                         '12' => 'monatlich',
                     ],
-                    'messages' => '',
+                    'messages' => 42,
                 ],
                 'attributes' => ['id' => 'zahlweise'],
             ],
